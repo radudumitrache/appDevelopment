@@ -29,15 +29,33 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.appdev.ui.theme.AppDevTheme
-import androidx.compose.material.*
 import androidx.compose.ui.graphics.Color
 
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);    }
+        super.onCreate(savedInstanceState)
+        setContent {
+            AppDevTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    //Greeting("Android")
+                    val navController = rememberNavController()
+                    Scaffold(
+                        bottomBar = { BottomBar(navController = navController) }
+                    ) {
+                        BottomNavGraph(navController = navController)
+                        Dashboard()
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @Composable
