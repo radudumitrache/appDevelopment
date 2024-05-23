@@ -26,7 +26,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.appdev.ui.theme.AppDevTheme
-import androidx.compose.material.*
 import androidx.compose.ui.graphics.Color
 
 
@@ -47,6 +46,7 @@ class MainActivity : ComponentActivity() {
                         bottomBar = { BottomBar(navController = navController) }
                     ) {
                         BottomNavGraph(navController = navController)
+                        Dashboard()
                     }
                 }
             }
