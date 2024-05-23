@@ -19,8 +19,30 @@
         android:textSize="96px" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
+        android:id="@+id/SubtitleBanner"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/subtitle"
+        android:layout_gravity="center_horizontal"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="533px" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="774px"
+        android:layout_height="137px"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_background_button1"
+        android:text="@string/login_button_text" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="774px"
+        android:layout_height="137px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_background_transparent"
+        android:text="@string/register_text" />
 </LinearLayout>

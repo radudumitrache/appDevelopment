@@ -1,6 +1,8 @@
 package com.example.appdev
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,22 +12,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.res.ResourcesCompat
 import com.example.appdev.ui.theme.AppDevTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AppDevTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
-        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        val titleBanner = findViewById<TextView>(R.id.AppTitle);
+        val subtextBanner = findViewById<TextView>(R.id.SubtitleBanner)
+        val typeface : Typeface? = ResourcesCompat.getFont(this,R.font.InterVariable);
+        titleBanner.setTypeface(typeface);
+        subtextBanner.setTypeface(typeface);
+
     }
 }
 

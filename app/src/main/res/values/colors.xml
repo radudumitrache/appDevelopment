@@ -8,4 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name= "purple">#AE14D1</color>
+    <color name="background">#CDE8E5</color>
+    <color name="button1">#7AB2B2</color>
+    <color name="button2">#4D869C</color>
+    <color name="transparent">#00ffffff</color>
 </resources>
