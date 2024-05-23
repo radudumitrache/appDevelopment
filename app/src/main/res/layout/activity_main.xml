@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CDE8E5 "
+    android:orientation="vertical">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="134dp" />
+
+    <TextView
+        android:id="@+id/AppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="96px" />
+
+    <TextView
+        android:id="@+id/SubtitleBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subtitle"
+        android:layout_gravity="center_horizontal"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="533px" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="774px"
+        android:layout_height="137px"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_background_button1"
+        android:text="@string/login_button_text" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="774px"
+        android:layout_height="137px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_background_transparent"
+        android:text="@string/register_text" />
+</LinearLayout>
