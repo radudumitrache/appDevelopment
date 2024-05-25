@@ -3,7 +3,7 @@
     <solid android:color="@color/transparent"/> <!-- Background color -->
     <corners android:radius="25dp"/>
     <solid
-        android:color="@color/background_color" >
+        android:color="@color/background" >
     </solid>
 
     <!-- View border color and width -->

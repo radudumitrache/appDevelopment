@@ -1,4 +1,5 @@
 package com.example.appdev
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -17,6 +18,7 @@ class LoginActivity : ComponentActivity(){
         const val PASSWORD_KEY = "password_key"
     }
     private lateinit var sharedpreferences: SharedPreferences
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

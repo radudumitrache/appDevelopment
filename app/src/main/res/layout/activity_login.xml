@@ -29,6 +29,7 @@
         android:layout_height="109dp" />
 
     <EditText
+        android:id="@+id/username_input"
         android:layout_gravity="center_horizontal"
         android:layout_width="305dp"
         android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
 
     <!-- Password EditText -->
     <EditText
+        android:id="@+id/password_input"
         android:layout_gravity="center_horizontal"
         android:layout_width="301dp"
         android:layout_height="wrap_content"
@@ -72,6 +74,7 @@
 
     <!-- Sign In Button -->
     <Button
+        android:id="@+id/login_button"
         android:layout_width="108dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
