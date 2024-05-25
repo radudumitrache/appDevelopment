@@ -3,6 +3,7 @@ package com.example.appdev
 import android.graphics.Typeface
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,19 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val connector = datatabaseConnector(
+            server = "appdevelopmentnhl.database.windows.net:1433;",
+            database = "appdevelopmentnhl",
+            user = "superadmin@appdevelopmentnhl",
+            password = "ApXCOzKMIm1yVeJ94opdPvPl"
+        )
+        if (connector != null)
+        {
+            Log.d("W","connection good")
+        }
+        else {
+            Log.d("E","connection failed")
+        }
         setContent {
             AppDevTheme {
                 // A surface container using the 'background' color from the theme
@@ -54,6 +68,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 
 }
