@@ -31,6 +31,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.appdev.ui.theme.AppDevTheme
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -46,10 +48,24 @@ class MainActivity : ComponentActivity() {
         if (connector != null)
         {
             Log.d("W","connection good")
+            println("connection good")
+//            lifecycleScope.launch {
+//                val result_set = connector.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'")
+//                result_set?.let {
+//                    while (it.next())
+//                    {
+//                        var table_name = it.getString("TABLE_NAME")
+//                        Log.d("D","TABLE NAME :")
+//                        Log.d("W",table_name)
+//                    }
+//                }
+//
+//            }
         }
         else {
             Log.d("E","connection failed")
         }
+        
         setContent {
             AppDevTheme {
                 // A surface container using the 'background' color from the theme

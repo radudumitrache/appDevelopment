@@ -15,23 +15,21 @@ class datatabaseConnector (
     private val user:String,
     private val password:String
 ) {
-    private val jdbcUrl = "jdbc:sqlserver://$server;databaseName=$database"
+    private val jdbcUrl = "jdbc:sqlserver://$server;databaseName=$database;encrypt=true;trustServerCertificate=false;loginTimeout=30;"
     init {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
     }
-    suspend fun query(query: String,callback:(ResultSet?) -> Unit)
-    {
+    suspend fun query(query: String): ResultSet? {
         return withContext(Dispatchers.IO) {
             try {
-                val connection : Connection = DriverManager.getConnection(jdbcUrl,user, password)
+                val connection: Connection = DriverManager.getConnection(jdbcUrl, user, password)
                 val statement = connection.createStatement()
-            } catch (e:Exception)
-            {
+                statement.executeQuery(query)
+            } catch (e: Exception) {
                 e.printStackTrace()
                 null
             }
         }
-
     }
 
 
