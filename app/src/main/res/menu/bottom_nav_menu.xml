@@ -7,9 +7,9 @@
         android:title="@string/title_account" />
 
     <item
-        android:id="@+id/navigation_spending"
+        android:id="@+id/navigation_transactions"
         android:icon="@drawable/ic_credit_card_24"
-        android:title="@string/title_spending" />
+        android:title="@string/title_transactions" />
 
     <item
         android:id="@+id/navigation_dashboard"

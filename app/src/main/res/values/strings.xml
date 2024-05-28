@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">appDev</string>
     <string name="title_account">Account</string>
-    <string name="title_spending">Spending</string>
+    <string name="title_transactions">Transactions</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_exchange">Exchange</string>
     <string name="title_goals">Goals</string>

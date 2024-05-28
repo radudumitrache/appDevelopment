@@ -1,4 +1,4 @@
-package com.example.appdev.ui.spending
+package com.example.appdev.ui.transactions
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.appdev.R
 
-class SpendingFragment : Fragment() {
+class TransactionsFragment : Fragment() {
 
     companion object {
-        fun newInstance() = SpendingFragment()
+        fun newInstance() = TransactionsFragment()
     }
 
-    private val viewModel: SpendingViewModel by viewModels()
+    private val viewModel: TransactionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class SpendingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_spending, container, false)
+        return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 }

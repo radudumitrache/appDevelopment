@@ -8,14 +8,14 @@
     <fragment
         android:id="@+id/navigation_account"
         android:name="com.example.appdev.ui.account.AccountFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_account"
         tools:layout="@layout/fragment_account" />
 
     <fragment
-        android:id="@+id/navigation_spending"
-        android:name="com.example.appdev.ui.spending.SpendingFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_spending" />
+        android:id="@+id/navigation_transactions"
+        android:name="com.example.appdev.ui.transactions.TransactionsFragment"
+        android:label="@string/title_transactions"
+        tools:layout="@layout/fragment_transactions" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -26,13 +26,13 @@
     <fragment
         android:id="@+id/navigation_exchange"
         android:name="com.example.appdev.ui.exchange.ExchangeFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_exchange"
         tools:layout="@layout/fragment_exchange" />
 
     <fragment
         android:id="@+id/navigation_goals"
         android:name="com.example.appdev.ui.goals.GoalsFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_goals"
         tools:layout="@layout/fragment_goals" />
 
 </navigation>
