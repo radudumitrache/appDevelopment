@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.example.appdev.ui.account.AccountFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/navigation_spending"
+        android:name="com.example.appdev.ui.spending.SpendingFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_spending" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.appdev.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_exchange"
+        android:name="com.example.appdev.ui.exchange.ExchangeFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_exchange" />
+
+    <fragment
+        android:id="@+id/navigation_goals"
+        android:name="com.example.appdev.ui.goals.GoalsFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_goals" />
+
+</navigation>
