@@ -10,7 +10,9 @@
     <string name="title_transactions">Transactions</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_exchange">Exchange</string>
-    <string name="title_goals">Goals</string>
+    <string name="title_goals">Goal</string>
+    <string name="title_createGoal">Create Goal</string>
+    <string name="title_relatedCosts">Related Costs</string>
     <string name="hint_amount">Amount</string>
     <string name="hint_description">Description</string>
     <string name="hint_date">Date</string>
