@@ -1,22 +1,25 @@
 package com.example.appdev.ui.dashboard
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.appdev.R
 import com.example.appdev.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
     private val MIN_SWIPE_DISTANCE = -200
     private var _binding: FragmentDashboardBinding? = null
-    private val cardDetails = listOf(
+    private val cardDetails = mutableListOf(
         CardDetails("1234 5678 9012 3456", "John Doe", "12/24", 12.3f),
         CardDetails("9876 5432 1098 7654", "Jane Smith", "11/23" , 50.0f),
         CardDetails("4567 8901 2345 6789", "Alice Johnson", "10/22" , 49.0f)
@@ -106,21 +109,56 @@ class DashboardFragment : Fragment() {
                 return true
             }
         })
+        binding.addCardButton.setOnClickListener {
 
+        }
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    private fun updateCardDetails(view: View, cardDetails: CardDetails) {
-        view.findViewById<TextView>(R.id.card_number).text = cardDetails.cardNumber
-        view.findViewById<TextView>(R.id.card_holder).text = cardDetails.cardHolder
-        view.findViewById<TextView>(R.id.expiry_date).text = cardDetails.expiryDate
-        view.findViewById<TextView>(R.id.card_value).text =  cardDetails.Sum.toString()
+    private fun updateCardDetails(view: View, PcardDetails: CardDetails) {
+        view.findViewById<TextView>(R.id.card_number).text = PcardDetails.cardNumber
+        view.findViewById<TextView>(R.id.card_holder).text = PcardDetails.cardHolder
+        view.findViewById<TextView>(R.id.expiry_date).text = PcardDetails.expiryDate
+        view.findViewById<TextView>(R.id.card_value).text =  PcardDetails.Sum.toString()
     }
+    private fun updateTransactions(recyclerView: RecyclerView, transactions: List<Transaction>) {
+        recyclerView.adapter = TransactionAdapter(transactions)
+    }
+    private fun showAddCardDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.dialog_add_card, null)
+        val cardNumberInput = dialogLayout.findViewById<EditText>(R.id.card_number_input)
+        val cardHolderInput = dialogLayout.findViewById<EditText>(R.id.card_holder_input)
+        val expiryDateInput = dialogLayout.findViewById<EditText>(R.id.expiry_date_input)
 
+        with(builder) {
+            setTitle("Add New Card")
+            setView(dialogLayout)
+            setPositiveButton("Add") { dialog, which ->
+                val cardNumber = cardNumberInput.text.toString()
+                val cardHolder = cardHolderInput.text.toString()
+                val expiryDate = expiryDateInput.text.toString()
+                if (cardNumber.isNotEmpty() && cardHolder.isNotEmpty() && expiryDate.isNotEmpty()) {
+                    val newCard = CardDetails(cardNumber, cardHolder, expiryDate,0f)
+                    cardDetails.add(newCard)
+                    transactionsList.toMutableList().add(listOf())
+                    cardIndex = cardDetails.size - 1
+                    updateCardDetails(binding.cardContainer.getChildAt(0), newCard)
+                    updateTransactions(binding.transactionsRecyclerView, listOf())
+                }
+            }
+            setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
+            }
+            show()
+        }
+    }
     data class CardDetails(val cardNumber: String, val cardHolder: String, val expiryDate: String , val Sum : Float)
     data class Transaction(val date: String, val description: String, val amount: String)
 }
