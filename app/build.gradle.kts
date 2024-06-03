@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
