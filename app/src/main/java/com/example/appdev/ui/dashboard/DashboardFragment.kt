@@ -1,9 +1,6 @@
 package com.example.appdev.ui.dashboard
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -12,22 +9,50 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appdev.R
 import com.example.appdev.databinding.FragmentDashboardBinding
-import com.example.appdev.util.CheckInternetConnection
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class DashboardFragment : Fragment() {
     private val MIN_SWIPE_DISTANCE = -200
     private var _binding: FragmentDashboardBinding? = null
     private val cardDetails = listOf(
-        CardDetails("1234 5678 9012 3456", "John Doe", "12/24"),
-        CardDetails("9876 5432 1098 7654", "Jane Smith", "11/23"),
-        CardDetails("4567 8901 2345 6789", "Alice Johnson", "10/22")
+        CardDetails("1234 5678 9012 3456", "John Doe", "12/24", 12.3f),
+        CardDetails("9876 5432 1098 7654", "Jane Smith", "11/23" , 50.0f),
+        CardDetails("4567 8901 2345 6789", "Alice Johnson", "10/22" , 49.0f)
+    )
+    private val transactionsList = listOf(
+        listOf(
+            Transaction("2024-06-01", "Grocery Store", "-$50.00"),
+            Transaction("2024-06-02", "Online Shopping", "-$120.00"),
+            Transaction("2024-06-03", "Restaurant", "-$45.00"),
+            Transaction("2024-06-03", "Gym Membership", "-$10.00"),
+            Transaction("2024-05-23", "Movie Theater", "-$40.00")
+
+        ),
+        listOf(
+            Transaction("2024-05-25", "Electronics Store", "-$200.00"),
+            Transaction("2024-05-26", "Coffee Shop", "-$15.00"),
+            Transaction("2024-05-27", "Bookstore", "-$30.00"),
+            Transaction("2024-05-28", "Clothing Store", "-$75.00"),
+            Transaction("2024-05-29", "Supermarket", "-$60.00"),
+            Transaction("2024-06-03", "Car Mechanic", "-$145.00")
+        ),
+        listOf(
+            Transaction("2024-05-20", "Pharmacy", "-$25.00"),
+            Transaction("2024-05-21", "Restaurant", "-$80.00"),
+            Transaction("2024-05-22", "Gas Station", "-$50.00"),
+
+
+        ),
+        listOf(
+            Transaction("2024-06-05", "Hotel Booking", "-$300.00"),
+            Transaction("2024-06-06", "Car Rental", "-$100.00"),
+            Transaction("2024-06-07", "Flight Tickets", "-$500.00"),
+            Transaction("2024-06-08", "Restaurant", "-$60.00"),
+            Transaction("2024-06-09", "Tour Guide", "-$80.00"),
+            Transaction("2024-05-24", "Concert Tickets", "-$150.00")
+        )
     )
     private lateinit var gestureDetector: GestureDetector
     private var cardIndex = 0
@@ -47,13 +72,13 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
 
-
         val root: View = binding.root
-
         val creditCardView = inflater.inflate(R.layout.item_debit_card,binding.cardContainer,false)
         creditCardView.findViewById<TextView>(R.id.card_number).text = "1234 5678 9012 3456"
         creditCardView.findViewById<TextView>(R.id.card_holder).text = "Radu Dumitrache"
         creditCardView.findViewById<TextView>(R.id.expiry_date).text = "12/24"
+        creditCardView.findViewById<TextView>(R.id.card_value).text = "0"
+        val value_container:TextView = binding.cardValue
         binding.cardContainer.addView(creditCardView)
         creditCardView.setOnTouchListener(object : View.OnTouchListener {
             private var initialX = 0f
@@ -70,6 +95,10 @@ class DashboardFragment : Fragment() {
                             // Swipe left detected
                             cardIndex = (cardIndex + 1) % cardDetails.size
                             updateCardDetails(creditCardView, cardDetails[cardIndex])
+                            value_container.text ="You have ${cardDetails[cardIndex].Sum.toString()} $ on this card"
+                            val recyclerView = binding.transactionsRecyclerView
+                            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                            recyclerView.adapter = TransactionAdapter(transactionsList[cardIndex])
                         }
                     }
                 }
@@ -77,6 +106,7 @@ class DashboardFragment : Fragment() {
                 return true
             }
         })
+
         return root
     }
 
@@ -88,7 +118,9 @@ class DashboardFragment : Fragment() {
         view.findViewById<TextView>(R.id.card_number).text = cardDetails.cardNumber
         view.findViewById<TextView>(R.id.card_holder).text = cardDetails.cardHolder
         view.findViewById<TextView>(R.id.expiry_date).text = cardDetails.expiryDate
+        view.findViewById<TextView>(R.id.card_value).text =  cardDetails.Sum.toString()
     }
 
-    data class CardDetails(val cardNumber: String, val cardHolder: String, val expiryDate: String)
+    data class CardDetails(val cardNumber: String, val cardHolder: String, val expiryDate: String , val Sum : Float)
+    data class Transaction(val date: String, val description: String, val amount: String)
 }
