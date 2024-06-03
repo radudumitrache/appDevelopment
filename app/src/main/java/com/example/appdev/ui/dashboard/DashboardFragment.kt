@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.appdev.databinding.FragmentDashboardBinding
-
+import com.example.appdev.util.CheckInternetConnection
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
@@ -26,6 +26,9 @@ class DashboardFragment : Fragment() {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+
+
+
         val root: View = binding.root
 
         val textView: TextView = binding.textDashboard
