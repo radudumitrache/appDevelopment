@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.appdev.R
 import com.example.appdev.databinding.FragmentDashboardBinding
 import com.example.appdev.util.CheckInternetConnection
 class DashboardFragment : Fragment() {
@@ -35,6 +36,11 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+        val creditCardView = inflater.inflate(R.layout.item_debit_card,binding.cardContainer,false)
+        creditCardView.findViewById<TextView>(R.id.card_number).text = "1234 5678 9012 3456"
+        creditCardView.findViewById<TextView>(R.id.card_holder).text = "Radu Dumitrache"
+        creditCardView.findViewById<TextView>(R.id.expiry_date).text = "12/24"
+        binding.cardContainer.addView(creditCardView)
         return root
     }
 
