@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -31,6 +30,7 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
+
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
 
@@ -43,11 +43,37 @@ class TransactionsFragment : Fragment() {
         })
 
         addButton.setOnClickListener {
-            // Example of adding a new transaction
-            viewModel.addTransaction(TransactionsViewModel.Transaction(-20, "New Item", "12/11/24"))
+            showAddTransactionDialog()
         }
 
         return view
+    }
+
+    private fun showAddTransactionDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_transaction, null)
+        val typeSpinner = dialogView.findViewById<Spinner>(R.id.typeSpinner)
+        val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
+        val descriptionEditText = dialogView.findViewById<EditText>(R.id.descriptionEditText)
+        val dateEditText = dialogView.findViewById<EditText>(R.id.dateEditText)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Add Transaction")
+            .setView(dialogView)
+            .setPositiveButton("Add") { dialog, _ ->
+                val amountText = amountEditText.text.toString()
+                val amount = if (amountText.isEmpty()) 0 else amountText.toInt()
+                val description = descriptionEditText.text.toString()
+                val date = dateEditText.text.toString()
+                val type = typeSpinner.selectedItem.toString()
+                val finalAmount = if (type == "-") -amount else amount
+                viewModel.addTransaction(TransactionsViewModel.Transaction(finalAmount, description, date))
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     private fun createTransactionCard(transaction: TransactionsViewModel.Transaction): CardView {
