@@ -15,54 +15,48 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Title -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_goals"
-                android:textSize="40dp" />
-
-            <!-- Separator -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/black" />
-
             <!-- Current Goal Title -->
             <TextView
+                android:id="@+id/goalTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Goal title: dynamic text"
                 android:textSize="20dp" />
 
             <!-- Current Goal Description -->
             <TextView
+                android:id="@+id/goalDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Goal description: dynamic text"
                 android:textSize="20dp" />
 
             <!-- Due Date -->
             <TextView
+                android:id="@+id/dueDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Due date: dynamic text"
                 android:textSize="20dp" />
 
             <!-- Price -->
             <TextView
+                android:id="@+id/amountSaved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Amount: dynamic text"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/remainingAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:textSize="20dp" />
 
 
@@ -73,7 +67,7 @@
                 android:layout_marginTop="50dp"
                 android:text="@string/title_relatedCosts"
                 android:textAlignment="center"
-                android:textSize="35dp" />
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -82,19 +76,19 @@
                 android:background="@color/black" />
 
             <TextView
+                android:id="@+id/costTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Cost title: dummy text"
                 android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="15dp"
-                android:text="Amount: dummy + currency"
                 android:layout_gravity="center"
                 android:textSize="20dp" />
 
