@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.appdev.R
 import com.google.android.material.textfield.TextInputEditText
 
-class GoalFragment : Fragment() {
+class CreateGoalFragment : Fragment() {
 
     private val goalViewModel: CreateGoalViewModel by viewModels()
 

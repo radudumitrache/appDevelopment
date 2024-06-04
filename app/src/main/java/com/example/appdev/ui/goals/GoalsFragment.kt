@@ -1,56 +1,43 @@
 package com.example.appdev.ui.goals
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import com.example.appdev.databinding.FragmentGoalsBinding
+import com.example.appdev.R
+import com.google.android.material.textfield.TextInputEditText
 
-class GoalsFragment : Fragment() {
+class GoalFragment : Fragment() {
 
-    private var _binding: FragmentGoalsBinding? = null
-    private val binding get() = _binding!!
-    private val goalsViewModel: GoalsViewModel by viewModels()
+    private val goalViewModel: CreateGoalViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentGoalsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_create_goal, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        // Get references to the EditText fields and the button
+        val etGoalTitle = view.findViewById<TextInputEditText>(R.id.etGoalTitle)
+        val etGoalDescription = view.findViewById<TextInputEditText>(R.id.etGoalDescription)
+        val etDueDate = view.findViewById<TextInputEditText>(R.id.etDueDate)
+        val etPrice = view.findViewById<TextInputEditText>(R.id.etPrice)
+        val btnCreate = view.findViewById<Button>(R.id.btnCreateGoal)
 
-        goalsViewModel.goalTitle.observe(viewLifecycleOwner, Observer {
-            binding.goalTitle.text = "Goal title: $it"
-        })
-        goalsViewModel.goalDescription.observe(viewLifecycleOwner, Observer {
-            binding.goalDescription.text = "Goal description: $it"
-        })
-        goalsViewModel.dueDate.observe(viewLifecycleOwner, Observer {
-            binding.dueDate.text = "Due date: $it"
-        })
-        goalsViewModel.amountSaved.observe(viewLifecycleOwner, Observer {
-            binding.amountSaved.text = "Amount saved: $it"
-        })
-        goalsViewModel.remainingAmount.observe(viewLifecycleOwner, Observer {
-            binding.remainingAmount.text = "Remaining amount: $it"
-        })
-        goalsViewModel.costTitle.observe(viewLifecycleOwner, Observer {
-            binding.costTitle.text = "Cost title: $it"
-        })
-        goalsViewModel.amount.observe(viewLifecycleOwner, Observer {
-            binding.amount.text = "Amount: $it"
-        })
-    }
+        // Set the button click listener
+        btnCreate.setOnClickListener {
+            val title = etGoalTitle.text.toString()
+            val description = etGoalDescription.text.toString()
+            val date = etDueDate.text.toString()
+            val price = etPrice.text.toString()
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+            goalViewModel.updateGoal(title, description, date, price)
+            // Optionally, show a confirmation message or navigate to another screen
+        }
+
+        return view
     }
 }
