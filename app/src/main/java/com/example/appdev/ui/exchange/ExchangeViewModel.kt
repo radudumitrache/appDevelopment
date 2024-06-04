@@ -16,13 +16,18 @@ class ExchangeViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    fun fetchExchangeRates() {
-        val call = RetrofitClient.apiService.getLatestRates()
+    fun fetchExchangeRates(base: String, amount: Double) {
+        val call: Call<ExchangeRates> = RetrofitClient.apiService.getLatestRates(base)
 
         call.enqueue(object : Callback<ExchangeRates> {
             override fun onResponse(call: Call<ExchangeRates>, response: Response<ExchangeRates>) {
                 if (response.isSuccessful) {
-                    _exchangeRates.value = response.body()
+                    response.body()?.let { exchangeRates ->
+                        val adjustedRates = exchangeRates.rates.mapValues { (_, rate) ->
+                            rate * amount
+                        }
+                        _exchangeRates.value = exchangeRates.copy(rates = adjustedRates)
+                    }
                 } else {
                     _error.value = "Failed to get response: ${response.code()}"
                 }
