@@ -6,35 +6,31 @@ import androidx.lifecycle.ViewModel
 
 class GoalsViewModel : ViewModel() {
 
-    private val _goalTitle = MutableLiveData<String>()
-    val goalTitle: LiveData<String> get() = _goalTitle
+    private val _goalDetails = MutableLiveData<GoalDetails>()
+    val goalDetails: LiveData<GoalDetails> get() = _goalDetails
 
-    private val _goalDescription = MutableLiveData<String>()
-    val goalDescription: LiveData<String> get() = _goalDescription
-
-    private val _dueDate = MutableLiveData<String>()
-    val dueDate: LiveData<String> get() = _dueDate
-
-    private val _amountSaved = MutableLiveData<String>()
-    val amountSaved: LiveData<String> get() = _amountSaved
-
-    private val _remainingAmount = MutableLiveData<String>()
-    val remainingAmount: LiveData<String> get() = _remainingAmount
-
-    private val _costTitle = MutableLiveData<String>()
-    val costTitle: LiveData<String> get() = _costTitle
-
-    private val _amount = MutableLiveData<String>()
-    val amount: LiveData<String> get() = _amount
+    private val _relatedCosts = MutableLiveData<List<RelatedCost>>()
+    val relatedCosts: LiveData<List<RelatedCost>> get() = _relatedCosts
 
     init {
-        // Initial dummy data
-        _goalTitle.value = "Save for a car"
-        _goalDescription.value = "Save money for a new car"
-        _dueDate.value = "31/12/2024"
-        _amountSaved.value = "$3000"
-        _remainingAmount.value = "$2000"
-        _costTitle.value = "Insurance"
-        _amount.value = "$500"
+        _goalDetails.value = GoalDetails(
+            "New Car",
+            "Save money for a new car",
+            "31/12/2024",
+            "$3000",
+            "$2500")
+
+        _relatedCosts.value = listOf(
+            RelatedCost("Insurance", 400.0),
+            RelatedCost("Tires", 400.0),
+        )
     }
+
+    fun addRelatedCost(relatedCost: RelatedCost) {
+        val list = _relatedCosts.value ?: emptyList()
+        _relatedCosts.value = list + relatedCost
+    }
+
+    data class GoalDetails(val title: String, val description: String, val dueDate: String, val amount: String, val remainingAmount: String)
+    data class RelatedCost(val title: String, val amount: Double)
 }

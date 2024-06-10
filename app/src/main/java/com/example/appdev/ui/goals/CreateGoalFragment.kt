@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.appdev.R
-import com.google.android.material.textfield.TextInputEditText
 
 class CreateGoalFragment : Fragment() {
 
@@ -22,10 +22,10 @@ class CreateGoalFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_create_goal, container, false)
 
         // Get references to the EditText fields and the button
-        val etGoalTitle = view.findViewById<TextInputEditText>(R.id.etGoalTitle)
-        val etGoalDescription = view.findViewById<TextInputEditText>(R.id.etGoalDescription)
-        val etDueDate = view.findViewById<TextInputEditText>(R.id.etDueDate)
-        val etPrice = view.findViewById<TextInputEditText>(R.id.etPrice)
+        val etGoalTitle = view.findViewById<EditText>(R.id.etGoalTitle)
+        val etGoalDescription = view.findViewById<EditText>(R.id.etGoalDescription)
+        val etDueDate = view.findViewById<EditText>(R.id.etDueDate)
+        val etPrice = view.findViewById<EditText>(R.id.etPrice)
         val btnCreate = view.findViewById<Button>(R.id.btnCreateGoal)
 
         // Set the button click listener
@@ -35,7 +35,7 @@ class CreateGoalFragment : Fragment() {
             val date = etDueDate.text.toString()
             val price = etPrice.text.toString()
 
-            goalViewModel.updateGoal(title, description, date, price)
+            goalViewModel.createGoal(title, description, date, price)
             // navigate to dashboard?
         }
 
