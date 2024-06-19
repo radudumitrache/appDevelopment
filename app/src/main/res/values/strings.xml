@@ -20,6 +20,8 @@
     <string name="autofillHintDescription">description</string>
     <string name="autofillHintDate">date</string>
     <string name="add_transaction">Add Transaction</string>
+    <string name="username_button">Username</string>
+    <string name="password_button">Password</string>
     <string-array name="transaction_types">
         <item>+</item>
         <item>-</item>
