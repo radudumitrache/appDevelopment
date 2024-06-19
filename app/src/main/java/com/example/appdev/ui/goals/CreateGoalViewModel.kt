@@ -8,7 +8,7 @@ class CreateGoalViewModel : ViewModel() {
     var dueDate: String = ""
     var price1: String = ""
 
-    fun updateGoal(title: String, description: String, date: String, price2: String) {
+    fun createGoal(title: String, description: String, date: String, price2: String) {
         goalTitle = title
         goalDescription = description
         dueDate = date
