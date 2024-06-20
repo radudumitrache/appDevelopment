@@ -12,7 +12,9 @@ class LandUpActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.register_button)
         val loginButton = findViewById<Button>(R.id.login_button)
         registerButton.setOnClickListener {
-
+            val intent = Intent(this,RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
         }
         loginButton.setOnClickListener {
             val intent = Intent(this,LoginActivity::class.java)
