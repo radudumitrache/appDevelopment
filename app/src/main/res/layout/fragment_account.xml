@@ -1,13 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.account.AccountFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/title_account" />
+        android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="136dp" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="161dp"
+                android:src="@drawable/profile_picture" />
+
+            <EditText
+                android:id="@+id/editEmailButton"
+                android:layout_width="296dp"
+                android:layout_height="63dp"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="new email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/editPasswordButton"
+                android:layout_width="294dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="new password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/editTextText2"
+                android:layout_width="294dp"
+                android:layout_height="64dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Teacher"
+                android:layout_gravity="center_horizontal"/>
+
+            <EditText
+                android:id="@+id/editTextText3"
+                android:layout_width="56dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:inputType="text"
+                android:text="$"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/ChangeInformationButton"
+                android:layout_width="198dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Change Profile" />
+
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>

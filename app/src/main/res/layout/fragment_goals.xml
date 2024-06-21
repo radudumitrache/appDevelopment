@@ -1,112 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.goals.GoalsFragment">
-
-    <ScrollView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Current Goal Title -->
+        <TextView
+            android:id="@+id/goalTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_gravity="center"
+            android:textSize="20dp" />
 
-            <!-- Title -->
-            <TextView
+        <!-- Current Goal Description -->
+        <TextView
+            android:id="@+id/goalDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp" />
+
+        <!-- Due Date -->
+        <TextView
+            android:id="@+id/dueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp" />
+
+        <!-- Price -->
+        <TextView
+            android:id="@+id/amountSaved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/remainingAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp" />
+
+    <!-- Add Related Cost Button -->
+    <Button
+        android:id="@+id/btnAddRelatedCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Add Related Cost" />
+
+        <!-- Related Costs Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/title_relatedCosts"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/black" />
+
+        <!-- ScrollView containing a LinearLayout for related costs -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <LinearLayout
+                android:id="@+id/relatedCostsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/title_goals"
-                android:textSize="40dp" />
+                android:orientation="vertical" />
+        </ScrollView>
 
-            <!-- Separator -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/black" />
-
-            <!-- Current Goal Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Goal title: dynamic text"
-                android:textSize="20dp" />
-
-            <!-- Current Goal Description -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Goal description: dynamic text"
-                android:textSize="20dp" />
-
-            <!-- Due Date -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Due date: dynamic text"
-                android:textSize="20dp" />
-
-            <!-- Price -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Amount: dynamic text"
-                android:textSize="20dp" />
-
-
-            <!-- Related Costs Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="@string/title_relatedCosts"
-                android:textAlignment="center"
-                android:textSize="35dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Cost title: dummy text"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="15dp"
-                android:text="Amount: dummy + currency"
-                android:layout_gravity="center"
-                android:textSize="20dp" />
-
-            <!-- Edit Goal Button -->
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:text="Refresh" />
-
-        </LinearLayout>
-    </ScrollView>
-
-</FrameLayout>
+    </LinearLayout>
