@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appdev.R
@@ -19,6 +20,7 @@ class ExchangeFragment : Fragment() {
     private lateinit var ratesRecyclerView: RecyclerView
     private lateinit var baseCurrencySpinner: Spinner
     private lateinit var fetchButton: Button
+    private lateinit var mapButton: Button
     private val viewModel: ExchangeViewModel by viewModels()
 
     override fun onCreateView(
@@ -32,6 +34,7 @@ class ExchangeFragment : Fragment() {
         ratesRecyclerView = view.findViewById(R.id.ratesRecyclerView)
         baseCurrencySpinner = view.findViewById(R.id.baseCurrencySpinner)
         fetchButton = view.findViewById(R.id.fetchButton)
+        mapButton = view.findViewById(R.id.mapButton)
 
         ratesRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -56,6 +59,10 @@ class ExchangeFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Please enter a valid amount", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        mapButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_map_dialog)
         }
 
         viewModel.exchangeRates.observe(viewLifecycleOwner, Observer { exchangeRates ->

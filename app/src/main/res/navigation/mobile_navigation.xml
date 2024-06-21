@@ -35,4 +35,9 @@
         android:label="@string/title_goals"
         tools:layout="@layout/fragment_goals" />
 
+    <dialog
+        android:id="@+id/navigation_map_dialog"
+        android:name="com.example.appdev.ui.map.MapDialogFragment"
+        android:label="Map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

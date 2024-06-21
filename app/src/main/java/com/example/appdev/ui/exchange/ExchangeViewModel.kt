@@ -3,7 +3,7 @@ package com.example.appdev.ui.exchange
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.appdev.models.ExchangeRates
+import com.example.appdev.network.ExchangeRates
 import com.example.appdev.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,7 +17,7 @@ class ExchangeViewModel : ViewModel() {
     val error: LiveData<String?> = _error
 
     fun fetchExchangeRates(base: String, amount: Double) {
-        val call: Call<ExchangeRates> = RetrofitClient.apiService.getLatestRates(base)
+        val call: Call<ExchangeRates> = RetrofitClient.apiServiceExchange.getLatestRates(base)
 
         call.enqueue(object : Callback<ExchangeRates> {
             override fun onResponse(call: Call<ExchangeRates>, response: Response<ExchangeRates>) {
