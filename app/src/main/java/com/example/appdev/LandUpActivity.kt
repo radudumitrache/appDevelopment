@@ -28,21 +28,5 @@ class LandUpActivity : AppCompatActivity() {
             finish()
         }
         val database = GoalSaverDatabase.getDatabase(this)
-
-
-            val newUser = UserEntity(
-                email = "john@example.com",
-                password = "password123",
-                profession = "Developer",
-                age = "30",
-                monthly_salary = 5000f,
-                preffered_currency = "USD"
-            )
-            database.userDao().insert(newUser)
-
-            val users = database.userDao().getAllUsers()
-            users.forEach {
-                println("User: ${it.email}, Profession: ${it.profession}")
-            }
     }
 }
