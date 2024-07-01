@@ -8,8 +8,8 @@ import androidx.room.OnConflictStrategy
 interface UserDao {
 
     @Insert
-    suspend fun insert(user: UserEntity)
+    fun insert(user: UserEntity)
 
     @Query("SELECT * FROM User")
-    suspend fun getAllUsers(): List<UserEntity>
+    fun getAllUsers(): List<UserEntity>
 }

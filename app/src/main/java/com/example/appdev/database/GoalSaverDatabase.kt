@@ -12,12 +12,10 @@ import com.example.appdev.database.entities.UserEntity
 import com.example.appdev.util.Converters
 import androidx.room.Room
 import android.content.Context
-@Database(entities = [UserEntity::class,TransactionsEntity::class,GoalEntity::class,], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class,], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class GoalSaverDatabase : RoomDatabase() {
     abstract fun userDao() : UserDao
-    abstract fun transactionsDao() : TransactionsDao
-    abstract fun goalDao() : GoalDao
     companion object {
         @Volatile
         private var INSTANCE: GoalSaverDatabase? = null
@@ -28,7 +26,7 @@ abstract class GoalSaverDatabase : RoomDatabase() {
                     context.applicationContext,
                     GoalSaverDatabase::class.java,
                     "goal_saver_database"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }

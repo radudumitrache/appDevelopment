@@ -29,7 +29,7 @@ class LandUpActivity : AppCompatActivity() {
         }
         val database = GoalSaverDatabase.getDatabase(this)
 
-        lifecycleScope.launch {
+
             val newUser = UserEntity(
                 email = "john@example.com",
                 password = "password123",
@@ -44,6 +44,5 @@ class LandUpActivity : AppCompatActivity() {
             users.forEach {
                 println("User: ${it.email}, Profession: ${it.profession}")
             }
-        }
     }
 }
