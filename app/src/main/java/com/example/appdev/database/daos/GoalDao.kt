@@ -7,7 +7,7 @@ import com.example.appdev.database.entities.UserEntity
 @Dao
 interface GoalDao {
     @Insert
-    suspend fun insert(goal : GoalEntity)
+    fun insert(goal : GoalEntity)
     @Query("SELECT * FROM Goal WHERE user_id = :user_id ")
-    suspend fun getGoalsOfUser(user_id : Int)
+    fun getGoalsOfUser(user_id : Int) : List<GoalEntity>
 }

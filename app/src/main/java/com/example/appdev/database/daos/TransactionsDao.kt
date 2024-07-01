@@ -7,11 +7,11 @@ import com.example.appdev.database.entities.TransactionsEntity
 @Dao
 interface TransactionsDao {
     @Insert
-    suspend fun insert(transaction : TransactionsEntity)
+    fun insert(transaction : TransactionsEntity)
     @Query("SELECT * FROM `Transaction` WHERE user_id = :user_id")
-    suspend fun getTransactionsByUser(user_id :Int)
+    fun getTransactionsByUser(user_id :Int) : List<TransactionsEntity>
     @Query("SELECT * FROM `Transaction` WHERE user_id = :user_id AND type = :transaction_type")
-    suspend fun getTransactionsByUserType(user_id: Int,transaction_type:String)
+    fun getTransactionsByUserType(user_id: Int,transaction_type:String) : List<TransactionsEntity>
     @Query("DELETE FROM `Transaction` WHERE transaction_id = :transaction_id")
-    suspend fun deleteTransaction(transaction_id: Int)
+    fun deleteTransaction(transaction_id: Int)
 }

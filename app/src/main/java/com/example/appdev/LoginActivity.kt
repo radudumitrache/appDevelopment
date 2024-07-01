@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateLogin(username: String, password: String): Boolean {
-        // Replace with your own validation logic
+
         return username == "user" && password == "password"
     }
 }
