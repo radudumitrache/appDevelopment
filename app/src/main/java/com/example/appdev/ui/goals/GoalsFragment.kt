@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.R
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class GoalsFragment : Fragment() {
 
@@ -25,35 +23,39 @@ class GoalsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_goals, container, false)
 
-        val relatedCostsContainer: LinearLayout = view.findViewById(R.id.relatedCostsContainer)
+        val goalsContainer: LinearLayout = view.findViewById(R.id.goalsContainer)
+        val btnAddRelatedCost: Button = view.findViewById(R.id.btnAddRelatedCost)
+        val btnCreateGoal: Button = view.findViewById(R.id.btnCreateGoal)
+        val btnCalculateImpact: Button = view.findViewById(R.id.btnCalculateImpact)
 
-        val btnAddRelatedCost = view.findViewById<Button>(R.id.btnAddRelatedCost)
+        val budgetImpact: TextView = view.findViewById(R.id.budgetImpact)
+        val prediction: TextView = view.findViewById(R.id.prediction)
 
-        val goalTitle = view.findViewById<TextView>(R.id.goalTitle)
-        val goalDescription = view.findViewById<TextView>(R.id.goalDescription)
-        val dueDate = view.findViewById<TextView>(R.id.dueDate)
-        val amount = view.findViewById<TextView>(R.id.amountSaved)
-        val remainingAmount = view.findViewById<TextView>(R.id.remainingAmount)
-
-        goalViewModel.goalDetails.observe(viewLifecycleOwner, Observer { goalDetails ->
-            goalTitle.text = "Title: ${goalDetails.title}"
-            goalDescription.text = "Description: ${goalDetails.description}"
-            dueDate.text = "Due date: ${goalDetails.dueDate}"
-            amount.text = "Amount: ${goalDetails.amount}"
-            remainingAmount.text = "Remaining: ${goalDetails.remainingAmount}"
+        goalViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
+            goalsContainer.removeAllViews()
+            goals.forEach { goalDetails ->
+                val goalView = createGoalView(goalDetails, inflater, container)
+                goalsContainer.addView(goalView)
+            }
         })
 
-
         goalViewModel.relatedCosts.observe(viewLifecycleOwner, Observer { relatedCosts ->
-            relatedCostsContainer.removeAllViews()
-            relatedCosts.forEach { relatedCostDetails ->
-                val cardView = createRelatedCostCard(relatedCostDetails, inflater, container)
-                relatedCostsContainer.addView(cardView)
-            }
+            // Handle related costs display if needed
         })
 
         btnAddRelatedCost.setOnClickListener {
             showAddRelatedCostDialog()
+        }
+
+        btnCreateGoal.setOnClickListener {
+            showCreateGoalDialog()
+        }
+
+        btnCalculateImpact.setOnClickListener {
+            val impact = goalViewModel.calculateBudgetImpact()
+            val monthsToGoal = goalViewModel.predictMonthsToGoal()
+            budgetImpact.text = getString(R.string.budget_impact, impact)
+            prediction.text = getString(R.string.months_to_goal, monthsToGoal)
         }
 
         return view
@@ -63,36 +65,68 @@ class GoalsFragment : Fragment() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_new_related_cost, null)
         val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.descriptionEditText)
+        val recurringSwitch = dialogView.findViewById<SwitchMaterial>(R.id.recurringSwitch)
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Add Transaction")
+            .setTitle(getString(R.string.add_related_cost))
             .setView(dialogView)
-            .setPositiveButton("Add") { dialog, _ ->
+            .setPositiveButton(getString(R.string.add)) { dialog, _ ->
                 val amountText = amountEditText.text.toString()
                 val amount = if (amountText.isEmpty()) 0.0 else amountText.toDouble()
                 val description = descriptionEditText.text.toString()
-                goalViewModel.addRelatedCost(GoalsViewModel.RelatedCost(description, amount))
+                val isRecurring = recurringSwitch.isChecked
+                goalViewModel.addRelatedCost(GoalsViewModel.RelatedCost(description, amount, isRecurring))
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
             .show()
     }
 
-    private fun createRelatedCostCard(
-        relatedCostDetails: GoalsViewModel.RelatedCost,
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): View {
-        val card = inflater.inflate(R.layout.item_related_cost, container, false)
-        val costTitle = card.findViewById<TextView>(R.id.tvCostTitle)
-        val amount = card.findViewById<TextView>(R.id.tvAmount)
+    private fun showCreateGoalDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_create_goal, null)
+        val titleEditText = dialogView.findViewById<EditText>(R.id.etGoalTitle)
+        val descriptionEditText = dialogView.findViewById<EditText>(R.id.etGoalDescription)
+        val dueDateEditText = dialogView.findViewById<EditText>(R.id.etDueDate)
+        val priceEditText = dialogView.findViewById<EditText>(R.id.etPrice)
+        val monthlySavingsEditText = dialogView.findViewById<EditText>(R.id.etMonthlySavings)
 
-        costTitle.text = relatedCostDetails.title
-        amount.text = relatedCostDetails.amount.toString()
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.create_new_goal))
+            .setView(dialogView)
+            .setPositiveButton(getString(R.string.create)) { dialog, _ ->
+                val title = titleEditText.text.toString()
+                val description = descriptionEditText.text.toString()
+                val dueDate = dueDateEditText.text.toString()
+                val price = priceEditText.text.toString().toDouble()
+                val monthlySavings = monthlySavingsEditText.text.toString().toDouble()
+                val goal = GoalsViewModel.GoalDetails(title, description, dueDate, price, price, monthlySavings)
+                goalViewModel.addGoal(goal)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
 
-        return card
+    private fun createGoalView(goalDetails: GoalsViewModel.GoalDetails, inflater: LayoutInflater, container: ViewGroup?): View {
+        val view = inflater.inflate(R.layout.item_goal, container, false)
+        val goalTitle: TextView = view.findViewById(R.id.goalTitle)
+        val goalDescription: TextView = view.findViewById(R.id.goalDescription)
+        val dueDate: TextView = view.findViewById(R.id.dueDate)
+        val amount: TextView = view.findViewById(R.id.amountSaved)
+        val remainingAmount: TextView = view.findViewById(R.id.remainingAmount)
+
+        goalTitle.text = getString(R.string.goal_title, goalDetails.title)
+        goalDescription.text = getString(R.string.goal_description, goalDetails.description)
+        dueDate.text = getString(R.string.due_date, goalDetails.dueDate)
+        amount.text = getString(R.string.amount_saved, goalDetails.amount)
+        remainingAmount.text = getString(R.string.remaining_amount, goalDetails.remainingAmount)
+
+        return view
     }
 }

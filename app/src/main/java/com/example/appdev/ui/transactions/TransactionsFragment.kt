@@ -36,6 +36,9 @@ class TransactionsFragment : Fragment() {
 
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
+        val totalEarningsTextView: TextView = view.findViewById(R.id.totalEarningsTextView)
+        val totalSpentTextView: TextView = view.findViewById(R.id.totalSpentTextView)
+        val totalSavedTextView: TextView = view.findViewById(R.id.totalSavedTextView)
 
         viewModel.transactions.observe(viewLifecycleOwner, Observer { transactions ->
             transactionContainer.removeAllViews()
@@ -43,6 +46,11 @@ class TransactionsFragment : Fragment() {
                 val cardView = createTransactionCard(transaction)
                 transactionContainer.addView(cardView)
             }
+
+            // Update total amounts
+            totalEarningsTextView.text = "Total Earnings: ${viewModel.calculateTotalEarnings()}$"
+            totalSpentTextView.text = "Total Spent: ${viewModel.calculateTotalSpent()}$"
+            totalSavedTextView.text = "Total Saved: ${viewModel.calculateTotalSaved()}$"
         })
 
         addButton.setOnClickListener {

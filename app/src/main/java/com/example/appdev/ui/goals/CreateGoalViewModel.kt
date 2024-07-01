@@ -6,14 +6,15 @@ class CreateGoalViewModel : ViewModel() {
     var goalTitle: String = ""
     var goalDescription: String = ""
     var dueDate: String = ""
-    var price1: String = ""
+    var price: String = ""
+    var monthlySavings: String = ""
 
-    fun createGoal(title: String, description: String, date: String, price2: String) {
+    fun createGoal(title: String, description: String, date: String, price: String, monthlySavings: String) {
         goalTitle = title
         goalDescription = description
         dueDate = date
-        price1 = price2
-        // add to db
+        this.price = price
+        this.monthlySavings = monthlySavings
+        // Add to db or handle further logic
     }
 }
-

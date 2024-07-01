@@ -23,5 +23,20 @@ class TransactionsViewModel : ViewModel() {
         _transactions.value = currentList + transaction
     }
 
+    // Function to calculate total earnings
+    fun calculateTotalEarnings(): Int {
+        return _transactions.value?.filter { it.amount > 0 }?.sumOf { it.amount } ?: 0
+    }
+
+    // Function to calculate total spent
+    fun calculateTotalSpent(): Int {
+        return _transactions.value?.filter { it.amount < 0 }?.sumOf { it.amount } ?: 0
+    }
+
+    // Function to calculate total saved
+    fun calculateTotalSaved(): Int {
+        return calculateTotalEarnings() + calculateTotalSpent() // since spent amounts are negative
+    }
+
     data class Transaction(val amount: Int, val description: String, val date: String)
 }
