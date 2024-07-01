@@ -1,11 +1,18 @@
 package com.example.appdev.ui.transactions
 
 import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -13,8 +20,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.R
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class TransactionsFragment : Fragment() {
 
@@ -23,6 +35,16 @@ class TransactionsFragment : Fragment() {
     }
 
     private val viewModel: TransactionsViewModel by viewModels()
+
+    private val filePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                val filePath = copyUriToFile(it)
+                filePath?.let { path ->
+                    viewModel.readCsvFile(path)
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +58,7 @@ class TransactionsFragment : Fragment() {
 
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
+        val importButton: Button = view.findViewById(R.id.importCSV) // Added import button
         val totalEarningsTextView: TextView = view.findViewById(R.id.totalEarningsTextView)
         val totalSpentTextView: TextView = view.findViewById(R.id.totalSpentTextView)
         val totalSavedTextView: TextView = view.findViewById(R.id.totalSavedTextView)
@@ -57,7 +80,15 @@ class TransactionsFragment : Fragment() {
             showAddTransactionDialog()
         }
 
+        importButton.setOnClickListener {
+            importTransactionsFromCSV()
+        }
+
         return view
+    }
+
+    private fun importTransactionsFromCSV() {
+        openFilePicker()
     }
 
     private fun showAddTransactionDialog() {
@@ -105,6 +136,51 @@ class TransactionsFragment : Fragment() {
             requireContext(), dateSetListener,
             calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
+    }
+
+    private fun openFilePicker() {
+        filePickerLauncher.launch("*/*")
+    }
+
+    private fun copyUriToFile(uri: Uri): String? {
+        val contentResolver = requireContext().contentResolver
+        val fileName = getFileName(uri)
+        val file = File(requireContext().cacheDir, fileName)
+
+        try {
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                FileOutputStream(file).use { outputStream ->
+                    copyStream(inputStream, outputStream)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
+
+        return file.absolutePath
+    }
+
+    private fun getFileName(uri: Uri): String {
+        var fileName = "temp_file"
+        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex >= 0) {
+                    fileName = it.getString(nameIndex)
+                }
+            }
+        }
+        return fileName
+    }
+
+    private fun copyStream(input: InputStream, output: FileOutputStream) {
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (input.read(buffer).also { length = it } > 0) {
+            output.write(buffer, 0, length)
+        }
     }
 
     private fun createTransactionCard(transaction: TransactionsViewModel.Transaction): CardView {
