@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,19 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.account.AccountFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="136dp" />
+                android:layout_height="13dp" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -70,6 +68,31 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Change Profile" />
 
+            <!-- New Elements for Adding Friends -->
+            <TextView
+                android:id="@+id/addFriendTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Add Friends"
+                android:textSize="24sp"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editSearchFriend"
+                android:layout_width="196dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:hint="Search by name"
+                android:minHeight="48dp" />
+
+            <Button
+                android:id="@+id/addFriendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Add Friend" />
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </FrameLayout>
