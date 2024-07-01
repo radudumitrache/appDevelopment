@@ -2,8 +2,8 @@ val room_version = "2.6.1"
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.kapt")
-    id ("com.google.devtools.ksp")
+    kotlin("kapt")
+
 }
 
 android {
@@ -45,6 +45,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     kapt ("android.arch.persistence.room:compiler:1.0.0-alpha4")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     // To use Kotlin annotation processing tool (kapt)
 
     implementation ("androidx.cardview:cardview:1.0.0")

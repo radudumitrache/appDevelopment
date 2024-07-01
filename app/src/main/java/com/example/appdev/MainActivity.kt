@@ -1,27 +1,28 @@
 package com.example.appdev
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.entities.UserEntity
 import com.example.appdev.databinding.ActivityMainBinding
 import com.example.appdev.util.CheckInternetConnection
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    companion object {
-        lateinit var database: GoalSaverDatabase
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        database = GoalSaverDatabase.getDatabase(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

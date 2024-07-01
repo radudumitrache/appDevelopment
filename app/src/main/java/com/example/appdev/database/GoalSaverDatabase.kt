@@ -27,7 +27,7 @@ abstract class GoalSaverDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GoalSaverDatabase::class.java,
-                    "GoalSaver"
+                    "goal_saver_database"
                 ).build()
                 INSTANCE = instance
                 instance
