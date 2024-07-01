@@ -19,13 +19,14 @@ class CreateGoalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_create_goal, container, false)
+        val view = inflater.inflate(R.layout.dialog_create_goal, container, false)
 
         // Get references to the EditText fields and the button
         val etGoalTitle = view.findViewById<EditText>(R.id.etGoalTitle)
         val etGoalDescription = view.findViewById<EditText>(R.id.etGoalDescription)
         val etDueDate = view.findViewById<EditText>(R.id.etDueDate)
         val etPrice = view.findViewById<EditText>(R.id.etPrice)
+        val etMonthlySavings = view.findViewById<EditText>(R.id.etMonthlySavings)
         val btnCreate = view.findViewById<Button>(R.id.btnCreateGoal)
 
         // Set the button click listener
@@ -34,8 +35,9 @@ class CreateGoalFragment : Fragment() {
             val description = etGoalDescription.text.toString()
             val date = etDueDate.text.toString()
             val price = etPrice.text.toString()
+            val monthlySavings = etMonthlySavings.text.toString()
 
-            goalViewModel.createGoal(title, description, date, price)
+            goalViewModel.createGoal(title, description, date, price, monthlySavings)
             // navigate to dashboard?
         }
 
