@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.R
+import com.example.appdev.database.entities.GoalEntity
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class GoalsFragment : Fragment() {
 
@@ -33,14 +36,10 @@ class GoalsFragment : Fragment() {
 
         goalViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
             goalsContainer.removeAllViews()
-            goals.forEach { goalDetails ->
-                val goalView = createGoalView(goalDetails, inflater, container)
+            goals.forEach { goal ->
+                val goalView = createGoalView(goal, inflater, container)
                 goalsContainer.addView(goalView)
             }
-        })
-
-        goalViewModel.relatedCosts.observe(viewLifecycleOwner, Observer { relatedCosts ->
-            // Handle related costs display if needed
         })
 
         btnAddRelatedCost.setOnClickListener {
@@ -102,7 +101,7 @@ class GoalsFragment : Fragment() {
                 val dueDate = dueDateEditText.text.toString()
                 val price = priceEditText.text.toString().toDouble()
                 val monthlySavings = monthlySavingsEditText.text.toString().toDouble()
-                val goal = GoalsViewModel.GoalDetails(title, description, dueDate, price, price, monthlySavings)
+                val goal = GoalsViewModel.GoalDetails(title, description, dueDate, price, 0.0, monthlySavings)
                 goalViewModel.addGoal(goal)
                 dialog.dismiss()
             }
@@ -113,7 +112,7 @@ class GoalsFragment : Fragment() {
             .show()
     }
 
-    private fun createGoalView(goalDetails: GoalsViewModel.GoalDetails, inflater: LayoutInflater, container: ViewGroup?): View {
+    private fun createGoalView(goal: GoalEntity, inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.item_goal, container, false)
         val goalTitle: TextView = view.findViewById(R.id.goalTitle)
         val goalDescription: TextView = view.findViewById(R.id.goalDescription)
@@ -121,11 +120,11 @@ class GoalsFragment : Fragment() {
         val amount: TextView = view.findViewById(R.id.amountSaved)
         val remainingAmount: TextView = view.findViewById(R.id.remainingAmount)
 
-        goalTitle.text = getString(R.string.goal_title, goalDetails.title)
-        goalDescription.text = getString(R.string.goal_description, goalDetails.description)
-        dueDate.text = getString(R.string.due_date, goalDetails.dueDate)
-        amount.text = getString(R.string.amount_saved, goalDetails.amount)
-        remainingAmount.text = getString(R.string.remaining_amount, goalDetails.remainingAmount)
+        goalTitle.text = getString(R.string.goal_title, goal.title)
+        goalDescription.text = getString(R.string.goal_description, goal.description)
+        dueDate.text = getString(R.string.due_date, SimpleDateFormat("dd/MM/yyyy", Locale.US).format(goal.due_date))
+        amount.text = getString(R.string.amount_saved, goal.current_amount.toFloat())
+        remainingAmount.text = getString(R.string.remaining_amount, goal.target_amount.toFloat() - goal.current_amount.toFloat())
 
         return view
     }
