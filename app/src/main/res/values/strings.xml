@@ -20,7 +20,7 @@
     <string name="autofillHintDescription">description</string>
     <string name="autofillHintDate">date</string>
     <string name="add_transaction">Add Transaction</string>
-    <string name="username_button">Username</string>
+    <string name="email_button">Email</string>
     <string name="password_button">Password</string>
     <string name="goal_title">Title: %1$s</string>
     <string name="goal_description">Description: %1$s</string>
