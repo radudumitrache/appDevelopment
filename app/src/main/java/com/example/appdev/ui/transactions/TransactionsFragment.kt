@@ -7,11 +7,7 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
@@ -20,19 +16,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.R
+import com.example.appdev.database.entities.TransactionsEntity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 class TransactionsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = TransactionsFragment()
-    }
 
     private val viewModel: TransactionsViewModel by viewModels()
 
@@ -46,11 +39,8 @@ class TransactionsFragment : Fragment() {
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -58,11 +48,10 @@ class TransactionsFragment : Fragment() {
 
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
-        val importButton: Button = view.findViewById(R.id.importCSV) // Added import button
+        val importButton: Button = view.findViewById(R.id.importCSV)
         val totalEarningsTextView: TextView = view.findViewById(R.id.totalEarningsTextView)
         val totalSpentTextView: TextView = view.findViewById(R.id.totalSpentTextView)
         val totalSavedTextView: TextView = view.findViewById(R.id.totalSavedTextView)
-
         viewModel.transactions.observe(viewLifecycleOwner, Observer { transactions ->
             transactionContainer.removeAllViews()
             transactions.forEach { transaction ->
@@ -70,7 +59,6 @@ class TransactionsFragment : Fragment() {
                 transactionContainer.addView(cardView)
             }
 
-            // Update total amounts
             totalEarningsTextView.text = "Total Earnings: ${viewModel.calculateTotalEarnings()}$"
             totalSpentTextView.text = "Total Spent: ${viewModel.calculateTotalSpent()}$"
             totalSavedTextView.text = "Total Saved: ${viewModel.calculateTotalSaved()}$"
@@ -107,13 +95,37 @@ class TransactionsFragment : Fragment() {
             .setView(dialogView)
             .setPositiveButton("Add") { dialog, _ ->
                 val amountText = amountEditText.text.toString()
-                val amount = if (amountText.isEmpty()) 0 else amountText.toInt()
                 val description = descriptionEditText.text.toString()
-                val date = dateEditText.text.toString()
-                val type = typeSpinner.selectedItem.toString()
-                val finalAmount = if (type == "-") -amount else amount
-                viewModel.addTransaction(TransactionsViewModel.Transaction(finalAmount, description, date))
-                dialog.dismiss()
+                val dateText = dateEditText.text.toString()
+                val typeText = typeSpinner.selectedItem.toString()
+
+                // Check if any field is empty
+                if (amountText.isEmpty() || description.isEmpty() || dateText.isEmpty() || typeText.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                val amount = amountText.toFloat()
+                val type = typeText[0]
+
+                try {
+                    val date = SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateText)
+                    val finalAmount = if (type == '-') -amount else amount
+                    val transaction = TransactionsEntity(
+                        user_id = 1, // Example user_id
+                        type = type,
+                        amount = finalAmount,
+                        currency = "USD", // Example currency
+                        date = date,
+                        isRecurring = false, // Example value
+                        description = description
+                    )
+                    viewModel.addTransaction(transaction)
+                    dialog.dismiss()
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Invalid date format", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -183,7 +195,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    private fun createTransactionCard(transaction: TransactionsViewModel.Transaction): CardView {
+    private fun createTransactionCard(transaction: TransactionsEntity): CardView {
         val cardView = CardView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -218,7 +230,7 @@ class TransactionsFragment : Fragment() {
         }
 
         val dateTextView = TextView(requireContext()).apply {
-            text = transaction.date
+            text = SimpleDateFormat("dd/MM/yy", Locale.US).format(transaction.date)
             textSize = 14f
             setTextColor(ContextCompat.getColor(context, R.color.date))
         }
