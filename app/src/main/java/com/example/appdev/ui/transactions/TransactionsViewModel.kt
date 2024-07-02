@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import com.example.appdev.MainActivity
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.daos.TransactionsDao
 import com.example.appdev.database.entities.TransactionsEntity
@@ -18,6 +19,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
 
     private val transactionsDao: TransactionsDao
     private val _transactions = MutableLiveData<List<TransactionsEntity>>()
+    private val logged_user = MainActivity.logged_user
     val transactions: LiveData<List<TransactionsEntity>> get() = _transactions
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     init {
@@ -32,7 +34,11 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun loadTransactions() {
-        _transactions.value = transactionsDao.getTransactionsByUser(1) // Example user_id
+        if (logged_user != null)
+        {
+            _transactions.value = transactionsDao.getTransactionsByUser(logged_user.user_id)
+        }
+         // Example user_id
     }
 
     fun addTransaction(transaction: TransactionsEntity) {
@@ -87,16 +93,20 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
 
                 if (date != null) {
                     val description = values[descriptionIndex]
-                    val transaction = TransactionsEntity(
-                        user_id = 1, // Example user_id
-                        type = if (amount >= 0) '+' else '-',
-                        amount = amount,
-                        currency = "USD", // Example currency
-                        date = date,
-                        isRecurring = false, // Example value
-                        description = description
-                    )
-                    addTransaction(transaction)
+                    if (logged_user != null)
+                    {
+                        val transaction = TransactionsEntity(
+                            user_id = logged_user.user_id, // Example user_id
+                            type = if (amount >= 0) '+' else '-',
+                            amount = amount,
+                            currency = "USD", // Example currency
+                            date = date,
+                            isRecurring = false, // Example value
+                            description = description
+                        )
+                        addTransaction(transaction)
+                    }
+
                 }
 
                 line = bufferedReader.readLine()

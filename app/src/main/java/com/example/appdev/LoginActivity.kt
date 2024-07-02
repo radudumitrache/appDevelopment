@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.example.appdev.R.*
 import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.entities.UserEntity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,7 +29,10 @@ class LoginActivity : AppCompatActivity() {
 
             if (validateLogin(email, password)) {
                 // Navigate to MainActivity
-                val intent = Intent(this, MainActivity::class.java)
+                var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
+                val intent = Intent(this, MainActivity::class.java).apply {
+                   putExtra("USER",user_with_mail)
+                }
                 startActivity(intent)
                 finish()
             } else {
