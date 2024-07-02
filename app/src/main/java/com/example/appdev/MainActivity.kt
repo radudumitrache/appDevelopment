@@ -1,46 +1,57 @@
 package com.example.appdev
 
+import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.appdev.ui.theme.AppDevTheme
+import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
+import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.entities.UserEntity
+import com.example.appdev.databinding.ActivityMainBinding
+import com.example.appdev.util.CheckInternetConnection
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+    companion object {
+        lateinit var database: GoalSaverDatabase
+        var logged_user : UserEntity? = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            AppDevTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        logged_user = intent.getParcelableExtra("USER", UserEntity::class.java)
+
+        if (logged_user != null) {
+            Toast.makeText(this, "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         }
-    }
-}
+        val navView: BottomNavigationView = binding.navView
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppDevTheme {
-        Greeting("Android")
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_account, R.id.navigation_transactions, R.id.navigation_dashboard, R.id.navigation_exchange, R.id.navigation_goals
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+        var newUser : UserEntity = UserEntity(email="ceva", password = "ceva", profession = "ceva", age = "ceva", monthly_salary = 11.2f, preffered_currency = "dollar", user_id = 0)
+        GoalSaverDatabase.getDatabase(this).userDao().insert(newUser)
     }
 }

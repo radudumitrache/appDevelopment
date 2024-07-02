@@ -1,7 +1,42 @@
 <resources>
-    <string name="app_name">AppDev</string>
+    <string name="app_name">Goal Saver</string>
+    <string name="subtitle">Track your savings goals</string>
+    <string name="register_text">Register</string>
     <string name="login_text">Login</string>
     <string name="username_text">Username</string>
     <string name="password_text">Password</string>
     <string name="login_button_text">Login</string>
+    <string name="title_account">Account</string>
+    <string name="title_transactions">Transactions</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_exchange">Exchange</string>
+    <string name="title_goals">Goal</string>
+    <string name="title_createGoal">Create Goal</string>
+    <string name="title_relatedCosts">Related Costs</string>
+    <string name="hint_amount">Amount</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_date">Date</string>
+    <string name="autofillHintAmount">amount</string>
+    <string name="autofillHintDescription">description</string>
+    <string name="autofillHintDate">date</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="email_button">Email</string>
+    <string name="password_button">Password</string>
+    <string name="goal_title">Title: %1$s</string>
+    <string name="goal_description">Description: %1$s</string>
+    <string name="due_date">Due date: %1$s</string>
+    <string name="amount_saved">Amount: %1$.2f$</string>
+    <string name="remaining_amount">Remaining: %1$.2f$</string>
+    <string name="budget_impact">Budget Impact: %1$.2f$</string>
+    <string name="months_to_goal">Months to Goal: %1$d</string>
+    <string name="add_related_cost">Add Related Cost</string>
+    <string name="create_new_goal">Create New Goal</string>
+    <string name="add">Add</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="amount_value">%1$.2f$</string>
+    <string-array name="transaction_types">
+        <item>+</item>
+        <item>-</item>
+    </string-array>
 </resources>

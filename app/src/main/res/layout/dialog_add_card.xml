@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/card_number_input"
+        android:layout_width="400dp"
+        android:layout_height="63dp"
+        android:hint="Card Number"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/card_holder_input"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="Card Holder"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/expiry_date_input"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:hint="Expiry Date (MM/YY)" />
+
+    <Button
+        android:id="@+id/add_card_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Card"/>
+
+</LinearLayout>

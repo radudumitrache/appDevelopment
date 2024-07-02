@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".LoginActivity"
+    android:background="@color/background">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="176dp" />
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="370dp"
+        android:layout_height="81dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/email_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="376dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/password_button"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="164dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="16dp"
+        android:text="Sign in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password" />
+
+    <Button
+        android:id="@+id/BackButtonLogin"
+        android:layout_width="199dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20sp"
-        android:background="@drawable/rounded_background_purple"
-        android:fontFamily="monospace"
-        android:padding="6sp"
-        android:text="@string/login_text"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold|italic" />
-
-    <LinearLayout
-        android:layout_width="377dp"
-        android:layout_height="213dp"
-        android:layout_marginLeft="20sp"
-        android:layout_marginTop="10sp"
-        android:background="@drawable/rounded_background_purple"
-        android:orientation="vertical"
-        android:padding="5sp">
-
-        <EditText
-            android:id="@+id/username_input"
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:ems="10"
-            android:fontFamily="monospace"
-            android:hint="@string/username_text"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/password_input"
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:ems="10"
-            android:fontFamily="monospace"
-            android:hint="@string/password_text"
-            android:inputType="textPassword"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="179dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:background="@drawable/rounded_background_white"
-            android:backgroundTint="#FFFFFF"
-            android:text="@string/login_button_text"
-            android:textColor="@color/purple" />
-    </LinearLayout>
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="112dp"
+        android:layout_marginEnd="16dp"
+        android:text="Go back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
