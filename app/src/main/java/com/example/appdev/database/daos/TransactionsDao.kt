@@ -14,4 +14,5 @@ interface TransactionsDao {
     fun getTransactionsByUserType(user_id: Int,transaction_type:String) : List<TransactionsEntity>
     @Query("DELETE FROM `Transaction` WHERE transaction_id = :transaction_id")
     fun deleteTransaction(transaction_id: Int)
+
 }

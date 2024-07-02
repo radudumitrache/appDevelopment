@@ -15,5 +15,6 @@ data class TransactionsEntity (
     val amount : Float,
     val currency : String,
     val date : Date,
-    val isRecurring : Boolean
+    val isRecurring : Boolean,
+    val description : String
 )
