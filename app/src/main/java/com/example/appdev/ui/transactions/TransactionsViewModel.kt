@@ -1,60 +1,69 @@
 package com.example.appdev.ui.transactions
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.daos.TransactionsDao
+import com.example.appdev.database.entities.TransactionsEntity
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
+import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.Locale
+class TransactionsViewModel(application: Application) : AndroidViewModel(application) {
 
-class TransactionsViewModel : ViewModel() {
-
-    private val _transactions = MutableLiveData<List<Transaction>>()
-    val transactions: LiveData<List<Transaction>> get() = _transactions
-
+    private val transactionsDao: TransactionsDao
+    private val _transactions = MutableLiveData<List<TransactionsEntity>>()
+    val transactions: LiveData<List<TransactionsEntity>> get() = _transactions
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     init {
-        // Initial dummy data
-        _transactions.value = listOf(
-            Transaction(-30, "Groceries", "11/11/24"),
-            Transaction(50, "Salary", "11/11/24")
-        )
+        // Create an instance of the database
+        val db = Room.databaseBuilder(
+            application,
+            GoalSaverDatabase::class.java, "goal_saver_database"
+        ).allowMainThreadQueries().build()
+
+        transactionsDao = db.transactionDao()
+        loadTransactions()
     }
 
-    // Function to add a new transaction
-    fun addTransaction(transaction: Transaction) {
-        val currentList = _transactions.value ?: emptyList()
-        _transactions.value = currentList + transaction
+    private fun loadTransactions() {
+        _transactions.value = transactionsDao.getTransactionsByUser(1) // Example user_id
     }
 
-    // Function to calculate total earnings
-    fun calculateTotalEarnings(): Int {
-        return _transactions.value?.filter { it.amount > 0 }?.sumOf { it.amount } ?: 0
+    fun addTransaction(transaction: TransactionsEntity) {
+        transactionsDao.insert(transaction)
+        loadTransactions()
     }
 
-    // Function to calculate total spent
-    fun calculateTotalSpent(): Int {
-        return _transactions.value?.filter { it.amount < 0 }?.sumOf { it.amount } ?: 0
+    fun deleteTransaction(transactionId: Int) {
+        transactionsDao.deleteTransaction(transactionId)
+        loadTransactions()
     }
 
-    // Function to calculate total saved
-    fun calculateTotalSaved(): Int {
+    fun calculateTotalEarnings(): Float {
+        return _transactions.value?.filter { it.amount > 0 }?.sumOf { it.amount.toDouble() }?.toFloat() ?: 0f
+    }
+
+    fun calculateTotalSpent(): Float {
+        return _transactions.value?.filter { it.amount < 0 }?.sumOf { it.amount.toDouble() }?.toFloat() ?: 0f
+    }
+
+    fun calculateTotalSaved(): Float {
         return calculateTotalEarnings() + calculateTotalSpent() // since spent amounts are negative
     }
 
     fun readCsvFile(filePath: String) {
         var bufferedReader: BufferedReader? = null
-        val amounts = mutableListOf<Double>()
-        val types = mutableListOf<String>()
-        val dates = mutableListOf<String>()
-
         try {
             bufferedReader = BufferedReader(FileReader(filePath))
-
-            // Reading the header line
             val headerLine = bufferedReader.readLine()
             val headers = headerLine.split(",")
 
-            // Indices for Amount and Type
             val amountIndex = headers.indexOf("Amount")
             val dateIndex = headers.indexOf("Started Date")
             val descriptionIndex = headers.indexOf("Description")
@@ -64,20 +73,34 @@ class TransactionsViewModel : ViewModel() {
                 return
             }
 
-            // Reading the rest of the lines
             var line: String? = bufferedReader.readLine()
             while (line != null) {
                 val values = line.split(",")
-                val amount = values[amountIndex].toDouble().toInt()
-                val date = values[dateIndex]
-                val type = values[descriptionIndex]
+                val amount = values[amountIndex].toFloat()
+                val dateString = values[dateIndex].trim()
+                val date = try {
+                    dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
 
-                addTransaction(Transaction(amount, type, date))
+                if (date != null) {
+                    val description = values[descriptionIndex]
+                    val transaction = TransactionsEntity(
+                        user_id = 1, // Example user_id
+                        type = if (amount >= 0) '+' else '-',
+                        amount = amount,
+                        currency = "USD", // Example currency
+                        date = date,
+                        isRecurring = false, // Example value
+                        description = description
+                    )
+                    addTransaction(transaction)
+                }
 
                 line = bufferedReader.readLine()
             }
-
-
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -85,6 +108,4 @@ class TransactionsViewModel : ViewModel() {
             bufferedReader?.close()
         }
     }
-
-    data class Transaction(val amount: Int, val description: String, val date: String)
 }
