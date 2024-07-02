@@ -12,13 +12,14 @@ import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
 import java.util.Date
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 class TransactionsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val transactionsDao: TransactionsDao
     private val _transactions = MutableLiveData<List<TransactionsEntity>>()
     val transactions: LiveData<List<TransactionsEntity>> get() = _transactions
-
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     init {
         // Create an instance of the database
         val db = Room.databaseBuilder(
@@ -31,7 +32,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun loadTransactions() {
-        _transactions.value = transactionsDao.getTransactionsByUser(0) // Example user_id
+        _transactions.value = transactionsDao.getTransactionsByUser(1) // Example user_id
     }
 
     fun addTransaction(transaction: TransactionsEntity) {
@@ -76,19 +77,28 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
             while (line != null) {
                 val values = line.split(",")
                 val amount = values[amountIndex].toFloat()
-                val date = Date(values[dateIndex]) // Assuming date is in a parseable format
-                val description = values[descriptionIndex]
+                val dateString = values[dateIndex].trim()
+                val date = try {
+                    dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
 
-                val transaction = TransactionsEntity(
-                    user_id = 0, // Example user_id
-                    type = if (amount >= 0) '+' else '-',
-                    amount = amount,
-                    currency = "USD", // Example currency
-                    date = date,
-                    isRecurring = false, // Example value
-                    description = description
-                )
-                addTransaction(transaction)
+                if (date != null) {
+                    val description = values[descriptionIndex]
+                    val transaction = TransactionsEntity(
+                        user_id = 1, // Example user_id
+                        type = if (amount >= 0) '+' else '-',
+                        amount = amount,
+                        currency = "USD", // Example currency
+                        date = date,
+                        isRecurring = false, // Example value
+                        description = description
+                    )
+                    addTransaction(transaction)
+                }
+
                 line = bufferedReader.readLine()
             }
 
