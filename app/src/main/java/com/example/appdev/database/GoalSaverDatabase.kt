@@ -36,5 +36,6 @@ abstract class GoalSaverDatabase : RoomDatabase() {
                 instance
             }
         }
+
     }
 }

@@ -8,13 +8,13 @@
     android:background="@color/background">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/email"
         android:layout_width="370dp"
         android:layout_height="81dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="180dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/username_button"
+        android:hint="@string/email_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username" />
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
     <Button
         android:id="@+id/loginButton"
