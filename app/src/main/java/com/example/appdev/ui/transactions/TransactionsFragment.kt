@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.example.appdev.MainActivity
 import com.example.appdev.R
 import com.example.appdev.database.entities.TransactionsEntity
 import java.io.File
@@ -26,9 +27,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TransactionsFragment : Fragment() {
-
+    private val logged_user = MainActivity.logged_user
     private val viewModel: TransactionsViewModel by viewModels()
-
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -38,14 +38,14 @@ class TransactionsFragment : Fragment() {
                 }
             }
         }
-
     override fun onCreateView(
 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-
+        val logged_user = MainActivity.logged_user
+        Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
         val importButton: Button = view.findViewById(R.id.importCSV)
@@ -111,16 +111,20 @@ class TransactionsFragment : Fragment() {
                 try {
                     val date = SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateText)
                     val finalAmount = if (type == '-') -amount else amount
-                    val transaction = TransactionsEntity(
-                        user_id = 1, // Example user_id
-                        type = type,
-                        amount = finalAmount,
-                        currency = "USD", // Example currency
-                        date = date,
-                        isRecurring = false, // Example value
-                        description = description
-                    )
-                    viewModel.addTransaction(transaction)
+                    if (logged_user!=null)
+                    {
+                        val transaction = TransactionsEntity(
+                            user_id = logged_user.user_id, // Example user_id
+                            type = type,
+                            amount = finalAmount,
+                            currency = "USD", // Example currency
+                            date = date,
+                            isRecurring = false, // Example value
+                            description = description
+                        )
+                        viewModel.addTransaction(transaction)
+                    }
+
                     dialog.dismiss()
                 } catch (e: ParseException) {
                     e.printStackTrace()

@@ -1,8 +1,10 @@
 package com.example.appdev
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -23,13 +25,20 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var database: GoalSaverDatabase
+        var logged_user : UserEntity? = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        logged_user = intent.getParcelableExtra("USER", UserEntity::class.java)
+
+        if (logged_user != null) {
+            Toast.makeText(this, "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
+        }
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)

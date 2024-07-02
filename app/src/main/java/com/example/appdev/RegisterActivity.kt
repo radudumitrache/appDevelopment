@@ -23,8 +23,6 @@ class RegisterActivity : AppCompatActivity() {
         val preffered_currency = findViewById<EditText>(R.id.preferred_currency)
         val registerButton = findViewById<Button>(R.id.RegisterButton)
         val backButton = findViewById<Button>(R.id.BackButton)
-        registeruser("","","","",12.3f,"")
-
 
         registerButton.setOnClickListener {
             val email = emailEditText.text.toString()
