@@ -18,6 +18,8 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
 
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
     init {
         loadGoals()
     }
@@ -30,7 +32,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             GoalDetails(
                 title = goal.title,
                 description = goal.description,
-                dueDate = goal.due_date.toString(),
+                dueDate = dateFormat.format(goal.due_date),
                 amount = goal.current_amount,
                 remainingAmount = goal.target_amount,
                 relatedCosts = relatedCosts.map {
@@ -48,7 +50,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             description = goal.description,
             target_amount = goal.amount,
             current_amount = 0.0,
-            due_date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(goal.dueDate)!!
+            due_date = dateFormat.parse(goal.dueDate)!!
         )
         goalDao.insert(goalEntity)
         loadGoals()
@@ -82,8 +84,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun parseDate(dateStr: String): Date {
-        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return format.parse(dateStr) ?: Date()
+        return dateFormat.parse(dateStr) ?: Date()
     }
 
     private fun calculateMonthsUntilDate(dueDate: Date): Int {
