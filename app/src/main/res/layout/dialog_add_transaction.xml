@@ -11,6 +11,18 @@
         android:layout_height="wrap_content"
         android:entries="@array/transaction_types"
         android:padding="16dp" />
+    <Spinner
+        android:id="@+id/spinner_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Card"
+        android:padding="16dp" />
+    <Switch
+        android:id="@+id/switch_recurring"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Is Recurring"
+        android:padding="16dp"/>
 
     <EditText
         android:id="@+id/amountEditText"

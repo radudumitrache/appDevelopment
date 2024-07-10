@@ -13,7 +13,6 @@ data class TransactionsEntity (
     val card_id: Int,
     val type : Char,
     val amount : Float,
-    val currency : String,
     val date : Date,
     val isRecurring : Boolean,
     val description : String

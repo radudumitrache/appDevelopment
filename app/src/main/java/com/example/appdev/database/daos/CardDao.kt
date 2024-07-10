@@ -5,6 +5,7 @@ import androidx.room.Query
 import com.example.appdev.database.entities.CardEntity
 import com.example.appdev.database.entities.GoalEntity
 import com.example.appdev.database.entities.UserEntity
+@Dao
 interface CardDao {
     @Insert
     fun insert(card : CardEntity)

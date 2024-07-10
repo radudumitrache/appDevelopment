@@ -10,7 +10,9 @@ import java.util.Date
 data class CardEntity (
     @PrimaryKey(autoGenerate = true) val card_id : Int = 0,
     val user_id : Int,
-    val name_on_card : Int,
+    val first_digits_of_card : String,
+    val expiry_date : Date,
+    val name_on_card : String,
     val currency_type : String,
     val bank_name : String,
     val amount_on_card : Float
