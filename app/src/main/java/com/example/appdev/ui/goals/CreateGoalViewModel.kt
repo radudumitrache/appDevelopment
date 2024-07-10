@@ -31,5 +31,6 @@ class CreateGoalViewModel(application: Application) : AndroidViewModel(applicati
             due_date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date)!!
         )
         goalDao.insert(goalEntity)
+
     }
 }

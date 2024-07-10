@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.R
+import com.example.appdev.database.entities.GoalEntity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class GoalsFragment : Fragment() {
 
@@ -42,6 +44,7 @@ class GoalsFragment : Fragment() {
 
         goalViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
             goalsContainer.removeAllViews()
+
             if (goals.isNotEmpty()) {
                 goals.forEach { goalDetails ->
                     val goalView = createGoalView(goalDetails, layoutInflater, null)
@@ -161,6 +164,7 @@ class GoalsFragment : Fragment() {
     }
 
     private fun createGoalView(goalDetails: GoalsViewModel.GoalDetails, inflater: LayoutInflater, container: ViewGroup?): View {
+
         val view = inflater.inflate(R.layout.item_goal, container, false)
         val goalTitle: TextView = view.findViewById(R.id.goalTitle)
         val goalDescription: TextView = view.findViewById(R.id.goalDescription)
@@ -170,11 +174,11 @@ class GoalsFragment : Fragment() {
         val btnAddRelatedCost: Button = view.findViewById(R.id.btnAddRelatedCost)
         val relatedCostsContainer: LinearLayout = view.findViewById(R.id.relatedCostsContainer)
 
-        goalTitle.text = getString(R.string.goal_title, goalDetails.title)
-        goalDescription.text = getString(R.string.goal_description, goalDetails.description)
-        dueDate.text = getString(R.string.due_date, goalDetails.dueDate)
-        amount.text = getString(R.string.amount_saved, goalDetails.amount)
-        remainingAmount.text = getString(R.string.remaining_amount, goalDetails.remainingAmount)
+        goalTitle.text = getString(R.string.goal_title, goal.title)
+        goalDescription.text = getString(R.string.goal_description, goal.description)
+        dueDate.text = getString(R.string.due_date, SimpleDateFormat("dd/MM/yyyy", Locale.US).format(goal.due_date))
+        amount.text = getString(R.string.amount_saved, goal.current_amount.toFloat())
+        remainingAmount.text = getString(R.string.remaining_amount, goal.target_amount.toFloat() - goal.current_amount.toFloat())
 
         btnAddRelatedCost.setOnClickListener {
             showAddRelatedCostDialog(goalDetails.title)

@@ -54,6 +54,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         loadGoals()
     }
 
+
     fun addRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
         val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
         val goal = currentGoals.find { it.title == goalTitle }

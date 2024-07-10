@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        var newUser : UserEntity = UserEntity(email="ceva", password = "ceva", profession = "ceva", age = "ceva", monthly_salary = 11.2f, preffered_currency = "dollar", user_id = 0)
-        GoalSaverDatabase.getDatabase(this).userDao().insert(newUser)
+
     }
 }

@@ -64,6 +64,7 @@ class CreateGoalFragment : Fragment() {
         return view
     }
 
+
     private fun showDatePickerDialog(dueDateEditText: EditText) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -79,4 +80,5 @@ class CreateGoalFragment : Fragment() {
 
         datePickerDialog.show()
     }
+
 }
