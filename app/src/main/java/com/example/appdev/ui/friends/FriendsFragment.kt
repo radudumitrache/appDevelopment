@@ -1,5 +1,6 @@
 package com.example.appdev.ui.friends
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,18 +22,11 @@ class FriendsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_friends, container, false)
-
-        // Get the LinearLayout container
         val linearLayoutContainer: LinearLayout = view.findViewById(R.id.container)
 
-        // Observe the ViewModel data
         friendViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
-            // Clear the container before adding new views
             linearLayoutContainer.removeAllViews()
-
-            // Dynamically add each friend view to the container
             for (friend in friends) {
                 val friendView = addFriend(inflater, linearLayoutContainer, friend)
                 linearLayoutContainer.addView(friendView)
@@ -51,8 +45,25 @@ class FriendsFragment : Fragment() {
 
         friendName.text = friend.name
 
-        // Optionally, you can set onClickListeners for buttons here
+        deleteFriend.setOnClickListener {
+            showConfirmRemoveFriendDialog {
+                friendViewModel.removeFriend(friend)
+            }
+        }
 
         return view
+    }
+
+    private fun showConfirmRemoveFriendDialog(onConfirm: () -> Unit) {
+        AlertDialog.Builder(requireContext())
+            .setMessage("Are you sure you want to remove your friend?")
+            .setPositiveButton("Yes") { _, _ ->
+                onConfirm()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 }

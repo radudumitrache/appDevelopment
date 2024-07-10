@@ -8,22 +8,23 @@
 
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="500dp"
-        android:padding="8dp"
+        android:layout_height="570dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp" >
+            android:padding="16dp">
 
         </LinearLayout>
     </ScrollView>
 
     <Button
+        android:id="@+id/addFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Friend"
