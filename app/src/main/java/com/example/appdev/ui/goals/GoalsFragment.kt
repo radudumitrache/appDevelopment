@@ -53,10 +53,6 @@ class GoalsFragment : Fragment() {
             }
         })
 
-        goalViewModel.relatedCosts.observe(viewLifecycleOwner, Observer { _ ->
-            // Handle related costs display if needed
-        })
-
         btnCreateGoal.setOnClickListener {
             showCreateGoalDialog()
         }
@@ -92,7 +88,7 @@ class GoalsFragment : Fragment() {
                 val amount = if (amountText.isEmpty()) 0.0 else amountText.toDouble()
                 val description = descriptionEditText.text.toString()
                 val isRecurring = recurringSwitch.isChecked
-                goalViewModel.addRelatedCost(GoalsViewModel.RelatedCost(description, amount, isRecurring))
+                goalViewModel.addRelatedCost(goalTitle, GoalsViewModel.RelatedCost(description, amount, isRecurring))
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
@@ -171,6 +167,7 @@ class GoalsFragment : Fragment() {
         val amount: TextView = view.findViewById(R.id.amountSaved)
         val remainingAmount: TextView = view.findViewById(R.id.remainingAmount)
         val btnAddRelatedCost: Button = view.findViewById(R.id.btnAddRelatedCost)
+        val relatedCostsContainer: LinearLayout = view.findViewById(R.id.relatedCostsContainer)
 
         goalTitle.text = getString(R.string.goal_title, goalDetails.title)
         goalDescription.text = getString(R.string.goal_description, goalDetails.description)
@@ -180,6 +177,28 @@ class GoalsFragment : Fragment() {
 
         btnAddRelatedCost.setOnClickListener {
             showAddRelatedCostDialog(goalDetails.title)
+        }
+
+        relatedCostsContainer.removeAllViews()
+        goalDetails.relatedCosts.forEach { relatedCost ->
+            val relatedCostView = createRelatedCostView(relatedCost, inflater, relatedCostsContainer, goalDetails.title)
+            relatedCostsContainer.addView(relatedCostView)
+        }
+
+        return view
+    }
+
+    private fun createRelatedCostView(relatedCost: GoalsViewModel.RelatedCost, inflater: LayoutInflater, container: ViewGroup?, goalTitle: String): View {
+        val view = inflater.inflate(R.layout.item_related_cost, container, false)
+        val costTitle: TextView = view.findViewById(R.id.tvCostTitle)
+        val costAmount: TextView = view.findViewById(R.id.tvAmount)
+        val btnDeleteRelatedCost: Button = view.findViewById(R.id.btnDeleteRelatedCost)
+
+        costTitle.text = relatedCost.title
+        costAmount.text = relatedCost.amount.toString()
+
+        btnDeleteRelatedCost.setOnClickListener {
+            goalViewModel.removeRelatedCost(goalTitle, relatedCost)
         }
 
         return view

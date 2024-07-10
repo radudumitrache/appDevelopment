@@ -11,13 +11,9 @@ class GoalsViewModel : ViewModel() {
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
 
-    private val _relatedCosts = MutableLiveData<List<RelatedCost>>()
-    val relatedCosts: LiveData<List<RelatedCost>> get() = _relatedCosts
-
     init {
         // Initialize with empty data
         _goals.value = listOf()
-        _relatedCosts.value = listOf()
     }
 
     fun addGoal(goal: GoalDetails) {
@@ -26,9 +22,18 @@ class GoalsViewModel : ViewModel() {
         _goals.value = currentGoals
     }
 
-    fun addRelatedCost(relatedCost: RelatedCost) {
-        val list = _relatedCosts.value ?: emptyList()
-        _relatedCosts.value = list + relatedCost
+    fun addRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
+        val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
+        val goal = currentGoals.find { it.title == goalTitle }
+        goal?.relatedCosts?.add(relatedCost)
+        _goals.value = currentGoals
+    }
+
+    fun removeRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
+        val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
+        val goal = currentGoals.find { it.title == goalTitle }
+        goal?.relatedCosts?.remove(relatedCost)
+        _goals.value = currentGoals
     }
 
     fun calculateBudgetImpact(averageMonthlySavings: Double): Double {
@@ -90,8 +95,13 @@ class GoalsViewModel : ViewModel() {
         val description: String,
         val dueDate: String,
         val amount: Double,
-        val remainingAmount: Double
+        val remainingAmount: Double,
+        val relatedCosts: MutableList<RelatedCost> = mutableListOf()
     )
 
-    data class RelatedCost(val title: String, val amount: Double, val isRecurring: Boolean)
+    data class RelatedCost(
+        val title: String,
+        val amount: Double,
+        val isRecurring: Boolean
+    )
 }
