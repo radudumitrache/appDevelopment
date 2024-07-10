@@ -13,6 +13,9 @@ interface RecurringCostDao {
     @Query("SELECT * FROM RecurringCost WHERE goal_id = :goalId")
     fun selectRecurringCostsByGoal(goalId: Int): List<RecurringCostEntity>
 
-    @Query("DELETE FROM RecurringCost WHERE cost_id = :cost_id")
-    fun deleteCost(cost_id: Int)
+    @Query("DELETE FROM RecurringCost WHERE cost_id = :costId")
+    fun deleteCost(costId: Int)
+
+    @Query("DELETE FROM RecurringCost WHERE goal_id = :goalId")
+    fun deleteCostsByGoal(goalId: Int)
 }

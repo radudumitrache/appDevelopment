@@ -66,11 +66,12 @@ class GoalsFragment : Fragment() {
 
         btnCheckViability.setOnClickListener {
             val nonViableGoals = goalViewModel.checkGoalsViability(averageMonthlySavings)
-            if (nonViableGoals.isEmpty()) {
+            if (nonViableGoals.size == 1 && nonViableGoals[0] == "All goals are viable.") {
                 nonViableGoalsText.text = getString(R.string.all_goals_viable)
             } else {
                 nonViableGoalsText.text = getString(R.string.non_viable_goals, nonViableGoals.joinToString(", "))
             }
+            nonViableGoalsText.visibility = View.VISIBLE
         }
     }
 
@@ -88,7 +89,7 @@ class GoalsFragment : Fragment() {
                 val amount = if (amountText.isEmpty()) 0.0 else amountText.toDouble()
                 val description = descriptionEditText.text.toString()
                 val isRecurring = recurringSwitch.isChecked
-                val relatedCost = GoalsViewModel.RelatedCost(description, amount, isRecurring)
+                val relatedCost = GoalsViewModel.RelatedCost(0, description, amount, isRecurring)
                 goalViewModel.addRelatedCost(goalTitle, relatedCost)
                 dialog.dismiss()
             }
@@ -124,7 +125,7 @@ class GoalsFragment : Fragment() {
                     try {
                         val price = priceText.toDouble()
                         if (price > 0) {
-                            val goal = GoalsViewModel.GoalDetails(title, description, dueDate, price, price)
+                            val goal = GoalsViewModel.GoalDetails(0, title, description, dueDate, price, price)
                             goalViewModel.addGoal(goal)
                         } else {
                             Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
@@ -168,6 +169,7 @@ class GoalsFragment : Fragment() {
         val amount: TextView = view.findViewById(R.id.amountSaved)
         val remainingAmount: TextView = view.findViewById(R.id.remainingAmount)
         val btnAddRelatedCost: Button = view.findViewById(R.id.btnAddRelatedCost)
+        val btnDeleteGoal: Button = view.findViewById(R.id.btnDeleteGoal)
         val relatedCostsContainer: LinearLayout = view.findViewById(R.id.relatedCostsContainer)
 
         goalTitle.text = getString(R.string.goal_title, goalDetails.title)
@@ -178,6 +180,10 @@ class GoalsFragment : Fragment() {
 
         btnAddRelatedCost.setOnClickListener {
             showAddRelatedCostDialog(goalDetails.title)
+        }
+
+        btnDeleteGoal.setOnClickListener {
+            goalViewModel.deleteGoal(goalDetails.goalId)
         }
 
         relatedCostsContainer.removeAllViews()
