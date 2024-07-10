@@ -38,6 +38,13 @@
     <dialog
         android:id="@+id/navigation_map_dialog"
         android:name="com.example.appdev.ui.map.MapDialogFragment"
+        android:label="Map_old"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.appdev.ui.map.MapDialogFragment"
         android:label="Map"
         tools:layout="@layout/fragment_map" />
+
 </navigation>
