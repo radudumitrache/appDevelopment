@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.goals.GoalsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <!-- Title -->
         <TextView
@@ -18,21 +22,24 @@
             android:layout_height="wrap_content"
             android:text="@string/title_goals"
             android:textAlignment="center"
-            android:textSize="40sp" />
+            android:textSize="32sp"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold" />
 
         <!-- Separator -->
         <View
             android:id="@+id/viewSeparator1"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_marginTop="8dp"
-            android:background="@color/black" />
+            android:background="@color/primaryColor" />
 
         <!-- Container for Goals -->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/goalsContainer"
@@ -44,27 +51,42 @@
         <!-- Buttons -->
         <Button
             android:id="@+id/btnAddRelatedCost"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:text="Add Related Cost" />
+            android:backgroundTint="@color/primaryColor"
+            android:text="Add Related Cost"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            app:cornerRadius="10dp" />
 
         <Button
             android:id="@+id/btnCreateGoal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Create Goal" />
+            android:backgroundTint="@color/primaryColor"
+            android:text="Create Goal"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            app:cornerRadius="10dp" />
 
         <Button
             android:id="@+id/btnCalculateImpact"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Calculate Impact" />
+            android:backgroundTint="@color/primaryColor"
+            android:text="Calculate Impact"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            app:cornerRadius="10dp" />
 
         <!-- Budget Impact and Prediction -->
         <TextView
@@ -73,7 +95,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:textSize="20dp" />
+            android:textSize="20sp"
+            android:textColor="@color/secondaryTextColor"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/prediction"
@@ -81,7 +105,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:textSize="20dp" />
+            android:textSize="20sp"
+            android:textColor="@color/secondaryTextColor"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </FrameLayout>

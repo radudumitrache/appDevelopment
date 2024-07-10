@@ -21,8 +21,8 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val cardDetails = mutableListOf(
         CardDetails("1234 5678 9012 3456", "John Doe", "12/24", 12.3f),
-        CardDetails("9876 5432 1098 7654", "Jane Smith", "11/23" , 50.0f),
-        CardDetails("4567 8901 2345 6789", "Alice Johnson", "10/22" , 49.0f)
+        CardDetails("9876 5432 1098 7654", "Jane Smith", "11/23", 50.0f),
+        CardDetails("4567 8901 2345 6789", "Alice Johnson", "10/22", 49.0f)
     )
     private val transactionsList = listOf(
         listOf(
@@ -47,7 +47,7 @@ class DashboardFragment : Fragment() {
             Transaction("2024-05-22", "Gas Station", "-$50.00"),
 
 
-        ),
+            ),
         listOf(
             Transaction("2024-06-05", "Hotel Booking", "-$300.00"),
             Transaction("2024-06-06", "Car Rental", "-$100.00"),
@@ -161,4 +161,36 @@ class DashboardFragment : Fragment() {
     }
     data class CardDetails(val cardNumber: String, val cardHolder: String, val expiryDate: String , val Sum : Float)
     data class Transaction(val date: String, val description: String, val amount: String)
+
+    inner class TransactionAdapter(private val transactions: List<Transaction>) :
+        RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_transactions, parent, false)
+            return TransactionViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
+            val transaction = transactions[position]
+            holder.date.text = transaction.date
+            holder.description.text = transaction.description
+            holder.amount.text = transaction.amount
+
+            // Apply coloring based on the transaction amount
+            if (transaction.amount.startsWith("-")) {
+                holder.amount.setTextColor(resources.getColor(R.color.negativeAmount, null))
+            } else {
+                holder.amount.setTextColor(resources.getColor(R.color.positiveAmount, null))
+            }
+        }
+
+        override fun getItemCount() = transactions.size
+
+        inner class TransactionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val date: TextView = view.findViewById(R.id.transaction_date)
+            val description: TextView = view.findViewById(R.id.transaction_description)
+            val amount: TextView = view.findViewById(R.id.transaction_amount)
+        }
+    }
 }

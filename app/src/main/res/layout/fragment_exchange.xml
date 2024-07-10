@@ -12,7 +12,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -25,9 +28,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Enter amount"
-                    android:autofillHints="1"
                     android:inputType="numberDecimal"
-                    android:paddingBottom="16dp"/>
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="8dp"/>
 
                 <Spinner
                     android:id="@+id/baseCurrencySpinner"
@@ -40,13 +43,17 @@
 
             <Button
                 android:id="@+id/fetchButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Fetch Rates"
-                android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/primaryColor"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/baseTextView"
@@ -73,16 +80,4 @@
                 android:overScrollMode="never"/>
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/mapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Map"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="70dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:textColor="@android:color/white"/>
-
 </FrameLayout>
