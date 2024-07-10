@@ -88,7 +88,8 @@ class GoalsFragment : Fragment() {
                 val amount = if (amountText.isEmpty()) 0.0 else amountText.toDouble()
                 val description = descriptionEditText.text.toString()
                 val isRecurring = recurringSwitch.isChecked
-                goalViewModel.addRelatedCost(goalTitle, GoalsViewModel.RelatedCost(description, amount, isRecurring))
+                val relatedCost = GoalsViewModel.RelatedCost(description, amount, isRecurring)
+                goalViewModel.addRelatedCost(goalTitle, relatedCost)
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->

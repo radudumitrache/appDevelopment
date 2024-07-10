@@ -1,25 +1,57 @@
 package com.example.appdev.ui.goals
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.entities.GoalEntity
+import com.example.appdev.database.entities.RecurringCostEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GoalsViewModel : ViewModel() {
+class GoalsViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val goalDao = GoalSaverDatabase.getDatabase(application).goalDao()
+    private val recurringCostDao = GoalSaverDatabase.getDatabase(application).recurringCostDao()
 
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
 
     init {
-        // Initialize with empty data
-        _goals.value = listOf()
+        loadGoals()
+    }
+
+    private fun loadGoals() {
+        val userId = 1 // Replace with actual user ID
+        val goalEntities = goalDao.getGoalsOfUser(userId)
+        val goalsWithCosts = goalEntities.map { goal ->
+            val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
+            GoalDetails(
+                title = goal.title,
+                description = goal.description,
+                dueDate = goal.due_date.toString(),
+                amount = goal.current_amount,
+                remainingAmount = goal.target_amount,
+                relatedCosts = relatedCosts.map {
+                    RelatedCost(it.title, it.amount.toDouble(), it.frequency == "recurring")
+                }.toMutableList()
+            )
+        }
+        _goals.value = goalsWithCosts
     }
 
     fun addGoal(goal: GoalDetails) {
-        val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
-        currentGoals.add(goal)
-        _goals.value = currentGoals
+        val goalEntity = GoalEntity(
+            user_id = 1, // Replace with actual user ID
+            title = goal.title,
+            description = goal.description,
+            target_amount = goal.amount,
+            current_amount = 0.0,
+            due_date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(goal.dueDate)!!
+        )
+        goalDao.insert(goalEntity)
+        loadGoals()
     }
 
     fun addRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
