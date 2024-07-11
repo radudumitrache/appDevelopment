@@ -105,6 +105,14 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                             isRecurring = false, // Example value
                             description = description
                         )
+                        if (transaction.type == '+')
+                        {
+                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                        }
+                        else
+                        {
+                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                        }
                         addTransaction(transaction)
                     }
 

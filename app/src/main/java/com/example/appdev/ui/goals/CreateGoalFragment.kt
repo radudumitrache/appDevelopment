@@ -1,5 +1,6 @@
 package com.example.appdev.ui.goals
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ class CreateGoalFragment : Fragment() {
 
     private val goalViewModel: CreateGoalViewModel by viewModels()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

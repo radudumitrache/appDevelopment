@@ -15,7 +15,8 @@ interface CardDao {
 
     @Query("SELECT * FROM Card WHERE card_id = :card_id")
     fun getCardOfId(card_id : Int) : CardEntity
-
+    @Query("UPDATE Card SET amount_on_card = :newAmount WHERE card_id = :cardId")
+    fun updateCardAmount(cardId: Int, newAmount: Float)
     @Query("DELETE FROM Card WHERE card_id=:card_id")
     fun deleteGoalWithId(card_id : Int)
 }
