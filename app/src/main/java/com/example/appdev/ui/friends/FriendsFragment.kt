@@ -3,6 +3,7 @@ package com.example.appdev.ui.friends
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class FriendsFragment : Fragment() {
         val addFriendButton: Button = view.findViewById(R.id.addFriendButton)
 
         friendViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
+            Log.d("FriendsFragment", "Friends observed: $friends")
             linearLayoutContainer.removeAllViews()
             for (friend in friends) {
                 val friendView = addFriendView(inflater, linearLayoutContainer, friend)
@@ -41,6 +43,7 @@ class FriendsFragment : Fragment() {
         })
 
         friendViewModel.friendRequests.observe(viewLifecycleOwner, Observer { requests ->
+            Log.d("FriendsFragment", "Friend requests observed: $requests")
             friendRequestContainer.removeAllViews()
             for (request in requests) {
                 val requestView = addFriendRequestView(inflater, friendRequestContainer, request)
@@ -51,6 +54,7 @@ class FriendsFragment : Fragment() {
         addFriendButton.setOnClickListener {
             val email = addFriendEditText.text.toString()
             if (email.isNotEmpty()) {
+                Log.d("FriendsFragment", "Adding friend with email: $email")
                 friendViewModel.sendFriendRequest(requireContext(), email)
                 addFriendEditText.text.clear()
             }
@@ -67,6 +71,7 @@ class FriendsFragment : Fragment() {
         friendName.text = friend.name
 
         deleteFriendButton.setOnClickListener {
+            Log.d("FriendsFragment", "Removing friend: ${friend.name}")
             showConfirmRemoveFriendDialog {
                 friendViewModel.removeFriend(requireContext(), friend)
             }
@@ -81,10 +86,12 @@ class FriendsFragment : Fragment() {
         val declineButton: Button = view.findViewById(R.id.declineButton)
 
         acceptButton.setOnClickListener {
+            Log.d("FriendsFragment", "Accepting friend request: $request")
             friendViewModel.acceptFriendRequest(requireContext(), request)
         }
 
         declineButton.setOnClickListener {
+            Log.d("FriendsFragment", "Declining friend request: $request")
             friendViewModel.declineFriendRequest(requireContext(), request)
         }
 

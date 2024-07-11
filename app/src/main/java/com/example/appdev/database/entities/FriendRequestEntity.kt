@@ -15,5 +15,6 @@ data class FriendRequestEntity(
     @PrimaryKey(autoGenerate = true) val request_id: Int = 0,
     val sender_id: Int,
     val receiver_id: Int,
+    val sender_email: String,
     val status: String // "pending", "accepted", "declined"
 )
