@@ -1,5 +1,6 @@
 package com.example.appdev.ui.account
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,13 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.appdev.LoginActivity
 import com.example.appdev.MainActivity
 import com.example.appdev.R
 import com.example.appdev.database.entities.UserEntity
-
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 class AccountFragment : Fragment() {
 
     private val viewModel: AccountViewModel by viewModels()
@@ -42,22 +48,31 @@ class AccountFragment : Fragment() {
         })
 
         changeInformationButton.setOnClickListener {
-            val updatedUser = UserEntity(
-                user_id = userId,
-                email = editEmailButton.text.toString(),
-                password = editPasswordButton.text.toString(),
-                profession = editTextProfession.text.toString(),
-                age = "Unknown", // Placeholder, add actual logic if needed
-                monthly_salary = 0f, // Placeholder, add actual logic if needed
-                preffered_currency = editTextCurrency.text.toString()
-            )
-            viewModel.updateUser(updatedUser)
+            if (MainActivity.logged_user != null)
+            {
+                val updatedUser = UserEntity(
+                    user_id = userId,
+                    email = editEmailButton.text.toString(),
+                    password = editPasswordButton.text.toString(),
+                    profession = editTextProfession.text.toString(),
+                    dateOfBirth = MainActivity.logged_user!!.dateOfBirth, // Placeholder, add actual logic if needed
+                    monthly_salary = 0f, // Placeholder, add actual logic if needed
+                    preffered_currency = editTextCurrency.text.toString()
+                )
+                viewModel.updateUser(updatedUser)
+            }
+
+
         }
         logoutButton.setOnClickListener {
             logout()
         }
 
         return view
+    }
+    private fun parseDate(dateStr: String): Date {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return sdf.parse(dateStr) ?: Date()
     }
     private fun logout() {
         // Clear the logged-in user state
