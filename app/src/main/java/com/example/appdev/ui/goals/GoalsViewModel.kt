@@ -1,68 +1,183 @@
 package com.example.appdev.ui.goals
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.appdev.MainActivity
+import com.example.appdev.database.GoalSaverDatabase
+import com.example.appdev.database.entities.GoalEntity
+import com.example.appdev.database.entities.RecurringCostEntity
+import java.text.SimpleDateFormat
+import java.util.*
 
-class GoalsViewModel : ViewModel() {
+class GoalsViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val goalDao = GoalSaverDatabase.getDatabase(application).goalDao()
+    private val recurringCostDao = GoalSaverDatabase.getDatabase(application).recurringCostDao()
 
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
 
-    private val _relatedCosts = MutableLiveData<List<RelatedCost>>()
-    val relatedCosts: LiveData<List<RelatedCost>> get() = _relatedCosts
-
     init {
-        // Initialize with dummy data
-        _goals.value = listOf(
-            GoalDetails(
-                "New Car",
-                "Save money for a new car",
-                "31/12/2024",
-                3000.0,
-                2500.0,
-                500.0 // Monthly savings
-            )
-        )
+        loadGoals()
+    }
 
-        _relatedCosts.value = listOf(
-            RelatedCost("Insurance", 400.0, false),
-            RelatedCost("Tires", 400.0, false)
-        )
+    private fun loadGoals() {
+        if (MainActivity.logged_user != null) {
+            val userId = MainActivity.logged_user!!.user_id
+            val goalEntities = goalDao.getGoalsOfUser(userId)
+            val goalsWithCosts = goalEntities.map { goal ->
+                val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
+                GoalDetails(
+                    goalId = goal.goal_id,
+                    title = goal.title,
+                    description = goal.description,
+                    dueDate = dateFormat.format(goal.due_date),
+                    amount = goal.current_amount,
+                    remainingAmount = goal.target_amount,
+                    relatedCosts = relatedCosts.map {
+                        RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
+                    }.toMutableList()
+                )
+            }
+            _goals.value = goalsWithCosts
+        }
     }
 
     fun addGoal(goal: GoalDetails) {
+        if (MainActivity.logged_user != null) {
+            val goalEntity = GoalEntity(
+                user_id = MainActivity.logged_user!!.user_id,
+                title = goal.title,
+                description = goal.description,
+                target_amount = goal.amount,
+                current_amount = 0.0,
+                due_date = dateFormat.parse(goal.dueDate)!!
+            )
+            goalDao.insert(goalEntity)
+            loadGoals()
+        }
+    }
+
+    fun addRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
         val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
-        currentGoals.add(goal)
+        val goal = currentGoals.find { it.title == goalTitle }
+        goal?.relatedCosts?.add(relatedCost)
         _goals.value = currentGoals
+
+        if (MainActivity.logged_user != null && goal != null) {
+            val recurringCostEntity = RecurringCostEntity(
+                goal_id = goal.goalId,
+                user_id = MainActivity.logged_user!!.user_id,
+                title = relatedCost.title,
+                amount = relatedCost.amount,
+                currency = "USD", // Assuming USD, change as necessary
+                frequency = if (relatedCost.isRecurring) "recurring" else "one-time"
+            )
+            recurringCostDao.insert(recurringCostEntity)
+        }
     }
 
-    fun addRelatedCost(relatedCost: RelatedCost) {
-        val list = _relatedCosts.value ?: emptyList()
-        _relatedCosts.value = list + relatedCost
+    fun removeRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
+        val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
+        val goal = currentGoals.find { it.title == goalTitle }
+        goal?.relatedCosts?.remove(relatedCost)
+        _goals.value = currentGoals
+        recurringCostDao.deleteCost(relatedCost.costId)
     }
 
-    fun calculateBudgetImpact(): Double {
-        val totalRelatedCost = _relatedCosts.value?.sumOf { it.amount } ?: 0.0
-        val goals = _goals.value ?: return 0.0
-        return goals.sumOf { it.remainingAmount } - totalRelatedCost
+    fun deleteGoal(goalId: Int) {
+        goalDao.deleteGoal(goalId)
+        recurringCostDao.deleteCostsByGoal(goalId)
+        loadGoals()
+    }
+
+    fun calculateBudgetImpact(averageMonthlySavings: Double): Pair<Double, Int> {
+        val totalRemainingAmount = _goals.value?.sumOf { it.remainingAmount } ?: 0.00
+        val monthsToGoal = predictMonthsToGoal()
+        val totalSavingsNeeded = totalRemainingAmount - (monthsToGoal * averageMonthlySavings)
+
+        val moneyLeft = if (totalSavingsNeeded > 0) {
+            -totalSavingsNeeded
+        } else {
+            -totalSavingsNeeded
+        }
+
+        return Pair(moneyLeft, monthsToGoal)
     }
 
     fun predictMonthsToGoal(): Int {
         val goals = _goals.value ?: return 0
-        val totalMonthlySavings = goals.sumOf { it.monthlySavings }
-        if (totalMonthlySavings <= 0) return Int.MAX_VALUE // To avoid division by zero
-        return (goals.sumOf { it.amount - it.remainingAmount } / totalMonthlySavings).toInt()
+        val latestDueDate = goals.maxOfOrNull { parseDate(it.dueDate) } ?: return 0
+        val monthsUntilDueDate = calculateMonthsUntilDate(latestDueDate)
+        return monthsUntilDueDate
+    }
+
+    private fun parseDate(dateStr: String): Date {
+        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return format.parse(dateStr) ?: Date()
+    }
+
+    private fun calculateMonthsUntilDate(dueDate: Date): Int {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        calendar.time = dueDate
+        val dueYear = calendar.get(Calendar.YEAR)
+        val dueMonth = calendar.get(Calendar.MONTH)
+        return (dueYear - currentYear) * 12 + (dueMonth - currentMonth)
+    }
+
+    fun checkGoalsViability(averageMonthlySavings: Double): List<String> {
+        val goals = _goals.value ?: return emptyList()
+        val totalRemainingAmount = goals.sumOf { it.remainingAmount }
+        val monthsToGoal = predictMonthsToGoal()
+        val totalSavingsNeeded = monthsToGoal * averageMonthlySavings
+
+        Log.d("GoalsViewModel", "Total remaining amount: $totalRemainingAmount")
+        Log.d("GoalsViewModel", "Total savings needed: $totalSavingsNeeded")
+
+        if (totalSavingsNeeded >= totalRemainingAmount) {
+            Log.d("GoalsViewModel", "All goals are viable.")
+            return listOf("All goals are viable.")
+        }
+
+        // Identify which goals to delete
+        val goalsSortedByPriority = goals.sortedByDescending { it.remainingAmount }
+        val nonViableGoals = mutableListOf<String>()
+        var accumulatedSavings = 0.0
+
+        for (goal in goalsSortedByPriority) {
+            accumulatedSavings += goal.remainingAmount
+            if (accumulatedSavings > totalSavingsNeeded) {
+                break
+            }
+            nonViableGoals.add(goal.title)
+        }
+
+        return nonViableGoals
     }
 
     data class GoalDetails(
+        val goalId: Int,
         val title: String,
         val description: String,
         val dueDate: String,
         val amount: Double,
         val remainingAmount: Double,
-        val monthlySavings: Double
+        val relatedCosts: MutableList<RelatedCost> = mutableListOf()
     )
 
-    data class RelatedCost(val title: String, val amount: Double, val isRecurring: Boolean)
+    data class RelatedCost(
+        val costId: Int,
+        val title: String,
+        val amount: Double,
+        val isRecurring: Boolean
+    )
+
+    companion object {
+        private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    }
 }

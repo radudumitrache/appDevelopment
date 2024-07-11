@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.goals.GoalsFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -15,9 +15,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitleGoals"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title_goals"
@@ -41,73 +39,65 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1">
 
+            <!-- Container for Goals -->
             <LinearLayout
                 android:id="@+id/goalsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-        </ScrollView>
 
-        <!-- Buttons -->
-        <Button
-            android:id="@+id/btnAddRelatedCost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/primaryColor"
-            android:text="Add Related Cost"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="16dp"
-            app:cornerRadius="10dp" />
+            <!-- Buttons -->
+            <Button
+                android:id="@+id/btnCreateGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Create Goal" />
 
-        <Button
-            android:id="@+id/btnCreateGoal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/primaryColor"
-            android:text="Create Goal"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="16dp"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btnCalculateImpact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Calculate Impact" />
 
-        <Button
-            android:id="@+id/btnCalculateImpact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/primaryColor"
-            android:text="Calculate Impact"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:padding="16dp"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btnCheckViability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Check Viability" />
 
-        <!-- Budget Impact and Prediction -->
-        <TextView
-            android:id="@+id/budgetImpact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/secondaryTextColor"
-            android:textStyle="bold" />
+            <!-- Budget Impact and Prediction -->
+            <TextView
+                android:id="@+id/budgetImpact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/prediction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/secondaryTextColor"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/prediction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp" />
 
-    </LinearLayout>
+            <!-- Non-Viable Goals -->
+            <TextView
+                android:id="@+id/nonViableGoals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp"
+                android:textColor="@android:color/holo_red_dark" />
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
