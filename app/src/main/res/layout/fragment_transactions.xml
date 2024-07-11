@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/background">
-
+    android:padding="16dp">
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
@@ -70,28 +68,25 @@
 
     <Button
         android:id="@+id/addButton"
-        android:layout_width="209dp"
-        android:layout_height="68dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginBottom="96dp"
-        android:backgroundTint="@color/button"
-        android:padding="15dp"
+        android:backgroundTint="@color/primaryColor"
         android:text="Add transaction"
-        android:textColor="@android:color/white"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/importCSV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
-        android:backgroundTint="@color/button"
-        android:padding="5dp"
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/primaryColor"
         android:text="Import CSV"
-        android:textColor="@android:color/white"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,11 @@
 package com.example.appdev.ui.transactions
 
 import android.app.DatePickerDialog
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -239,11 +241,11 @@ class TransactionsFragment : Fragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(16, 16, 16, 16)
+                setMargins(0, 0, 0, 10)
             }
             radius = 16f
-            setCardBackgroundColor(ContextCompat.getColor(context, R.color.card_background))
-            cardElevation = 8f
+            setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
+            cardElevation = 0f
         }
 
         val contentLayout = LinearLayout(requireContext()).apply {
@@ -252,32 +254,49 @@ class TransactionsFragment : Fragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
-            setPadding(16, 16, 16, 16)
-        }
-
-        val amountTextView = TextView(requireContext()).apply {
-            text = "${transaction.amount}$"
-            textSize = 18f
-            setTextColor(ContextCompat.getColor(context, if (transaction.amount < 0) R.color.negative else R.color.positive))
-        }
-
-        val descriptionTextView = TextView(requireContext()).apply {
-            text = transaction.description
-            textSize = 16f
-            setTextColor(ContextCompat.getColor(context, R.color.description))
+            setPadding(0, 0, 0, 0)
         }
 
         val dateTextView = TextView(requireContext()).apply {
             text = SimpleDateFormat("dd/MM/yy", Locale.US).format(transaction.date)
-            textSize = 14f
-            setTextColor(ContextCompat.getColor(context, R.color.date))
+            textSize = 12f
+            setTextColor(ContextCompat.getColor(context, R.color.secondaryTextColor))
+            setTypeface(typeface, Typeface.BOLD)
         }
 
-        contentLayout.addView(amountTextView)
-        contentLayout.addView(descriptionTextView)
+        val descriptionTextView = TextView(requireContext()).apply {
+            text = transaction.description
+            textSize = 14f
+            setTextColor(ContextCompat.getColor(context, R.color.textColor))
+            setPadding(0, 4, 0, 0)
+        }
+
+        val amountTextView = TextView(requireContext()).apply {
+            text = "${transaction.amount}$"
+            textSize = 16f
+            setTextColor(ContextCompat.getColor(context, if (transaction.amount < 0) R.color.negative else R.color.positive))
+            setTypeface(typeface, Typeface.BOLD)
+            setPadding(0, 8, 0, 0)
+            gravity = Gravity.END
+        }
+
+        val separator = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                1
+            ).apply {
+                setMargins(0, 8, 0, 0)
+            }
+            setBackgroundColor(ContextCompat.getColor(context, R.color.secondaryTextColor))
+        }
+
         contentLayout.addView(dateTextView)
+        contentLayout.addView(descriptionTextView)
+        contentLayout.addView(amountTextView)
+        contentLayout.addView(separator)
         cardView.addView(contentLayout)
 
         return cardView
     }
+
 }

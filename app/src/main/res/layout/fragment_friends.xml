@@ -1,13 +1,21 @@
-<!-- fragment_friends.xml -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <!-- Back to Account Button -->
+
+        <EditText
+            android:id="@+id/addFriendEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter friend's email" />
 
         <LinearLayout
             android:id="@+id/friendRequestContainer"
@@ -18,19 +26,29 @@
             <!-- Friend requests will be dynamically added here -->
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/addFriendEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter friend's email" />
-
         <Button
             android:id="@+id/addFriendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Friend"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/primaryColor"
+            android:text="Add Friends"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+
+        <Button
+            android:id="@+id/backToAccountButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/primaryDarkColor"
+            android:text="Back to account"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
 
         <LinearLayout
             android:id="@+id/container"
