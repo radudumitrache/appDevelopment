@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.appdev.MainActivity
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.GoalEntity
 import com.example.appdev.database.entities.RecurringCostEntity
@@ -24,36 +25,46 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun loadGoals() {
-        val userId = 1 // Replace with actual user ID
-        val goalEntities = goalDao.getGoalsOfUser(userId)
-        val goalsWithCosts = goalEntities.map { goal ->
-            val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
-            GoalDetails(
-                goalId = goal.goal_id,
-                title = goal.title,
-                description = goal.description,
-                dueDate = dateFormat.format(goal.due_date),
-                amount = goal.current_amount,
-                remainingAmount = goal.target_amount,
-                relatedCosts = relatedCosts.map {
-                    RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
-                }.toMutableList()
-            )
+        if (MainActivity.logged_user != null)
+        {
+            val userId = MainActivity.logged_user!!.user_id // Replace with actual user ID
+            val goalEntities = goalDao.getGoalsOfUser(userId)
+            val goalsWithCosts = goalEntities.map { goal ->
+                val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
+                GoalDetails(
+                    goalId = goal.goal_id,
+                    title = goal.title,
+                    description = goal.description,
+                    dueDate = dateFormat.format(goal.due_date),
+                    amount = goal.current_amount,
+                    remainingAmount = goal.target_amount,
+                    relatedCosts = relatedCosts.map {
+                        RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
+                    }.toMutableList()
+                )
+            }
+            _goals.value = goalsWithCosts
         }
-        _goals.value = goalsWithCosts
+
+
+
     }
 
     fun addGoal(goal: GoalDetails) {
-        val goalEntity = GoalEntity(
-            user_id = 1, // Replace with actual user ID
-            title = goal.title,
-            description = goal.description,
-            target_amount = goal.amount,
-            current_amount = 0.0,
-            due_date = dateFormat.parse(goal.dueDate)!!
-        )
-        goalDao.insert(goalEntity)
-        loadGoals()
+        if (MainActivity.logged_user !=null)
+        {
+            val goalEntity = GoalEntity(
+                user_id = MainActivity.logged_user!!.user_id, // Replace with actual user ID
+                title = goal.title,
+                description = goal.description,
+                target_amount = goal.amount,
+                current_amount = 0.0,
+                due_date = dateFormat.parse(goal.dueDate)!!
+            )
+            goalDao.insert(goalEntity)
+            loadGoals()
+        }
+
     }
 
 
