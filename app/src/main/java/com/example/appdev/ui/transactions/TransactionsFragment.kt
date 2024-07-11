@@ -27,6 +27,8 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.ArrayAdapter
+import com.example.appdev.database.entities.CardEntity
+
 class TransactionsFragment : Fragment() {
     private val logged_user = MainActivity.logged_user
     private val viewModel: TransactionsViewModel by viewModels()
@@ -137,7 +139,21 @@ class TransactionsFragment : Fragment() {
                                 description = description
                             )
                         }
-                        if (transaction != null) {
+                        var card =
+                            transaction?.let {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
+                                    it.card_id)
+                            }
+                        if (transaction != null && card != null) {
+                            if (transaction.type == '+')
+                            {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            }
+                            else
+                            {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            }
+
                             viewModel.addTransaction(transaction)
                         }
 

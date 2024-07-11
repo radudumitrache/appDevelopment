@@ -84,12 +84,12 @@
             <!-- Non-Viable Goals -->
             <TextView
                 android:id="@+id/nonViableGoals"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="331dp"
+                android:layout_height="133dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:textSize="20dp"
-                android:textColor="@android:color/holo_red_dark" />
+                android:layout_marginTop="0dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="20dp" />
 
         </LinearLayout>
     </ScrollView>

@@ -18,7 +18,7 @@ import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var birthdayTextView: TextView
-    private lateinit var selectBirthdayButton: ImageButton
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +31,10 @@ class RegisterActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.RegisterButton)
         val backButton = findViewById<Button>(R.id.BackButton)
         birthdayTextView = findViewById<TextView>(R.id.birthdayTextView)
-        selectBirthdayButton = findViewById<ImageButton>(R.id.selectBirthdayButton)
-        selectBirthdayButton.setOnClickListener {
+        birthdayTextView.setOnClickListener {
             showDatePickerDialog()
         }
+
         registerButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()

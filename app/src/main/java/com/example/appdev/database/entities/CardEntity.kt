@@ -15,5 +15,5 @@ data class CardEntity (
     val name_on_card : String,
     val currency_type : String,
     val bank_name : String,
-    val amount_on_card : Float
+    var amount_on_card : Float
 )

@@ -2,6 +2,7 @@ package com.example.appdev.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -22,12 +23,15 @@ import com.example.appdev.database.entities.CardEntity
 import com.example.appdev.database.entities.TransactionsEntity
 import com.example.appdev.databinding.FragmentDashboardBinding
 import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
     private val MIN_SWIPE_DISTANCE = 200
     private var _binding: FragmentDashboardBinding? = null
     private var cardDetails = mutableListOf<CardEntity>()
     private var transactionsList = listOf<List<TransactionsEntity>>()
+    private lateinit var expiryDateInput : TextView
 
     companion object {
         lateinit var selected_card: CardEntity
@@ -55,29 +59,34 @@ class DashboardFragment : Fragment() {
 
         val valueContainer: TextView = binding.cardValue
         binding.cardContainer.addView(creditCardView)
-        creditCardView.setOnTouchListener(object : View.OnTouchListener {
-            private var initialX = 0f
+            creditCardView.setOnTouchListener(object : View.OnTouchListener {
+                private var initialX = 0f
 
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        initialX = event.rawX
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        val finalX = event.rawX
-                        if (initialX - finalX > MIN_SWIPE_DISTANCE) {
-                            // Swipe left detected
-                            cardIndex = (cardIndex + 1) % cardDetails.size
-                            updateCardDetails(creditCardView, cardDetails[cardIndex])
-                            valueContainer.text = "You have ${cardDetails[cardIndex].amount_on_card} $ on this card"
-                            updateTransactions(binding.transactionsRecyclerView, transactionsList[cardIndex])
+                override fun onTouch(v: View, event: MotionEvent): Boolean {
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            initialX = event.rawX
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            if (cardDetails.size >=1)
+                            {
+                                val finalX = event.rawX
+                                if (initialX - finalX > MIN_SWIPE_DISTANCE) {
+                                    // Swipe left detected
+                                    cardIndex = (cardIndex + 1) % cardDetails.size
+                                    updateCardDetails(creditCardView, cardDetails[cardIndex])
+                                    valueContainer.text = "You have ${cardDetails[cardIndex].amount_on_card} $ on this card"
+                                    updateTransactions(binding.transactionsRecyclerView, transactionsList[cardIndex])
+                                }
+                            }
+
                         }
                     }
+                    v.performClick()
+                    return true
                 }
-                v.performClick()
-                return true
-            }
-        })
+            })
+
 
         binding.addCardButton.setOnClickListener {
             showAddCardDialog()
@@ -102,7 +111,9 @@ class DashboardFragment : Fragment() {
         selected_card = cardDetails
         view.findViewById<TextView>(R.id.card_number).text = cardDetails.first_digits_of_card
         view.findViewById<TextView>(R.id.card_holder).text = cardDetails.name_on_card
-        view.findViewById<TextView>(R.id.expiry_date).text = cardDetails.expiry_date.toString()
+        val dateFormat = SimpleDateFormat("MM/yyyy", Locale.getDefault())
+        val formated_date = dateFormat.format(cardDetails.expiry_date.time).toString()
+        view.findViewById<TextView>(R.id.expiry_date).text = formated_date
         view.findViewById<TextView>(R.id.card_value).text = cardDetails.amount_on_card.toString()
     }
 
@@ -120,11 +131,13 @@ class DashboardFragment : Fragment() {
         val dialogLayout = inflater.inflate(R.layout.dialog_add_card, null)
         val cardNumberInput = dialogLayout.findViewById<EditText>(R.id.card_number_input)
         val cardHolderInput = dialogLayout.findViewById<EditText>(R.id.card_holder_input)
-        val expiryDateInput = dialogLayout.findViewById<EditText>(R.id.expiry_date_input)
+        expiryDateInput = dialogLayout.findViewById<EditText>(R.id.expiry_date_input)
         val currencyTypeInput = dialogLayout.findViewById<EditText>(R.id.currency_type_input)
         val bankNameInput = dialogLayout.findViewById<EditText>(R.id.bank_name_input)
         val addCardButton = dialogLayout.findViewById<Button>(R.id.add_card_button)
-
+        expiryDateInput.setOnClickListener {
+            showDatePickerDialog()
+        }
         val alertDialog = builder.setView(dialogLayout).create()
 
         addCardButton.setOnClickListener {
@@ -155,6 +168,18 @@ class DashboardFragment : Fragment() {
 
         alertDialog.show()
     }
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val datePickerDialog = DatePickerDialog(this.requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+            expiryDateInput.text = selectedDate
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
     data class Transaction(val date: String, val description: String, val amount: String)
 }

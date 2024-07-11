@@ -147,9 +147,10 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         for (goal in goalsSortedByPriority) {
             accumulatedSavings += goal.remainingAmount
             if (accumulatedSavings > totalSavingsNeeded) {
-                break
+                nonViableGoals.add(goal.title)
+
             }
-            nonViableGoals.add(goal.title)
+
         }
 
         return nonViableGoals

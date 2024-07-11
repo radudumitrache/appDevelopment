@@ -19,7 +19,7 @@ class GoalsFragment : Fragment() {
 
     private val goalViewModel: GoalsViewModel by viewModels()
     private var averageMonthlySavings: Double = 500.0 // Dummy value, replace with actual DB retrieval
-
+    private lateinit var nonViableGoalsText : TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +38,7 @@ class GoalsFragment : Fragment() {
 
         val budgetImpact: TextView = view.findViewById(R.id.budgetImpact)
         val prediction: TextView = view.findViewById(R.id.prediction)
-        val nonViableGoalsText: TextView = view.findViewById(R.id.nonViableGoals)
+        nonViableGoalsText = view.findViewById(R.id.nonViableGoals)
 
         goalViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
             goalsContainer.removeAllViews()
@@ -72,8 +72,10 @@ class GoalsFragment : Fragment() {
             val nonViableGoals = goalViewModel.checkGoalsViability(averageMonthlySavings)
             if (nonViableGoals.size == 1 && nonViableGoals[0] == "All goals are viable.") {
                 nonViableGoalsText.text = getString(R.string.all_goals_viable)
+                Toast.makeText(requireContext(), "All goals viable", Toast.LENGTH_SHORT).show()
             } else {
                 nonViableGoalsText.text = getString(R.string.non_viable_goals, nonViableGoals.joinToString(", "))
+                Toast.makeText(requireContext(), nonViableGoalsText.text, Toast.LENGTH_SHORT).show()
             }
             nonViableGoalsText.visibility = View.VISIBLE
         }
