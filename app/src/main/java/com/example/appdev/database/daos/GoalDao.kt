@@ -12,4 +12,7 @@ interface GoalDao {
 
     @Query("SELECT * FROM Goal WHERE user_id = :user_id")
     fun getGoalsOfUser(user_id: Int): List<GoalEntity>
+
+    @Query("DELETE FROM Goal WHERE goal_id = :goalId")
+    fun deleteGoal(goalId: Int)
 }

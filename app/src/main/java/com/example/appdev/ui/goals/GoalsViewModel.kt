@@ -1,6 +1,7 @@
 package com.example.appdev.ui.goals
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,13 +29,14 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         val goalsWithCosts = goalEntities.map { goal ->
             val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
             GoalDetails(
+                goalId = goal.goal_id,
                 title = goal.title,
                 description = goal.description,
-                dueDate = goal.due_date.toString(),
+                dueDate = dateFormat.format(goal.due_date),
                 amount = goal.current_amount,
                 remainingAmount = goal.target_amount,
                 relatedCosts = relatedCosts.map {
-                    RelatedCost(it.title, it.amount.toDouble(), it.frequency == "recurring")
+                    RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
                 }.toMutableList()
             )
         }
@@ -48,7 +50,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             description = goal.description,
             target_amount = goal.amount,
             current_amount = 0.0,
-            due_date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(goal.dueDate)!!
+            due_date = dateFormat.parse(goal.dueDate)!!
         )
         goalDao.insert(goalEntity)
         loadGoals()
@@ -67,12 +69,27 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         val goal = currentGoals.find { it.title == goalTitle }
         goal?.relatedCosts?.remove(relatedCost)
         _goals.value = currentGoals
+        recurringCostDao.deleteCost(relatedCost.costId)
     }
 
-    fun calculateBudgetImpact(averageMonthlySavings: Double): Double {
-        val totalRemainingAmount = _goals.value?.sumOf { it.remainingAmount } ?: 0.0
+    fun deleteGoal(goalId: Int) {
+        goalDao.deleteGoal(goalId)
+        recurringCostDao.deleteCostsByGoal(goalId)
+        loadGoals()
+    }
+
+    fun calculateBudgetImpact(averageMonthlySavings: Double): Pair<Double, Int> {
+        val totalRemainingAmount = _goals.value?.sumOf { it.remainingAmount } ?: 0.00
         val monthsToGoal = predictMonthsToGoal()
-        return (totalRemainingAmount - (monthsToGoal * averageMonthlySavings)).coerceAtLeast(0.0)
+        val totalSavingsNeeded = totalRemainingAmount - (monthsToGoal * averageMonthlySavings)
+
+        val moneyLeft = if (totalSavingsNeeded > 0) {
+            -totalSavingsNeeded
+        } else {
+            -totalSavingsNeeded
+        }
+
+        return Pair(moneyLeft, monthsToGoal)
     }
 
     fun predictMonthsToGoal(): Int {
@@ -103,8 +120,12 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         val monthsToGoal = predictMonthsToGoal()
         val totalSavingsNeeded = monthsToGoal * averageMonthlySavings
 
+        Log.d("GoalsViewModel", "Total remaining amount: $totalRemainingAmount")
+        Log.d("GoalsViewModel", "Total savings needed: $totalSavingsNeeded")
+
         if (totalSavingsNeeded >= totalRemainingAmount) {
-            return emptyList() // All goals are viable
+            Log.d("GoalsViewModel", "All goals are viable.")
+            return listOf("All goals are viable.")
         }
 
         // Identify which goals to delete
@@ -124,6 +145,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     data class GoalDetails(
+        val goalId: Int,
         val title: String,
         val description: String,
         val dueDate: String,
@@ -133,8 +155,13 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     )
 
     data class RelatedCost(
+        val costId: Int,
         val title: String,
         val amount: Double,
         val isRecurring: Boolean
     )
+
+    companion object {
+        private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    }
 }
