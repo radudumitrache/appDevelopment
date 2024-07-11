@@ -86,7 +86,7 @@ class TransactionsFragment : Fragment() {
     private fun showAddTransactionDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_transaction, null)
         val cardSpinner = dialogView.findViewById<Spinner>(R.id.spinner_card)
-        val typeSpinner = dialogView.findViewById<Spinner>(R.id.typeSpinner)
+        val typeRadioGroup = dialogView.findViewById<RadioGroup>(R.id.typeRadioGroup)
         val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.descriptionEditText)
         val dateEditText = dialogView.findViewById<EditText>(R.id.dateEditText)
@@ -114,8 +114,8 @@ class TransactionsFragment : Fragment() {
                 val amountText = amountEditText.text.toString()
                 val description = descriptionEditText.text.toString()
                 val dateText = dateEditText.text.toString()
-                val typeText = typeSpinner.selectedItem.toString()
-
+                val selectedTypeId = typeRadioGroup.checkedRadioButtonId
+                val typeText = dialogView.findViewById<RadioButton>(selectedTypeId).text.toString()
                 // Check if any field is empty
                 if (amountText.isEmpty() || description.isEmpty() || dateText.isEmpty() || typeText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()

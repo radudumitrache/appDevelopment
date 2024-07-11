@@ -1,11 +1,11 @@
 package com.example.appdev.ui.goals
-
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.appdev.MainActivity
+import com.example.appdev.R
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.GoalEntity
 import com.example.appdev.database.entities.RecurringCostEntity
@@ -19,11 +19,13 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
-
+    private var goalsFragment: GoalsFragment? = null
+    fun setGoalsFragment(fragment: GoalsFragment) {
+        this.goalsFragment = fragment
+    }
     init {
         loadGoals()
     }
-
     private fun loadGoals() {
         if (MainActivity.logged_user != null) {
             val userId = MainActivity.logged_user!!.user_id

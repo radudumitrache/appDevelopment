@@ -107,11 +107,15 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                         )
                         if (transaction.type == '+')
                         {
+                            val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
                             DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id,amount_to_change)
                         }
                         else
                         {
+                            val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
                             DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id,amount_to_change)
                         }
                         addTransaction(transaction)
                     }

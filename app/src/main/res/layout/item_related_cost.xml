@@ -24,9 +24,9 @@
 
     <Button
         android:id="@+id/btnDeleteRelatedCost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cornerRadius="10dp"
+        android:layout_width="51dp"
+        android:layout_height="35dp"
+        android:background="@drawable/delete_button"
         android:backgroundTint="@color/primaryDarkColor"
-        android:text="Delete" />
+        app:cornerRadius="10dp" />
 </LinearLayout>

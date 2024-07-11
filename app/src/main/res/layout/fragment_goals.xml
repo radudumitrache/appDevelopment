@@ -35,11 +35,11 @@
 
             <Button
                 android:id="@+id/btnCreateGoal"
-                android:layout_width="match_parent"
+                android:layout_width="54dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/add_icon"
                 android:backgroundTint="@color/primaryColor"
-                android:text="Create Goal"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -47,7 +47,7 @@
 
             <Button
                 android:id="@+id/btnCalculateImpact"
-                android:layout_width="match_parent"
+                android:layout_width="248dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/primaryColor"
@@ -59,7 +59,7 @@
 
             <Button
                 android:id="@+id/btnCheckViability"
-                android:layout_width="match_parent"
+                android:layout_width="251dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/primaryColor"
