@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.appdev.MainActivity
 import com.example.appdev.R
+import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.TransactionsEntity
 import java.io.File
 import java.io.FileOutputStream
@@ -25,6 +26,8 @@ import java.io.InputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.ArrayAdapter
+import com.example.appdev.database.entities.CardEntity
 
 class TransactionsFragment : Fragment() {
     private val logged_user = MainActivity.logged_user
@@ -81,6 +84,7 @@ class TransactionsFragment : Fragment() {
 
     private fun showAddTransactionDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_transaction, null)
+        val cardSpinner = dialogView.findViewById<Spinner>(R.id.spinner_card)
         val typeSpinner = dialogView.findViewById<Spinner>(R.id.typeSpinner)
         val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.descriptionEditText)
@@ -89,11 +93,23 @@ class TransactionsFragment : Fragment() {
         dateEditText.setOnClickListener {
             showDatePickerDialog(dateEditText)
         }
+        val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
+        var cardNames = cards?.map { it.name_on_card }
+        if (cardNames != null)
+        {
+            cardNames = cardNames.toMutableList()
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            cardSpinner.adapter = adapter
+        }
 
         AlertDialog.Builder(requireContext())
             .setTitle("Add Transaction")
             .setView(dialogView)
             .setPositiveButton("Add") { dialog, _ ->
+                val selectedCardPosition = cardSpinner.selectedItemPosition
+                val selectedCard = cards?.get(selectedCardPosition)
+
                 val amountText = amountEditText.text.toString()
                 val description = descriptionEditText.text.toString()
                 val dateText = dateEditText.text.toString()
@@ -113,16 +129,34 @@ class TransactionsFragment : Fragment() {
                     val finalAmount = if (type == '-') -amount else amount
                     if (logged_user!=null)
                     {
-                        val transaction = TransactionsEntity(
-                            user_id = logged_user.user_id, // Example user_id
-                            type = type,
-                            amount = finalAmount,
-                            currency = "USD", // Example currency
-                            date = date,
-                            isRecurring = false, // Example value
-                            description = description
-                        )
-                        viewModel.addTransaction(transaction)
+                        val transaction = selectedCard?.let {
+                            TransactionsEntity(
+                                card_id = it.card_id, // Example user_id
+                                type = type,
+                                amount = finalAmount,
+                                date = date,
+                                isRecurring = false, // Example value
+                                description = description
+                            )
+                        }
+                        var card =
+                            transaction?.let {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
+                                    it.card_id)
+                            }
+                        if (transaction != null && card != null) {
+                            if (transaction.type == '+')
+                            {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            }
+                            else
+                            {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            }
+
+                            viewModel.addTransaction(transaction)
+                        }
+
                     }
 
                     dialog.dismiss()

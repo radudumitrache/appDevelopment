@@ -7,11 +7,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="775dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <Space
@@ -21,7 +21,8 @@
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="match_parent"
-                android:layout_height="161dp"
+                android:layout_height="49dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/profile_picture" />
 
             <EditText
@@ -46,10 +47,10 @@
                 android:id="@+id/editTextText2"
                 android:layout_width="294dp"
                 android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Teacher"
-                android:layout_gravity="center_horizontal"/>
+                android:text="Teacher" />
 
             <EditText
                 android:id="@+id/editTextText3"
@@ -68,31 +69,30 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Change Profile" />
 
-            <!-- New Elements for Adding Friends -->
+            <!-- Updated Elements for Navigating to Friends -->
             <TextView
                 android:id="@+id/addFriendTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Add Friends"
-                android:textSize="24sp"
                 android:layout_marginTop="16dp"
+                android:text="Friends"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editSearchFriend"
-                android:layout_width="196dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:hint="Search by name"
-                android:minHeight="48dp" />
-
             <Button
-                android:id="@+id/addFriendButton"
+                android:id="@+id/goToFriendsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Add Friend" />
+                android:text="Go to Friends" />
+
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="106dp"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

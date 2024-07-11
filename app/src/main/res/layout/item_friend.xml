@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@drawable/rounded_border"
+    android:layout_marginTop="10dp">
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:padding="2dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/profile_picture" />
+
+    <TextView
+        android:id="@+id/friend_name"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAlignment="center"
+        android:layout_marginLeft="20dp"
+        android:textSize="16sp"
+        tools:ignore="RtlCompat" />
+
+    <ImageButton
+        android:id="@+id/remove_friend_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center_vertical"
+        android:padding="3dp"
+        android:src="@drawable/x_button"
+        android:background="@android:color/transparent" />
+</LinearLayout>

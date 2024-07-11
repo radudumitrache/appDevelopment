@@ -8,7 +8,9 @@ import androidx.room.Room
 import com.example.appdev.MainActivity
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.daos.TransactionsDao
+import com.example.appdev.database.entities.CardEntity
 import com.example.appdev.database.entities.TransactionsEntity
+import com.example.appdev.ui.dashboard.DashboardFragment
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
@@ -30,25 +32,25 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
         ).allowMainThreadQueries().build()
 
         transactionsDao = db.transactionDao()
-        loadTransactions()
     }
 
-    private fun loadTransactions() {
+    private fun loadTransactions(cardEntityId : Int) {
         if (logged_user != null)
         {
-            _transactions.value = transactionsDao.getTransactionsByUser(logged_user.user_id)
+            _transactions.value = transactionsDao.getTransactionsByCard(cardEntityId)
         }
          // Example user_id
     }
 
     fun addTransaction(transaction: TransactionsEntity) {
         transactionsDao.insert(transaction)
-        loadTransactions()
+        loadTransactions(transaction.card_id)
     }
 
     fun deleteTransaction(transactionId: Int) {
+        var cardId = transactionsDao.getTransactionByID(transactionId).card_id
         transactionsDao.deleteTransaction(transactionId)
-        loadTransactions()
+        loadTransactions(cardId)
     }
 
     fun calculateTotalEarnings(): Float {
@@ -96,14 +98,21 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                     if (logged_user != null)
                     {
                         val transaction = TransactionsEntity(
-                            user_id = logged_user.user_id, // Example user_id
+                            card_id = DashboardFragment.selected_card.card_id, // Example user_id
                             type = if (amount >= 0) '+' else '-',
                             amount = amount,
-                            currency = "USD", // Example currency
                             date = date,
                             isRecurring = false, // Example value
                             description = description
                         )
+                        if (transaction.type == '+')
+                        {
+                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                        }
+                        else
+                        {
+                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
+                        }
                         addTransaction(transaction)
                     }
 
