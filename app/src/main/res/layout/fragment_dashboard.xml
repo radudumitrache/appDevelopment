@@ -50,10 +50,10 @@
 
     <TextView
         android:id="@+id/card_value"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_width="276dp"
+        android:layout_height="33dp"
         android:layout_marginTop="80dp"
-        android:text="0f"
+        android:text="No card selected"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"

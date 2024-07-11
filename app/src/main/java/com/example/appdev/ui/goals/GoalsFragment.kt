@@ -18,8 +18,14 @@ import java.util.*
 class GoalsFragment : Fragment() {
 
     private val goalViewModel: GoalsViewModel by viewModels()
-    private var averageMonthlySavings: Double = 500.0 // Dummy value, replace with actual DB retrieval
+      // Dummy value, replace with actual DB retrieval
     private lateinit var nonViableGoalsText : TextView
+    companion object
+    {
+        var averageMonthlySavings: Double = 500.0
+        lateinit var budgetImpact: TextView
+        lateinit var prediction: TextView
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,11 +41,12 @@ class GoalsFragment : Fragment() {
         val btnCreateGoal: Button = view.findViewById(R.id.btnCreateGoal)
         val btnCalculateImpact: Button = view.findViewById(R.id.btnCalculateImpact)
         val btnCheckViability: Button = view.findViewById(R.id.btnCheckViability)
-
+        budgetImpact = view.findViewById(R.id.budgetImpact)
+        prediction = view.findViewById(R.id.prediction)
         val budgetImpact: TextView = view.findViewById(R.id.budgetImpact)
-        val prediction: TextView = view.findViewById(R.id.prediction)
+        var prediction: TextView = view.findViewById(R.id.prediction)
         nonViableGoalsText = view.findViewById(R.id.nonViableGoals)
-
+        goalViewModel.setGoalsFragment(this)
         goalViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
             goalsContainer.removeAllViews()
 
@@ -59,13 +66,7 @@ class GoalsFragment : Fragment() {
         }
 
         btnCalculateImpact.setOnClickListener {
-            val (moneyLeft, monthsToGoal) = goalViewModel.calculateBudgetImpact(averageMonthlySavings)
-            budgetImpact.text = if (moneyLeft > 0) {
-                getString(R.string.budget_left, "%.2f".format(moneyLeft))
-            } else {
-                getString(R.string.budget_deficit, "%.2f".format(-moneyLeft))
-            }
-            prediction.text = getString(R.string.months_to_goal, monthsToGoal)
+            update_prediction_text()
         }
 
         btnCheckViability.setOnClickListener {
@@ -80,7 +81,17 @@ class GoalsFragment : Fragment() {
             nonViableGoalsText.visibility = View.VISIBLE
         }
     }
-
+    public fun update_prediction_text()
+    {
+        val (moneyLeft, monthsToGoal) = goalViewModel.calculateBudgetImpact(averageMonthlySavings)
+        budgetImpact.text = if (moneyLeft > 0) {
+            getString(R.string.budget_left, "%.2f".format(moneyLeft))
+        } else {
+            getString(R.string.budget_deficit, "%.2f".format(-moneyLeft))
+        }
+        Toast.makeText(requireContext(), "Prediction updated", Toast.LENGTH_SHORT).show()
+        prediction.text = getString(R.string.months_to_goal, monthsToGoal)
+    }
     private fun showAddRelatedCostDialog(goalTitle: String) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_new_related_cost, null)
         val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
@@ -98,6 +109,7 @@ class GoalsFragment : Fragment() {
                 val relatedCost = GoalsViewModel.RelatedCost(0, description, amount, isRecurring)
                 goalViewModel.addRelatedCost(goalTitle, relatedCost)
                 dialog.dismiss()
+                update_prediction_text()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
@@ -133,6 +145,7 @@ class GoalsFragment : Fragment() {
                         if (price > 0) {
                             val goal = GoalsViewModel.GoalDetails(0, title, description, dueDate, price, price)
                             goalViewModel.addGoal(goal)
+
                         } else {
                             Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
                         }
@@ -143,6 +156,7 @@ class GoalsFragment : Fragment() {
                     Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
                 }
                 dialog.dismiss()
+                update_prediction_text()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
@@ -190,6 +204,7 @@ class GoalsFragment : Fragment() {
 
         btnDeleteGoal.setOnClickListener {
             goalViewModel.deleteGoal(goalDetails.goalId)
+            update_prediction_text()
         }
 
         relatedCostsContainer.removeAllViews()
@@ -212,6 +227,7 @@ class GoalsFragment : Fragment() {
 
         btnDeleteRelatedCost.setOnClickListener {
             goalViewModel.removeRelatedCost(goalTitle, relatedCost)
+            update_prediction_text()
         }
 
         return view
