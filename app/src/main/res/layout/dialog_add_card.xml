@@ -37,11 +37,15 @@
         android:layout_height="55dp"
         android:hint="Name of bank"
         android:textSize="16sp" />
+
     <Button
         android:id="@+id/add_card_button"
-        android:layout_width="match_parent"
+        android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:text="Add Card"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/add_icon"
+        android:backgroundTint="#370202"
+        android:backgroundTintMode="add" />
 
 
 </LinearLayout>

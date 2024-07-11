@@ -10,11 +10,11 @@
 
     <Button
         android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
+        android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:text="Close"
         android:layout_gravity="top|end"
         android:layout_margin="16dp"
+        android:background="@drawable/close_button"
         android:backgroundTint="?attr/colorPrimary"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white" />
 </FrameLayout>
