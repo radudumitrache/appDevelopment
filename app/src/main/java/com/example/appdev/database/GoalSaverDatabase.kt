@@ -8,6 +8,12 @@ import androidx.room.TypeConverters
 import com.example.appdev.database.daos.*
 import com.example.appdev.database.entities.*
 import com.example.appdev.util.Converters
+import com.example.appdev.database.daos.UserDao
+import com.example.appdev.database.daos.FriendDao
+import com.example.appdev.database.daos.FriendRequestDao
+import com.example.appdev.database.entities.FriendEntity
+import com.example.appdev.database.entities.FriendRequestEntity
+import com.example.appdev.database.entities.UserEntity
 
 @Database(
     entities = [
@@ -15,7 +21,9 @@ import com.example.appdev.util.Converters
         TransactionsEntity::class,
         GoalEntity::class,
         RecurringCostEntity::class,
-        CardEntity::class
+        CardEntity::class,
+        FriendEntity::class,
+        FriendRequestEntity::class,
     ],
     version = 2,
     exportSchema = false
@@ -27,6 +35,8 @@ abstract class GoalSaverDatabase : RoomDatabase() {
     abstract fun goalDao(): GoalDao
     abstract fun recurringCostDao(): RecurringCostDao
     abstract fun cardDao(): CardDao
+    abstract fun friendDao(): FriendDao
+    abstract fun friendRequestDao(): FriendRequestDao
 
     companion object {
         @Volatile
