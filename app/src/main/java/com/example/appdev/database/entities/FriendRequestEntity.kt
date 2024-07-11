@@ -16,5 +16,5 @@ data class FriendRequestEntity(
     val sender_id: Int,
     val receiver_id: Int,
     val sender_email: String,
-    val status: String // "pending", "accepted", "declined"
+    val status: String
 )

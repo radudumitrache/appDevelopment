@@ -25,7 +25,6 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     val transactions: LiveData<List<TransactionsEntity>> get() = _transactions
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     init {
-        // Create an instance of the database
         val db = Room.databaseBuilder(
             application,
             GoalSaverDatabase::class.java, "goal_saver_database"
@@ -39,7 +38,6 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
         {
             _transactions.value = transactionsDao.getTransactionsByCard(cardEntityId)
         }
-         // Example user_id
     }
 
     fun addTransaction(transaction: TransactionsEntity) {
@@ -98,11 +96,11 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                     if (logged_user != null)
                     {
                         val transaction = TransactionsEntity(
-                            card_id = DashboardFragment.selected_card.card_id, // Example user_id
+                            card_id = DashboardFragment.selected_card.card_id,
                             type = if (amount >= 0) '+' else '-',
                             amount = amount,
                             date = date,
-                            isRecurring = false, // Example value
+                            isRecurring = false,
                             description = description
                         )
                         if (transaction.type == '+')

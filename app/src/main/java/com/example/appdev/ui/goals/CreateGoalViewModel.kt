@@ -23,7 +23,7 @@ class CreateGoalViewModel(application: Application) : AndroidViewModel(applicati
         this.price = price
 
         val goalEntity = GoalEntity(
-            user_id = 1, // Replace with actual user ID
+            user_id = 1,
             title = title,
             description = description,
             target_amount = price.toDouble(),

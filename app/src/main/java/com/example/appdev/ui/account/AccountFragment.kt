@@ -33,8 +33,7 @@ class AccountFragment : Fragment() {
         val goToFriendsButton: Button = view.findViewById(R.id.goToFriendsButton)
         val logoutButton: Button = view.findViewById(R.id.logout_button)
 
-        // Load user data
-        val userId = MainActivity.logged_user!!.user_id // Assuming you have user_id available in MainActivity
+        val userId = MainActivity.logged_user!!.user_id
         viewModel.loadUser(userId)
 
         viewModel.user.observe(viewLifecycleOwner, { user ->
@@ -51,8 +50,8 @@ class AccountFragment : Fragment() {
                     email = editEmailButton.text.toString(),
                     password = editPasswordButton.text.toString(),
                     profession = editTextProfession.text.toString(),
-                    dateOfBirth = MainActivity.logged_user!!.dateOfBirth, // Placeholder, add actual logic if needed
-                    monthly_salary = 0f, // Placeholder, add actual logic if needed
+                    dateOfBirth = MainActivity.logged_user!!.dateOfBirth,
+                    monthly_salary = 0f,
                     preffered_currency = editTextCurrency.text.toString()
                 )
                 viewModel.updateUser(updatedUser)
@@ -71,10 +70,9 @@ class AccountFragment : Fragment() {
     }
 
     private fun logout() {
-        // Clear the logged-in user state
+
         MainActivity.logged_user = null
 
-        // Navigate back to the LoginActivity
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()

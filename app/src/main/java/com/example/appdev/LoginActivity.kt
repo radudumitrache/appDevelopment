@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (validateLogin(email, password)) {
-                // Navigate to MainActivity
                 var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
                 val intent = Intent(this, MainActivity::class.java).apply {
                    putExtra("USER",user_with_mail)
@@ -36,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                // Show error message
                 Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
         }
