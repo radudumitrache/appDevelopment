@@ -1,7 +1,6 @@
 package com.example.appdev.ui.friends
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ class FriendsFragment : Fragment() {
         val friendRequestContainer: LinearLayout = view.findViewById(R.id.friendRequestContainer)
         val addFriendEditText: EditText = view.findViewById(R.id.addFriendEditText)
         val addFriendButton: Button = view.findViewById(R.id.addFriendButton)
+        val backToAccountButton: Button = view.findViewById(R.id.backToAccountButton)
 
         friendViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
             Log.d("FriendsFragment", "Friends observed: $friends")
@@ -58,6 +58,10 @@ class FriendsFragment : Fragment() {
                 friendViewModel.sendFriendRequest(requireContext(), email)
                 addFriendEditText.text.clear()
             }
+        }
+
+        backToAccountButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         return view

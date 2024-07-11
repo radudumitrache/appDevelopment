@@ -25,7 +25,7 @@ import com.example.appdev.database.entities.UserEntity
         FriendEntity::class,
         FriendRequestEntity::class,
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -3,6 +3,8 @@ package com.example.appdev
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,6 +18,7 @@ import androidx.room.Room
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.UserEntity
 import com.example.appdev.databinding.ActivityMainBinding
+import com.example.appdev.ui.map.MapDialogFragment
 import com.example.appdev.util.CheckInternetConnection
 import kotlinx.coroutines.launch
 
@@ -51,6 +54,27 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_app_bar_menu, menu)
+        val item = menu?.findItem(R.id.action_map)
+        item?.icon?.setTint(getColor(R.color.white))
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_map -> {
+                showMapDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showMapDialog() {
+        val mapDialogFragment = MapDialogFragment()
+        mapDialogFragment.show(supportFragmentManager, "MapDialogFragment")
     }
 }

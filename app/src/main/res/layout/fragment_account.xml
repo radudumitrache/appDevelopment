@@ -7,92 +7,122 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="775dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="13dp" />
 
-            <ImageView
-                android:id="@+id/imageView4"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/profile_picture" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
-            <EditText
-                android:id="@+id/editEmailButton"
-                android:layout_width="296dp"
-                android:layout_height="63dp"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="new email"
-                android:inputType="textEmailAddress" />
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/profile_picture" />
+
+                <EditText
+                    android:id="@+id/editEmailButton"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:hint="New email"
+                    android:inputType="textEmailAddress"
+                    android:padding="16dp"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/editPasswordButton"
-                android:layout_width="294dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="new password"
-                android:inputType="textPassword" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:hint="New password"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/textColor" />
 
             <EditText
                 android:id="@+id/editTextText2"
-                android:layout_width="294dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:inputType="text"
-                android:text="Teacher" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:hint="Profession"
+                android:padding="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/textColor" />
 
             <EditText
                 android:id="@+id/editTextText3"
-                android:layout_width="56dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:inputType="text"
-                android:text="$"
-                android:textAlignment="center" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:hint="Salary"
+                android:padding="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/textColor" />
 
             <Button
                 android:id="@+id/ChangeInformationButton"
-                android:layout_width="198dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Change Profile" />
-
-            <!-- Updated Elements for Navigating to Friends -->
-            <TextView
-                android:id="@+id/addFriendTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                android:text="Friends"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:backgroundTint="@color/primaryColor"
+                android:text="Apply Changes"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/goToFriendsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Go to Friends" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="48dp"
+                android:backgroundTint="@color/primaryColor"
+                android:text="Friends"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/logout_button"
-                android:layout_width="106dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/primaryDarkColor"
                 android:text="Logout"
-                android:layout_gravity="center_horizontal"/>
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cornerRadius="10dp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
