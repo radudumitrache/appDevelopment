@@ -8,7 +8,6 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appdev.R
@@ -17,6 +16,7 @@ class ExchangeFragment : Fragment() {
     private lateinit var amountEditText: EditText
     private lateinit var baseTextView: TextView
     private lateinit var dateTextView: TextView
+    private lateinit var ratesHeaderTextView: TextView
     private lateinit var ratesRecyclerView: RecyclerView
     private lateinit var baseCurrencySpinner: Spinner
     private lateinit var fetchButton: Button
@@ -30,6 +30,7 @@ class ExchangeFragment : Fragment() {
         amountEditText = view.findViewById(R.id.amountEditText)
         baseTextView = view.findViewById(R.id.baseTextView)
         dateTextView = view.findViewById(R.id.dateTextView)
+        ratesHeaderTextView = view.findViewById(R.id.ratesHeaderTextView)
         ratesRecyclerView = view.findViewById(R.id.ratesRecyclerView)
         baseCurrencySpinner = view.findViewById(R.id.baseCurrencySpinner)
         fetchButton = view.findViewById(R.id.fetchButton)
@@ -59,15 +60,11 @@ class ExchangeFragment : Fragment() {
             }
         }
 
-
         viewModel.exchangeRates.observe(viewLifecycleOwner, Observer { exchangeRates ->
             exchangeRates?.let {
-                val rates = it.rates.map { (currency, rate) ->
-                    "$currency: ${rate * (amountEditText.text.toString().toDoubleOrNull() ?: 1.0)}"
-                }.joinToString("\n")
-
                 baseTextView.visibility = View.VISIBLE
                 dateTextView.visibility = View.VISIBLE
+                ratesHeaderTextView.visibility = View.VISIBLE
                 baseTextView.text = "Base: ${it.base}"
                 dateTextView.text = "Date: ${it.date}"
                 ratesRecyclerView.adapter = ExchangeRatesAdapter(it.rates)

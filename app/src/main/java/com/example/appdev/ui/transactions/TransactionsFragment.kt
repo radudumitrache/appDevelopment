@@ -29,7 +29,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.ArrayAdapter
-import com.example.appdev.database.entities.CardEntity
 
 class TransactionsFragment : Fragment() {
     private val logged_user = MainActivity.logged_user
@@ -43,8 +42,8 @@ class TransactionsFragment : Fragment() {
                 }
             }
         }
-    override fun onCreateView(
 
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -272,7 +271,7 @@ class TransactionsFragment : Fragment() {
         }
 
         val amountTextView = TextView(requireContext()).apply {
-            text = "${transaction.amount}$"
+            text = String.format("%.2f$", transaction.amount)
             textSize = 16f
             setTextColor(ContextCompat.getColor(context, if (transaction.amount < 0) R.color.negative else R.color.positive))
             setTypeface(typeface, Typeface.BOLD)
@@ -298,5 +297,4 @@ class TransactionsFragment : Fragment() {
 
         return cardView
     }
-
 }

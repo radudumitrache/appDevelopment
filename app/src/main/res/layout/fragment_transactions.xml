@@ -70,7 +70,7 @@
         android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="116dp"
         android:backgroundTint="@color/primaryColor"
         android:text="Add transaction"
         app:cornerRadius="10dp"
