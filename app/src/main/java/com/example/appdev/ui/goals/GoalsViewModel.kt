@@ -77,10 +77,18 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
         loadGoals()
     }
 
-    fun calculateBudgetImpact(averageMonthlySavings: Double): Double {
-        val totalRemainingAmount = _goals.value?.sumOf { it.remainingAmount } ?: 0.0
+    fun calculateBudgetImpact(averageMonthlySavings: Double): Pair<Double, Int> {
+        val totalRemainingAmount = _goals.value?.sumOf { it.remainingAmount } ?: 0.00
         val monthsToGoal = predictMonthsToGoal()
-        return (totalRemainingAmount - (monthsToGoal * averageMonthlySavings)).coerceAtLeast(0.0)
+        val totalSavingsNeeded = totalRemainingAmount - (monthsToGoal * averageMonthlySavings)
+
+        val moneyLeft = if (totalSavingsNeeded > 0) {
+            -totalSavingsNeeded
+        } else {
+            -totalSavingsNeeded
+        }
+
+        return Pair(moneyLeft, monthsToGoal)
     }
 
     fun predictMonthsToGoal(): Int {

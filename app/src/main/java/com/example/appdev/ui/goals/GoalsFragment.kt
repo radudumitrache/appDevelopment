@@ -58,9 +58,12 @@ class GoalsFragment : Fragment() {
         }
 
         btnCalculateImpact.setOnClickListener {
-            val impact = goalViewModel.calculateBudgetImpact(averageMonthlySavings)
-            val monthsToGoal = goalViewModel.predictMonthsToGoal()
-            budgetImpact.text = getString(R.string.budget_impact, impact)
+            val (moneyLeft, monthsToGoal) = goalViewModel.calculateBudgetImpact(averageMonthlySavings)
+            budgetImpact.text = if (moneyLeft > 0) {
+                getString(R.string.budget_left, moneyLeft)
+            } else {
+                getString(R.string.budget_deficit, -moneyLeft)
+            }
             prediction.text = getString(R.string.months_to_goal, monthsToGoal)
         }
 
