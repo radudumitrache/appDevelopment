@@ -43,6 +43,8 @@
     <string name="budget_left">You will have %1$s left after completing all goals.</string>
     <string name="budget_deficit">You will need %1$s more to complete all goals.</string>
     <string name="months_to_goal">You would want complete all goals in : %1$d months. </string>
+    <string name="title_friends">Friends</string>
+    title_friends
     <string-array name="transaction_types">
         <item>+</item>
         <item>-</item>

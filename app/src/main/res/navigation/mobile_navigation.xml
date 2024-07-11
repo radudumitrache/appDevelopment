@@ -9,7 +9,11 @@
         android:id="@+id/navigation_account"
         android:name="com.example.appdev.ui.account.AccountFragment"
         android:label="@string/title_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_navigation_account_to_navigation_friends"
+            app:destination="@id/navigation_friends" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_transactions"
@@ -31,9 +35,15 @@
 
     <fragment
         android:id="@+id/navigation_goals"
-        android:name="com.example.appdev.ui.friends.FriendsFragment"
+        android:name="com.example.appdev.ui.goals.GoalsFragment"
         android:label="@string/title_goals"
         tools:layout="@layout/fragment_goals" />
+
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.example.appdev.ui.friends.FriendsFragment"
+        android:label="@string/title_friends"
+        tools:layout="@layout/fragment_friends" />
 
     <dialog
         android:id="@+id/navigation_map_dialog"

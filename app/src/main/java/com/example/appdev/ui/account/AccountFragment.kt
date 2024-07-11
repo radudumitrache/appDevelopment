@@ -1,6 +1,5 @@
 package com.example.appdev.ui.account
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.appdev.LoginActivity
 import com.example.appdev.MainActivity
 import com.example.appdev.R
 import com.example.appdev.database.entities.UserEntity
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+
 class AccountFragment : Fragment() {
 
     private val viewModel: AccountViewModel by viewModels()
@@ -35,7 +30,9 @@ class AccountFragment : Fragment() {
         val editTextProfession: EditText = view.findViewById(R.id.editTextText2)
         val editTextCurrency: EditText = view.findViewById(R.id.editTextText3)
         val changeInformationButton: Button = view.findViewById(R.id.ChangeInformationButton)
-        val logoutButton : Button = view.findViewById(R.id.logout_button)
+        val goToFriendsButton: Button = view.findViewById(R.id.goToFriendsButton)
+        val logoutButton: Button = view.findViewById(R.id.logout_button)
+
         // Load user data
         val userId = MainActivity.logged_user!!.user_id // Assuming you have user_id available in MainActivity
         viewModel.loadUser(userId)
@@ -48,8 +45,7 @@ class AccountFragment : Fragment() {
         })
 
         changeInformationButton.setOnClickListener {
-            if (MainActivity.logged_user != null)
-            {
+            if (MainActivity.logged_user != null) {
                 val updatedUser = UserEntity(
                     user_id = userId,
                     email = editEmailButton.text.toString(),
@@ -61,19 +57,19 @@ class AccountFragment : Fragment() {
                 )
                 viewModel.updateUser(updatedUser)
             }
-
-
         }
+
+        goToFriendsButton.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_account_to_navigation_friends)
+        }
+
         logoutButton.setOnClickListener {
             logout()
         }
 
         return view
     }
-    private fun parseDate(dateStr: String): Date {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return sdf.parse(dateStr) ?: Date()
-    }
+
     private fun logout() {
         // Clear the logged-in user state
         MainActivity.logged_user = null

@@ -27,16 +27,6 @@
         tools:ignore="RtlCompat" />
 
     <ImageButton
-         android:id="@+id/compare_button"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:scaleType="centerCrop"
-        android:padding="3dp"
-        android:src="@drawable/scale_unbalanced"
-        android:background="@android:color/transparent" />
-
-    <ImageButton
         android:id="@+id/remove_friend_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -45,6 +35,5 @@
         android:layout_gravity="center_vertical"
         android:padding="3dp"
         android:src="@drawable/x_button"
-        android:background="@android:color/transparent"
-        />
+        android:background="@android:color/transparent" />
 </LinearLayout>

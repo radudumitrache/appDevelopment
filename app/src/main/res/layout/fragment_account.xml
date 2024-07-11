@@ -69,31 +69,23 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Change Profile" />
 
-            <!-- New Elements for Adding Friends -->
+            <!-- Updated Elements for Navigating to Friends -->
             <TextView
                 android:id="@+id/addFriendTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:text="Add Friends"
+                android:text="Friends"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editSearchFriend"
-                android:layout_width="196dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:hint="Search by name"
-                android:minHeight="48dp" />
-
             <Button
-                android:id="@+id/addFriendButton"
+                android:id="@+id/goToFriendsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Add Friend" />
+                android:text="Go to Friends" />
 
             <Button
                 android:id="@+id/logout_button"
