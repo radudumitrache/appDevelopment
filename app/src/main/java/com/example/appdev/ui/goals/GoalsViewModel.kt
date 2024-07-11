@@ -25,9 +25,8 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun loadGoals() {
-        if (MainActivity.logged_user != null)
-        {
-            val userId = MainActivity.logged_user!!.user_id // Replace with actual user ID
+        if (MainActivity.logged_user != null) {
+            val userId = MainActivity.logged_user!!.user_id
             val goalEntities = goalDao.getGoalsOfUser(userId)
             val goalsWithCosts = goalEntities.map { goal ->
                 val relatedCosts = recurringCostDao.selectRecurringCostsByGoal(goal.goal_id)
@@ -45,16 +44,12 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             }
             _goals.value = goalsWithCosts
         }
-
-
-
     }
 
     fun addGoal(goal: GoalDetails) {
-        if (MainActivity.logged_user !=null)
-        {
+        if (MainActivity.logged_user != null) {
             val goalEntity = GoalEntity(
-                user_id = MainActivity.logged_user!!.user_id, // Replace with actual user ID
+                user_id = MainActivity.logged_user!!.user_id,
                 title = goal.title,
                 description = goal.description,
                 target_amount = goal.amount,
@@ -64,15 +59,25 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             goalDao.insert(goalEntity)
             loadGoals()
         }
-
     }
-
 
     fun addRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
         val currentGoals = _goals.value?.toMutableList() ?: mutableListOf()
         val goal = currentGoals.find { it.title == goalTitle }
         goal?.relatedCosts?.add(relatedCost)
         _goals.value = currentGoals
+
+        if (MainActivity.logged_user != null && goal != null) {
+            val recurringCostEntity = RecurringCostEntity(
+                goal_id = goal.goalId,
+                user_id = MainActivity.logged_user!!.user_id,
+                title = relatedCost.title,
+                amount = relatedCost.amount,
+                currency = "USD", // Assuming USD, change as necessary
+                frequency = if (relatedCost.isRecurring) "recurring" else "one-time"
+            )
+            recurringCostDao.insert(recurringCostEntity)
+        }
     }
 
     fun removeRelatedCost(goalTitle: String, relatedCost: RelatedCost) {
