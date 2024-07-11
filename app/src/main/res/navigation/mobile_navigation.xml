@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/navigation_goals"
-        android:name="com.example.appdev.ui.goals.GoalsFragment"
+        android:name="com.example.appdev.ui.friends.FriendsFragment"
         android:label="@string/title_goals"
         tools:layout="@layout/fragment_goals" />
 
