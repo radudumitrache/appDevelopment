@@ -28,17 +28,20 @@ import java.io.InputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.widget.ArrayAdapter
 
 class TransactionsFragment : Fragment() {
     private val logged_user = MainActivity.logged_user
     private val viewModel: TransactionsViewModel by viewModels()
+    private var selectedCardId: Int? = null
+
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 val filePath = copyUriToFile(it)
                 filePath?.let { path ->
-                    viewModel.readCsvFile(path)
+                    selectedCardId?.let { cardId ->
+                        viewModel.readCsvFile(path, cardId)
+                    }
                 }
             }
         }
@@ -48,7 +51,6 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-        Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
         val importButton: Button = view.findViewById(R.id.importCSV)
@@ -72,14 +74,46 @@ class TransactionsFragment : Fragment() {
         }
 
         importButton.setOnClickListener {
-            importTransactionsFromCSV()
+            showCardSelectionDialog()
         }
 
         return view
     }
 
-    private fun importTransactionsFromCSV() {
-        openFilePicker()
+    private fun showCardSelectionDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_select_card, null)
+        val cardSpinner = dialogView.findViewById<Spinner>(R.id.spinner_card)
+
+        val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
+        var cardNames = cards?.map { it.name_on_card }
+        if (cardNames != null) {
+            cardNames = cardNames.toMutableList()
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            cardSpinner.adapter = adapter
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Card")
+            .setView(dialogView)
+            .setPositiveButton("Select") { dialog, _ ->
+                val selectedCardPosition = cardSpinner.selectedItemPosition
+                val selectedCard = cards?.get(selectedCardPosition)
+                if (selectedCard != null) {
+                    selectedCardId = selectedCard.card_id
+                    openFilePicker()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun openFilePicker() {
+        filePickerLauncher.launch("*/*")
     }
 
     private fun showAddTransactionDialog() {
@@ -179,9 +213,6 @@ class TransactionsFragment : Fragment() {
         ).show()
     }
 
-    private fun openFilePicker() {
-        filePickerLauncher.launch("/")
-    }
 
     private fun copyUriToFile(uri: Uri): String? {
         val contentResolver = requireContext().contentResolver

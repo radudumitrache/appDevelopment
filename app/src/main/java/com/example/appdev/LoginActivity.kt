@@ -49,8 +49,14 @@ class LoginActivity : AppCompatActivity() {
 
         var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
         if (user_with_mail != null) {
-            if (user_with_mail.password == password)
+            if (user_with_mail.password == password) {
+                Toast.makeText(
+                    this,
+                    "Welcome ${user_with_mail.email}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return true
+            }
         }
         return false
     }
