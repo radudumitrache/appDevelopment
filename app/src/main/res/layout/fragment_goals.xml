@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,89 +7,92 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tvTitleGoals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_goals"
                 android:textAlignment="center"
+                android:textColor="@android:color/black"
                 android:textSize="40sp" />
 
-            <!-- Separator -->
-            <View
-                android:id="@+id/viewSeparator1"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/black" />
-
-            <!-- Container for Goals -->
             <LinearLayout
                 android:id="@+id/goalsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical" />
 
-            <!-- Buttons -->
             <Button
                 android:id="@+id/btnCreateGoal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="16dp"
-                android:text="Create Goal" />
+                android:background="@drawable/ic_add_circle_outline_24"
+                android:backgroundTint="@color/primaryColor"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/btnCalculateImpact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="248dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                android:text="Calculate Impact" />
+                android:backgroundTint="@color/primaryColor"
+                android:text="Calculate Impact"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/btnCheckViability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="251dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                android:text="Check Viability" />
+                android:backgroundTint="@color/primaryColor"
+                android:text="Check Viability"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
 
-            <!-- Budget Impact and Prediction -->
             <TextView
                 android:id="@+id/budgetImpact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/prediction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
-            <!-- Non-Viable Goals -->
             <TextView
                 android:id="@+id/nonViableGoals"
-                android:layout_width="331dp"
-                android:layout_height="133dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>

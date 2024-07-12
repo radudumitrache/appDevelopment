@@ -21,25 +21,23 @@ class CreateGoalFragment : Fragment() {
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.dialog_create_goal, container, false)
 
-        // Get references to the EditText fields and the button
+
         val etGoalTitle = view.findViewById<EditText>(R.id.etGoalTitle)
         val etGoalDescription = view.findViewById<EditText>(R.id.etGoalDescription)
         val etDueDate = view.findViewById<EditText>(R.id.etDueDate)
         val etPrice = view.findViewById<EditText>(R.id.etPrice)
         val btnCreate = view.findViewById<Button>(R.id.btnCreateGoal)
 
-        // Set up the date picker dialog
+
         etDueDate.setOnClickListener {
             showDatePickerDialog(etDueDate)
         }
 
-        // Set the button click listener
         btnCreate.setOnClickListener {
             val title = etGoalTitle.text.toString()
             val description = etGoalDescription.text.toString()
@@ -51,15 +49,22 @@ class CreateGoalFragment : Fragment() {
                     val priceValue = price.toDouble()
                     if (priceValue > 0) {
                         goalViewModel.createGoal(title, description, date, price)
-                        // Navigate to dashboard or other appropriate action
+
                     } else {
-                        Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } catch (e: NumberFormatException) {
-                    Toast.makeText(requireContext(), "Please enter a valid number for Price.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter a valid number for Price.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -73,12 +78,13 @@ class CreateGoalFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            dueDateEditText.setText(dateFormat.format(selectedDate.time))
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(selectedYear, selectedMonth, selectedDay)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                dueDateEditText.setText(dateFormat.format(selectedDate.time))
+            }, year, month, day)
 
         datePickerDialog.show()
     }

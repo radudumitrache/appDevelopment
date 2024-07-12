@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Goal Saver</string>
-    <string name ="profession">Profession</string>
+    <string name="profession">Profession</string>
     <string name="subtitle">Track your savings goals</string>
     <string name="register_text">Register</string>
     <string name="login_text">Login</string>
@@ -11,7 +11,7 @@
     <string name="title_transactions">Transactions</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_exchange">Exchange</string>
-    <string name="title_goals">Goal</string>
+    <string name="title_goals">Goals</string>
     <string name="title_createGoal">Create Goal</string>
     <string name="title_relatedCosts">Related Costs</string>
     <string name="hint_amount">Amount</string>
@@ -39,13 +39,14 @@
     <string name="total_with_related">Total with related costs</string>
     <string name="all_goals_viable">All goals are viable</string>
     <string name="non_viable_goals">Non-viable goals: %1$s</string>
-
+    <string name="select_card">Select Card</string>
     <string name="budget_left">You will have %1$s left after completing all goals.</string>
     <string name="budget_deficit">You will need %1$s more to complete all goals.</string>
     <string name="months_to_goal">You would want complete all goals in : %1$d months. </string>
     <string name="title_friends">Friends</string>
     title_friends
     <string-array name="transaction_types">
+
         <item>+</item>
         <item>-</item>
     </string-array>

@@ -41,24 +41,26 @@ class MapDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("MapDialogFragment", "onCreateView called")
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
-        // Handle the close button
         view.findViewById<Button>(R.id.closeButton).setOnClickListener {
+            Log.d("MapDialogFragment", "Close button clicked")
             dismiss()
         }
 
         mapView = view.findViewById(R.id.map)
-        Configuration.getInstance().load(context, context?.getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
+        Configuration.getInstance().load(requireContext(), requireContext().getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
         mapView.setTileSource(TileSourceFactory.MAPNIK)
 
-        // Initialize map view
         mapView.setMultiTouchControls(true)
 
-        // Set up location overlay
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("MapDialogFragment", "Requesting location permissions")
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
         } else {
+            Log.d("MapDialogFragment", "Permissions already granted, setting up location overlay")
             setupLocationOverlay()
         }
 
@@ -66,16 +68,14 @@ class MapDialogFragment : DialogFragment() {
     }
 
     private fun setupLocationOverlay() {
+        Log.d("MapDialogFragment", "Setting up location overlay")
         locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mapView)
         locationOverlay.enableMyLocation()
         mapView.overlays.add(locationOverlay)
 
-        // Set up compass overlay
         compassOverlay = CompassOverlay(context, mapView)
         compassOverlay.enableCompass()
         mapView.overlays.add(compassOverlay)
-
-        // Center map on the current location
         locationOverlay.runOnFirstFix {
             mainHandler.post {
                 val mapController: IMapController = mapView.controller
@@ -84,12 +84,15 @@ class MapDialogFragment : DialogFragment() {
                 if (startPoint != null) {
                     mapController.setCenter(GeoPoint(startPoint.latitude, startPoint.longitude))
                     fetchNearbyATMs(startPoint.latitude, startPoint.longitude)
+                } else {
+                    Log.d("MapDialogFragment", "Start point is null")
                 }
             }
         }
     }
 
     private fun fetchNearbyATMs(latitude: Double, longitude: Double) {
+        Log.d("MapDialogFragment", "Fetching nearby ATMs")
         val apiService = RetrofitClient.apiServiceNominatim
         val call = apiService.searchATMs("ATM", "json", 50, latitude, longitude, 5000) // Increased limit to 50 and radius to 5000 meters
 
@@ -126,6 +129,7 @@ class MapDialogFragment : DialogFragment() {
     }
 
     private fun addATMMarkers(atmResponses: List<ATMResponse>) {
+        Log.d("MapDialogFragment", "Adding ATM markers")
         for (atm in atmResponses) {
             Log.d("MapDialogFragment", "Adding ATM marker at: ${atm.lat}, ${atm.lon}")
             val marker = Marker(mapView)
@@ -134,17 +138,19 @@ class MapDialogFragment : DialogFragment() {
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             mapView.overlays.add(marker)
         }
-        mapView.invalidate() // Refresh the map to show markers
+        mapView.invalidate()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Log.d("MapDialogFragment", "Location permission granted, setting up location overlay")
                 setupLocationOverlay()
             } else {
-                // Permission denied, show a message to the user
+                Log.d("MapDialogFragment", "Location permission denied")
+                Toast.makeText(context, "Location permission is required to display map", Toast.LENGTH_SHORT).show()
             }
-            return
         }
     }
 

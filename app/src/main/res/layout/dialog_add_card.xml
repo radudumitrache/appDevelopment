@@ -31,17 +31,22 @@
         android:layout_height="55dp"
         android:hint="Currency type"
         android:textSize="16sp" />
+
     <EditText
         android:id="@+id/bank_name_input"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:hint="Name of bank"
         android:textSize="16sp" />
+
     <Button
         android:id="@+id/add_card_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Card"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ic_add_circle_outline_24"
+        android:backgroundTint="#370202"
+        android:backgroundTintMode="add" />
 
 
 </LinearLayout>

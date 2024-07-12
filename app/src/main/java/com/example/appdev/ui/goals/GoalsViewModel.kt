@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.appdev.MainActivity
+import com.example.appdev.R
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.GoalEntity
 import com.example.appdev.database.entities.RecurringCostEntity
@@ -19,6 +20,10 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _goals = MutableLiveData<List<GoalDetails>>()
     val goals: LiveData<List<GoalDetails>> get() = _goals
+    private var goalsFragment: GoalsFragment? = null
+    fun setGoalsFragment(fragment: GoalsFragment) {
+        this.goalsFragment = fragment
+    }
 
     init {
         loadGoals()
@@ -38,7 +43,9 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
                     amount = goal.current_amount,
                     remainingAmount = goal.target_amount,
                     relatedCosts = relatedCosts.map {
-                        RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
+                        RelatedCost(
+                            it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring"
+                        )
                     }.toMutableList()
                 )
             }
@@ -73,7 +80,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
                 user_id = MainActivity.logged_user!!.user_id,
                 title = relatedCost.title,
                 amount = relatedCost.amount,
-                currency = "USD", // Assuming USD, change as necessary
+                currency = "USD",
                 frequency = if (relatedCost.isRecurring) "recurring" else "one-time"
             )
             recurringCostDao.insert(recurringCostEntity)
@@ -143,8 +150,6 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             Log.d("GoalsViewModel", "All goals are viable.")
             return listOf("All goals are viable.")
         }
-
-        // Identify which goals to delete
         val goalsSortedByPriority = goals.sortedByDescending { it.remainingAmount }
         val nonViableGoals = mutableListOf<String>()
         var accumulatedSavings = 0.0
@@ -172,10 +177,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     )
 
     data class RelatedCost(
-        val costId: Int,
-        val title: String,
-        val amount: Double,
-        val isRecurring: Boolean
+        val costId: Int, val title: String, val amount: Double, val isRecurring: Boolean
     )
 
     companion object {

@@ -24,9 +24,7 @@ import com.example.appdev.database.entities.UserEntity
         CardEntity::class,
         FriendEntity::class,
         FriendRequestEntity::class,
-    ],
-    version = 2,
-    exportSchema = false
+    ], version = 1, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class GoalSaverDatabase : RoomDatabase() {
@@ -45,13 +43,8 @@ abstract class GoalSaverDatabase : RoomDatabase() {
         fun getDatabase(context: Context): GoalSaverDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    GoalSaverDatabase::class.java,
-                    "goal_saver_database"
-                )
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
+                    context.applicationContext, GoalSaverDatabase::class.java, "goal_saver_database"
+                ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }
