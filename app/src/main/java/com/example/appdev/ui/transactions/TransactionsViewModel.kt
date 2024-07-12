@@ -24,6 +24,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     private val logged_user = MainActivity.logged_user
     val transactions: LiveData<List<TransactionsEntity>> get() = _transactions
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
     init {
         val db = Room.databaseBuilder(
             application,
@@ -31,24 +32,26 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
         ).allowMainThreadQueries().build()
 
         transactionsDao = db.transactionDao()
+
+        AverageSavingsCalculator.initialize(application.applicationContext)
+        loadAllTransactions()
     }
 
-    private fun loadTransactions(cardEntityId : Int) {
-        if (logged_user != null)
-        {
-            _transactions.value = transactionsDao.getTransactionsByCard(cardEntityId)
+    private fun loadAllTransactions() {
+        if (logged_user != null) {
+            _transactions.value = transactionsDao.getTransactionsByUserId(logged_user.user_id)
         }
     }
 
     fun addTransaction(transaction: TransactionsEntity) {
         transactionsDao.insert(transaction)
-        loadTransactions(transaction.card_id)
+        loadAllTransactions()
     }
 
     fun deleteTransaction(transactionId: Int) {
-        var cardId = transactionsDao.getTransactionByID(transactionId).card_id
+        val cardId = transactionsDao.getTransactionByID(transactionId).card_id
         transactionsDao.deleteTransaction(transactionId)
-        loadTransactions(cardId)
+        loadAllTransactions()
     }
 
     fun calculateTotalEarnings(): Float {
@@ -93,8 +96,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
 
                 if (date != null) {
                     val description = values[descriptionIndex]
-                    if (logged_user != null)
-                    {
+                    if (logged_user != null) {
                         val transaction = TransactionsEntity(
                             card_id = DashboardFragment.selected_card.card_id,
                             type = if (amount >= 0) '+' else '-',
@@ -103,21 +105,17 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                             isRecurring = false,
                             description = description
                         )
-                        if (transaction.type == '+')
-                        {
+                        if (transaction.type == '+') {
                             val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
-                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
-                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id,amount_to_change)
-                        }
-                        else
-                        {
+                            DashboardFragment.selected_card.amount_on_card = amount_to_change
+                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id, amount_to_change)
+                        } else {
                             val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
-                            DashboardFragment.selected_card.amount_on_card = DashboardFragment.selected_card.amount_on_card + amount
-                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id,amount_to_change)
+                            DashboardFragment.selected_card.amount_on_card = amount_to_change
+                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id, amount_to_change)
                         }
                         addTransaction(transaction)
                     }
-
                 }
 
                 line = bufferedReader.readLine()

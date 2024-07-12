@@ -48,7 +48,6 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-        val logged_user = MainActivity.logged_user
         Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
@@ -96,8 +95,7 @@ class TransactionsFragment : Fragment() {
         }
         val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
         var cardNames = cards?.map { it.name_on_card }
-        if (cardNames != null)
-        {
+        if (cardNames != null) {
             cardNames = cardNames.toMutableList()
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -128,8 +126,7 @@ class TransactionsFragment : Fragment() {
                 try {
                     val date = SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateText)
                     val finalAmount = if (type == '-') -amount else amount
-                    if (logged_user!=null)
-                    {
+                    if (logged_user != null) {
                         val transaction = selectedCard?.let {
                             TransactionsEntity(
                                 card_id = it.card_id, // Example user_id
@@ -140,24 +137,18 @@ class TransactionsFragment : Fragment() {
                                 description = description
                             )
                         }
-                        var card =
-                            transaction?.let {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
-                                    it.card_id)
-                            }
+                        val card = transaction?.let {
+                            GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
+                                it.card_id)
+                        }
                         if (transaction != null && card != null) {
-                            if (transaction.type == '+')
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            if (transaction.type == '+') {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
+                            } else {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
                             }
-                            else
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
-                            }
-
                             viewModel.addTransaction(transaction)
                         }
-
                     }
 
                     dialog.dismiss()
@@ -263,12 +254,47 @@ class TransactionsFragment : Fragment() {
             setTypeface(typeface, Typeface.BOLD)
         }
 
+        val descriptionLayout = LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.HORIZONTAL
+        }
+
         val descriptionTextView = TextView(requireContext()).apply {
             text = transaction.description
             textSize = 14f
             setTextColor(ContextCompat.getColor(context, R.color.textColor))
-            setPadding(0, 4, 0, 0)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
         }
+
+        val deleteButton = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.delete_button)
+            setBackgroundResource(android.R.color.transparent)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            setOnClickListener {
+                // Confirm deletion with the user
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Transaction")
+                    .setMessage("Are you sure you want to delete this transaction?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        viewModel.deleteTransaction(transaction.transaction_id)
+                    }
+                    .setNegativeButton("No", null)
+                    .show()
+            }
+        }
+
+        descriptionLayout.addView(descriptionTextView)
+        descriptionLayout.addView(deleteButton)
 
         val amountTextView = TextView(requireContext()).apply {
             text = String.format("%.2f$", transaction.amount)
@@ -290,7 +316,7 @@ class TransactionsFragment : Fragment() {
         }
 
         contentLayout.addView(dateTextView)
-        contentLayout.addView(descriptionTextView)
+        contentLayout.addView(descriptionLayout)
         contentLayout.addView(amountTextView)
         contentLayout.addView(separator)
         cardView.addView(contentLayout)
