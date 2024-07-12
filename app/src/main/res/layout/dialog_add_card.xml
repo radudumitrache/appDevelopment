@@ -41,10 +41,10 @@
 
     <Button
         android:id="@+id/add_card_button"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/add_icon"
+        android:background="@drawable/ic_add_circle_outline_24"
         android:backgroundTint="#370202"
         android:backgroundTintMode="add" />
 
