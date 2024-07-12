@@ -81,10 +81,10 @@
 
     <Button
         android:id="@+id/addButton"
-        android:layout_width="57dp"
-        android:layout_height="47dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="116dp"
-        android:background="@drawable/add_icon"
+        android:background="@drawable/ic_add_circle_outline_24"
         android:backgroundTint="@color/primaryColor"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -62,9 +62,9 @@
 
     <Button
         android:id="@+id/btnDeleteGoal"
-        android:layout_width="63dp"
-        android:layout_height="50dp"
-        android:background="@drawable/delete_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_delete_outline_24"
         android:backgroundTint="@color/primaryDarkColor"
         android:textColor="@android:color/white"
         app:cornerRadius="10dp" />

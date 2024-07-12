@@ -328,13 +328,13 @@ class TransactionsFragment : Fragment() {
         }
 
         val deleteButton = ImageButton(requireContext()).apply {
-            setImageResource(R.drawable.delete_button)
-            setBackgroundResource(android.R.color.holo_green_dark)
+            setImageResource(R.drawable.ic_delete_outline_24)
+            setBackgroundResource(android.R.color.white)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(16, 0, 0, 0)
+                setMargins(0, 0, 0, 0)
             }
             setPadding(16, 16, 16, 16)
             setOnClickListener {
