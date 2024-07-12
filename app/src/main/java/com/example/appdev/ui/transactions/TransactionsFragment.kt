@@ -64,9 +64,9 @@ class TransactionsFragment : Fragment() {
                 transactionContainer.addView(cardView)
             }
 
-            totalEarningsTextView.text = "Total Earnings: ${viewModel.calculateTotalEarnings()}$"
-            totalSpentTextView.text = "Total Spent: ${viewModel.calculateTotalSpent()}$"
-            totalSavedTextView.text = "Total Saved: ${viewModel.calculateTotalSaved()}$"
+            totalEarningsTextView.text = "Total Earnings: %.2f$".format(viewModel.calculateTotalEarnings())
+            totalSpentTextView.text = "Total Spent: %.2f$".format(viewModel.calculateTotalSpent())
+            totalSavedTextView.text = "Total Saved: %.2f$".format(viewModel.calculateTotalSaved())
         })
 
         addButton.setOnClickListener {
