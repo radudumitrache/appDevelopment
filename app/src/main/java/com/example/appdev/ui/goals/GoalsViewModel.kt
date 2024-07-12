@@ -145,8 +145,6 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
             Log.d("GoalsViewModel", "All goals are viable.")
             return listOf("All goals are viable.")
         }
-
-        // Identify which goals to delete
         val goalsSortedByPriority = goals.sortedByDescending { it.remainingAmount }
         val nonViableGoals = mutableListOf<String>()
         var accumulatedSavings = 0.0

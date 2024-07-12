@@ -43,14 +43,11 @@ class RegisterActivity : AppCompatActivity() {
             val preffered_currency = preffered_currency.text.toString()
             val birthday = birthdayTextView.text.toString()
             if (validateRegistration(email, password,birthday, profession)) {
-                // Registration successful, show a success message
                 registeruser(email,password,profession,parseDate(birthday),monthly_salary,preffered_currency)
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                // Navigate to another activity or perform other actions as needed
                 intent = Intent(this,LandUpActivity::class.java)
                 startActivity(intent)
                 finish()
-            // Close the registration activity
             }
             else {
                 Toast.makeText(this, "Please fill in all fields correctly", Toast.LENGTH_SHORT).show()
@@ -77,7 +74,6 @@ class RegisterActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    // Utility function to parse date string to Date object
     private fun parseDate(dateStr: String): Date {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return sdf.parse(dateStr) ?: Date()

@@ -19,6 +19,7 @@ import java.util.*
 class GoalsFragment : Fragment() {
 
     private val goalViewModel: GoalsViewModel by viewModels()
+
     private lateinit var nonViableGoalsText: TextView
 
     companion object {
@@ -30,7 +31,6 @@ class GoalsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_goals, container, false)
     }
 
@@ -130,7 +130,6 @@ class GoalsFragment : Fragment() {
         val dueDateEditText = dialogView.findViewById<EditText>(R.id.etDueDate)
         val priceEditText = dialogView.findViewById<EditText>(R.id.etPrice)
 
-        // Set up the date picker dialog
         dueDateEditText.setOnClickListener {
             showDatePickerDialog(dueDateEditText)
         }

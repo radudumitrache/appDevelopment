@@ -24,22 +24,21 @@ class CreateGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.dialog_create_goal, container, false)
 
-        // Get references to the EditText fields and the button
+
         val etGoalTitle = view.findViewById<EditText>(R.id.etGoalTitle)
         val etGoalDescription = view.findViewById<EditText>(R.id.etGoalDescription)
         val etDueDate = view.findViewById<EditText>(R.id.etDueDate)
         val etPrice = view.findViewById<EditText>(R.id.etPrice)
         val btnCreate = view.findViewById<Button>(R.id.btnCreateGoal)
 
-        // Set up the date picker dialog
+
         etDueDate.setOnClickListener {
             showDatePickerDialog(etDueDate)
         }
 
-        // Set the button click listener
         btnCreate.setOnClickListener {
             val title = etGoalTitle.text.toString()
             val description = etGoalDescription.text.toString()

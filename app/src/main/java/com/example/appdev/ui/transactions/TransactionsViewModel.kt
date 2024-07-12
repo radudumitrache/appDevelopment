@@ -25,7 +25,6 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     init {
-        // Create an instance of the database
         val db = Room.databaseBuilder(
             application,
             GoalSaverDatabase::class.java, "goal_saver_database"
@@ -102,7 +101,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                             type = if (amount >= 0) '+' else '-',
                             amount = amount,
                             date = date,
-                            isRecurring = false, // Example value
+                            isRecurring = false,
                             description = description
                         )
                         val card = GoalSaverDatabase.getDatabase(getApplication()).cardDao().getCardOfId(cardId)

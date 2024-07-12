@@ -44,7 +44,6 @@ class MapDialogFragment : DialogFragment() {
         Log.d("MapDialogFragment", "onCreateView called")
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
-        // Handle the close button
         view.findViewById<Button>(R.id.closeButton).setOnClickListener {
             Log.d("MapDialogFragment", "Close button clicked")
             dismiss()
@@ -54,10 +53,8 @@ class MapDialogFragment : DialogFragment() {
         Configuration.getInstance().load(requireContext(), requireContext().getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
         mapView.setTileSource(TileSourceFactory.MAPNIK)
 
-        // Initialize map view
         mapView.setMultiTouchControls(true)
 
-        // Check and request location permissions
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d("MapDialogFragment", "Requesting location permissions")
@@ -76,12 +73,9 @@ class MapDialogFragment : DialogFragment() {
         locationOverlay.enableMyLocation()
         mapView.overlays.add(locationOverlay)
 
-        // Set up compass overlay
         compassOverlay = CompassOverlay(context, mapView)
         compassOverlay.enableCompass()
         mapView.overlays.add(compassOverlay)
-
-        // Center map on the current location
         locationOverlay.runOnFirstFix {
             mainHandler.post {
                 val mapController: IMapController = mapView.controller
@@ -144,7 +138,7 @@ class MapDialogFragment : DialogFragment() {
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             mapView.overlays.add(marker)
         }
-        mapView.invalidate() // Refresh the map to show markers
+        mapView.invalidate()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -154,7 +148,6 @@ class MapDialogFragment : DialogFragment() {
                 Log.d("MapDialogFragment", "Location permission granted, setting up location overlay")
                 setupLocationOverlay()
             } else {
-                // Permission denied, show a message to the user
                 Log.d("MapDialogFragment", "Location permission denied")
                 Toast.makeText(context, "Location permission is required to display map", Toast.LENGTH_SHORT).show()
             }

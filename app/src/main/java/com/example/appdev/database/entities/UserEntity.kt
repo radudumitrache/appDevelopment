@@ -21,7 +21,7 @@ data class UserEntity(
                 parcel.readString() ?: "",
                 parcel.readString() ?: "",
                 parcel.readString() ?: "",
-                Date(parcel.readLong()),  // Read the date as a Long
+                Date(parcel.readLong()),
                 parcel.readFloat(),
                 parcel.readString() ?: ""
         )
@@ -31,7 +31,7 @@ data class UserEntity(
                 parcel.writeString(email)
                 parcel.writeString(password)
                 parcel.writeString(profession)
-                parcel.writeLong(dateOfBirth.time)  // Write the date as a Long
+                parcel.writeLong(dateOfBirth.time)
                 parcel.writeFloat(monthly_salary)
                 parcel.writeString(preffered_currency)
         }
