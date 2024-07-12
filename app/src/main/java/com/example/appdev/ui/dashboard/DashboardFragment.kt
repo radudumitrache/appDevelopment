@@ -55,7 +55,8 @@ class DashboardFragment : Fragment() {
         db = GoalSaverDatabase.getDatabase(requireContext())
         loadCardsAndTransactions()
 
-        val creditCardView = inflater.inflate(R.layout.item_debit_card, binding.cardContainer, false)
+        val creditCardView =
+            inflater.inflate(R.layout.item_debit_card, binding.cardContainer, false)
         val valueContainer: TextView = binding.cardValue
         binding.cardContainer.addView(creditCardView)
 
@@ -75,6 +76,7 @@ class DashboardFragment : Fragment() {
                     MotionEvent.ACTION_DOWN -> {
                         initialX = event.rawX
                     }
+
                     MotionEvent.ACTION_UP -> {
                         if (cardDetails.size >= 1) {
                             val finalX = event.rawX
@@ -82,8 +84,12 @@ class DashboardFragment : Fragment() {
                                 // Swipe left detected
                                 cardIndex = (cardIndex + 1) % cardDetails.size
                                 updateCardDetails(creditCardView, cardDetails[cardIndex])
-                                valueContainer.text = "You have ${cardDetails[cardIndex].amount_on_card} $ on this card"
-                                updateTransactions(binding.transactionsRecyclerView, transactionsList[cardIndex])
+                                valueContainer.text =
+                                    "You have ${cardDetails[cardIndex].amount_on_card} $ on this card"
+                                updateTransactions(
+                                    binding.transactionsRecyclerView,
+                                    transactionsList[cardIndex]
+                                )
                             }
                         }
                     }
@@ -103,7 +109,8 @@ class DashboardFragment : Fragment() {
     private fun loadCardsAndTransactions() {
         MainActivity.logged_user?.let { user ->
             cardDetails = db.cardDao().getCardsOfUser(user.user_id).toMutableList()
-            transactionsList = cardDetails.map { card -> db.transactionDao().getTransactionsByCard(card.card_id) }
+            transactionsList =
+                cardDetails.map { card -> db.transactionDao().getTransactionsByCard(card.card_id) }
         }
     }
 
@@ -122,7 +129,10 @@ class DashboardFragment : Fragment() {
         view.findViewById<TextView>(R.id.card_value).text = cardDetails.amount_on_card.toString()
     }
 
-    private fun updateTransactions(recyclerView: RecyclerView, transactions: List<TransactionsEntity>) {
+    private fun updateTransactions(
+        recyclerView: RecyclerView,
+        transactions: List<TransactionsEntity>
+    ) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = TransactionAdapter(transactions.map {
             Transaction(it.date.toString(), it.description, it.amount.toString())
@@ -180,10 +190,11 @@ class DashboardFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(this.requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-            expiryDateInput.text = selectedDate
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(this.requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                expiryDateInput.text = selectedDate
+            }, year, month, day)
 
         datePickerDialog.show()
     }

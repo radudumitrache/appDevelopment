@@ -11,16 +11,16 @@
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="16dp"
         android:textColor="@color/textColor"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
@@ -28,112 +28,112 @@
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:hint="Password"
         android:inputType="textPassword"
         android:padding="16dp"
         android:textColor="@color/textColor"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/profession"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/profession" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
     <EditText
         android:id="@+id/profession"
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:hint="@string/profession"
         android:padding="16dp"
         android:textColor="@color/textColor"
-        app:layout_constraintTop_toBottomOf="@id/password"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/birthdayTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/birthdayTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password" />
 
     <TextView
         android:id="@+id/birthdayTextView"
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:gravity="center"
         android:hint="Select Birthday"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/profession"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/monthly_salary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/monthly_salary" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profession" />
 
     <EditText
         android:id="@+id/monthly_salary"
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:hint="Monthly Salary"
         android:inputType="number"
         android:padding="16dp"
         android:textColor="@color/textColor"
-        app:layout_constraintTop_toBottomOf="@id/birthdayTextView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/preferred_currency"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/preferred_currency" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/birthdayTextView" />
 
     <EditText
         android:id="@+id/preferred_currency"
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:hint="Preferred Currency"
         android:inputType="text"
         android:padding="16dp"
         android:textColor="@color/textColor"
-        app:layout_constraintTop_toBottomOf="@id/monthly_salary"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/RegisterButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/RegisterButton" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/monthly_salary" />
 
     <Button
         android:id="@+id/RegisterButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:backgroundTint="@color/primaryColor"
         android:text="Sign Up"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@id/preferred_currency"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/BackButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/BackButton" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preferred_currency" />
 
     <Button
         android:id="@+id/BackButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:backgroundTint="@color/primaryDarkColor"
         android:text="Go back"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@id/RegisterButton"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/RegisterButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,13 +20,9 @@ interface ApiService {
 }
 
 data class ExchangeRates(
-    val base: String,
-    val date: String,
-    val rates: Map<String, Double>
+    val base: String, val date: String, val rates: Map<String, Double>
 )
 
 data class ATMResponse(
-    val lat: Double,
-    val lon: Double,
-    val display_name: String
+    val lat: Double, val lon: Double, val display_name: String
 )

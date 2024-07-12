@@ -28,9 +28,10 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (validateLogin(email, password)) {
-                var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
+                var user_with_mail =
+                    GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
                 val intent = Intent(this, MainActivity::class.java).apply {
-                    putExtra("USER",user_with_mail)
+                    putExtra("USER", user_with_mail)
                 }
                 startActivity(intent)
                 finish()
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         backButton.setOnClickListener {
-            intent = Intent(this,LandUpActivity::class.java)
+            intent = Intent(this, LandUpActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -51,9 +52,7 @@ class LoginActivity : AppCompatActivity() {
         if (user_with_mail != null) {
             if (user_with_mail.password == password) {
                 Toast.makeText(
-                    this,
-                    "Welcome ${user_with_mail.email}",
-                    Toast.LENGTH_SHORT
+                    this, "Welcome ${user_with_mail.email}", Toast.LENGTH_SHORT
                 ).show()
                 return true
             }

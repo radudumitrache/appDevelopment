@@ -41,13 +41,16 @@ class MainActivity : AppCompatActivity() {
         logged_user = intent.getParcelableExtra("USER", UserEntity::class.java)
 
 
-
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_account, R.id.navigation_transactions, R.id.navigation_dashboard, R.id.navigation_exchange, R.id.navigation_goals
+                R.id.navigation_account,
+                R.id.navigation_transactions,
+                R.id.navigation_dashboard,
+                R.id.navigation_exchange,
+                R.id.navigation_goals
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 showMapDialog()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

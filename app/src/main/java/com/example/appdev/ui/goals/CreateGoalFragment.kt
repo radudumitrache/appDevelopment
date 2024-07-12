@@ -21,8 +21,7 @@ class CreateGoalFragment : Fragment() {
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.dialog_create_goal, container, false)
@@ -52,13 +51,20 @@ class CreateGoalFragment : Fragment() {
                         goalViewModel.createGoal(title, description, date, price)
 
                     } else {
-                        Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } catch (e: NumberFormatException) {
-                    Toast.makeText(requireContext(), "Please enter a valid number for Price.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter a valid number for Price.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -72,12 +78,13 @@ class CreateGoalFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            dueDateEditText.setText(dateFormat.format(selectedDate.time))
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(selectedYear, selectedMonth, selectedDay)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                dueDateEditText.setText(dateFormat.format(selectedDate.time))
+            }, year, month, day)
 
         datePickerDialog.show()
     }

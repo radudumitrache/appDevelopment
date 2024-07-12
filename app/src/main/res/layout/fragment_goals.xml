@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.goals.GoalsFragment">
 
     <ScrollView
@@ -13,8 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <TextView
@@ -22,16 +22,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_goals"
-                android:textColor="@android:color/black"
                 android:textAlignment="center"
+                android:textColor="@android:color/black"
                 android:textSize="40sp" />
 
             <LinearLayout
                 android:id="@+id/goalsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                android:orientation="vertical" />
 
             <Button
                 android:id="@+id/btnCreateGoal"
@@ -73,26 +73,26 @@
                 android:id="@+id/budgetImpact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:layout_gravity="center_horizontal" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/prediction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:layout_gravity="center_horizontal" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/nonViableGoals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="20sp"
-                android:layout_gravity="center_horizontal" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>
