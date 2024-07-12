@@ -51,7 +51,6 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-        Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
         val importButton: Button = view.findViewById(R.id.importCSV)
@@ -114,7 +113,7 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun openFilePicker() {
-        filePickerLauncher.launch("*/*")
+        filePickerLauncher.launch("/")
     }
 
     private fun showAddTransactionDialog() {
@@ -149,7 +148,6 @@ class TransactionsFragment : Fragment() {
                 val dateText = dateEditText.text.toString()
                 val selectedTypeId = typeRadioGroup.checkedRadioButtonId
                 val typeText = dialogView.findViewById<RadioButton>(selectedTypeId).text.toString()
-                // Check if any field is empty
                 if (amountText.isEmpty() || description.isEmpty() || dateText.isEmpty() || typeText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
@@ -164,11 +162,11 @@ class TransactionsFragment : Fragment() {
                     if (logged_user != null) {
                         val transaction = selectedCard?.let {
                             TransactionsEntity(
-                                card_id = it.card_id, // Example user_id
+                                card_id = it.card_id,
                                 type = type,
                                 amount = finalAmount,
                                 date = date,
-                                isRecurring = false, // Example value
+                                isRecurring = false,
                                 description = description
                             )
                         }
@@ -215,6 +213,7 @@ class TransactionsFragment : Fragment() {
         ).show()
     }
 
+
     private fun copyUriToFile(uri: Uri): String? {
         val contentResolver = requireContext().contentResolver
         val fileName = getFileName(uri)
@@ -255,7 +254,6 @@ class TransactionsFragment : Fragment() {
             output.write(buffer, 0, length)
         }
     }
-
     private fun createTransactionCard(transaction: TransactionsEntity): CardView {
         val cardView = CardView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -275,7 +273,7 @@ class TransactionsFragment : Fragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
-            setPadding(0, 0, 0, 0)
+            setPadding(16, 16, 16, 16)
         }
 
         val dateTextView = TextView(requireContext()).apply {
@@ -291,6 +289,7 @@ class TransactionsFragment : Fragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 8, 0, 8)
         }
 
         val descriptionTextView = TextView(requireContext()).apply {
@@ -306,13 +305,15 @@ class TransactionsFragment : Fragment() {
 
         val deleteButton = ImageButton(requireContext()).apply {
             setImageResource(R.drawable.delete_button)
-            setBackgroundResource(android.R.color.transparent)
+            setBackgroundResource(android.R.color.holo_green_dark)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            ).apply {
+                setMargins(16, 0, 0, 0)
+            }
+            setPadding(16, 16, 16, 16)
             setOnClickListener {
-                // Confirm deletion with the user
                 AlertDialog.Builder(requireContext())
                     .setTitle("Delete Transaction")
                     .setMessage("Are you sure you want to delete this transaction?")
@@ -325,7 +326,6 @@ class TransactionsFragment : Fragment() {
         }
 
         descriptionLayout.addView(descriptionTextView)
-        descriptionLayout.addView(deleteButton)
 
         val amountTextView = TextView(requireContext()).apply {
             text = String.format("%.2f$", transaction.amount)
@@ -349,9 +349,11 @@ class TransactionsFragment : Fragment() {
         contentLayout.addView(dateTextView)
         contentLayout.addView(descriptionLayout)
         contentLayout.addView(amountTextView)
+        contentLayout.addView(deleteButton)
         contentLayout.addView(separator)
         cardView.addView(contentLayout)
 
         return cardView
     }
+
 }

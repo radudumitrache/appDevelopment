@@ -40,14 +40,11 @@ class MainActivity : AppCompatActivity() {
 
         logged_user = intent.getParcelableExtra("USER", UserEntity::class.java)
 
-        if (logged_user != null) {
-            Toast.makeText(this, "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
-        }
+
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        // Passing each menu ID as a set of Ids because each menu should be considered as top-level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_account, R.id.navigation_transactions, R.id.navigation_dashboard, R.id.navigation_exchange, R.id.navigation_goals

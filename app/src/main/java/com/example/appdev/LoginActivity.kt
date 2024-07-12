@@ -28,15 +28,13 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (validateLogin(email, password)) {
-                // Navigate to MainActivity
                 var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
                 val intent = Intent(this, MainActivity::class.java).apply {
-                   putExtra("USER",user_with_mail)
+                    putExtra("USER",user_with_mail)
                 }
                 startActivity(intent)
                 finish()
             } else {
-                // Show error message
                 Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
         }
@@ -51,8 +49,14 @@ class LoginActivity : AppCompatActivity() {
 
         var user_with_mail = GoalSaverDatabase.getDatabase(this).userDao().getUserByEmail(email)
         if (user_with_mail != null) {
-            if (user_with_mail.password == password)
+            if (user_with_mail.password == password) {
+                Toast.makeText(
+                    this,
+                    "Welcome ${user_with_mail.email}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return true
+            }
         }
         return false
     }
