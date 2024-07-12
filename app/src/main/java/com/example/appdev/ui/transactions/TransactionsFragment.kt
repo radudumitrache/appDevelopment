@@ -28,17 +28,20 @@ import java.io.InputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.widget.ArrayAdapter
 
 class TransactionsFragment : Fragment() {
     private val logged_user = MainActivity.logged_user
     private val viewModel: TransactionsViewModel by viewModels()
+    private var selectedCardId: Int? = null
+
     private val filePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 val filePath = copyUriToFile(it)
                 filePath?.let { path ->
-                    viewModel.readCsvFile(path)
+                    selectedCardId?.let { cardId ->
+                        viewModel.readCsvFile(path, cardId)
+                    }
                 }
             }
         }
@@ -48,8 +51,6 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-        val logged_user = MainActivity.logged_user
-        Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
         val importButton: Button = view.findViewById(R.id.importCSV)
@@ -73,14 +74,46 @@ class TransactionsFragment : Fragment() {
         }
 
         importButton.setOnClickListener {
-            importTransactionsFromCSV()
+            showCardSelectionDialog()
         }
 
         return view
     }
 
-    private fun importTransactionsFromCSV() {
-        openFilePicker()
+    private fun showCardSelectionDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_select_card, null)
+        val cardSpinner = dialogView.findViewById<Spinner>(R.id.spinner_card)
+
+        val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
+        var cardNames = cards?.map { it.name_on_card }
+        if (cardNames != null) {
+            cardNames = cardNames.toMutableList()
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            cardSpinner.adapter = adapter
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Card")
+            .setView(dialogView)
+            .setPositiveButton("Select") { dialog, _ ->
+                val selectedCardPosition = cardSpinner.selectedItemPosition
+                val selectedCard = cards?.get(selectedCardPosition)
+                if (selectedCard != null) {
+                    selectedCardId = selectedCard.card_id
+                    openFilePicker()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun openFilePicker() {
+        filePickerLauncher.launch("/")
     }
 
     private fun showAddTransactionDialog() {
@@ -96,8 +129,7 @@ class TransactionsFragment : Fragment() {
         }
         val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
         var cardNames = cards?.map { it.name_on_card }
-        if (cardNames != null)
-        {
+        if (cardNames != null) {
             cardNames = cardNames.toMutableList()
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -116,7 +148,6 @@ class TransactionsFragment : Fragment() {
                 val dateText = dateEditText.text.toString()
                 val selectedTypeId = typeRadioGroup.checkedRadioButtonId
                 val typeText = dialogView.findViewById<RadioButton>(selectedTypeId).text.toString()
-                // Check if any field is empty
                 if (amountText.isEmpty() || description.isEmpty() || dateText.isEmpty() || typeText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
@@ -128,36 +159,29 @@ class TransactionsFragment : Fragment() {
                 try {
                     val date = SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateText)
                     val finalAmount = if (type == '-') -amount else amount
-                    if (logged_user!=null)
-                    {
+                    if (logged_user != null) {
                         val transaction = selectedCard?.let {
                             TransactionsEntity(
-                                card_id = it.card_id, // Example user_id
+                                card_id = it.card_id,
                                 type = type,
                                 amount = finalAmount,
                                 date = date,
-                                isRecurring = false, // Example value
+                                isRecurring = false,
                                 description = description
                             )
                         }
-                        var card =
-                            transaction?.let {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
-                                    it.card_id)
-                            }
+                        val card = transaction?.let {
+                            GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
+                                it.card_id)
+                        }
                         if (transaction != null && card != null) {
-                            if (transaction.type == '+')
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            if (transaction.type == '+') {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
+                            } else {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
                             }
-                            else
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
-                            }
-
                             viewModel.addTransaction(transaction)
                         }
-
                     }
 
                     dialog.dismiss()
@@ -189,9 +213,6 @@ class TransactionsFragment : Fragment() {
         ).show()
     }
 
-    private fun openFilePicker() {
-        filePickerLauncher.launch("*/*")
-    }
 
     private fun copyUriToFile(uri: Uri): String? {
         val contentResolver = requireContext().contentResolver
@@ -233,7 +254,6 @@ class TransactionsFragment : Fragment() {
             output.write(buffer, 0, length)
         }
     }
-
     private fun createTransactionCard(transaction: TransactionsEntity): CardView {
         val cardView = CardView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -253,7 +273,7 @@ class TransactionsFragment : Fragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
-            setPadding(0, 0, 0, 0)
+            setPadding(16, 16, 16, 16)
         }
 
         val dateTextView = TextView(requireContext()).apply {
@@ -263,12 +283,49 @@ class TransactionsFragment : Fragment() {
             setTypeface(typeface, Typeface.BOLD)
         }
 
+        val descriptionLayout = LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 8, 0, 8)
+        }
+
         val descriptionTextView = TextView(requireContext()).apply {
             text = transaction.description
             textSize = 14f
             setTextColor(ContextCompat.getColor(context, R.color.textColor))
-            setPadding(0, 4, 0, 0)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
         }
+
+        val deleteButton = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.delete_button)
+            setBackgroundResource(android.R.color.holo_green_dark)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(16, 0, 0, 0)
+            }
+            setPadding(16, 16, 16, 16)
+            setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Transaction")
+                    .setMessage("Are you sure you want to delete this transaction?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        viewModel.deleteTransaction(transaction.transaction_id)
+                    }
+                    .setNegativeButton("No", null)
+                    .show()
+            }
+        }
+
+        descriptionLayout.addView(descriptionTextView)
 
         val amountTextView = TextView(requireContext()).apply {
             text = String.format("%.2f$", transaction.amount)
@@ -290,11 +347,13 @@ class TransactionsFragment : Fragment() {
         }
 
         contentLayout.addView(dateTextView)
-        contentLayout.addView(descriptionTextView)
+        contentLayout.addView(descriptionLayout)
         contentLayout.addView(amountTextView)
+        contentLayout.addView(deleteButton)
         contentLayout.addView(separator)
         cardView.addView(contentLayout)
 
         return cardView
     }
+
 }

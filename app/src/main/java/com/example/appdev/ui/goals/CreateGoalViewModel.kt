@@ -2,6 +2,7 @@ package com.example.appdev.ui.goals
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.example.appdev.MainActivity
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.GoalEntity
 import java.text.SimpleDateFormat
@@ -23,7 +24,7 @@ class CreateGoalViewModel(application: Application) : AndroidViewModel(applicati
         this.price = price
 
         val goalEntity = GoalEntity(
-            user_id = 1, // Replace with actual user ID
+            user_id = MainActivity.logged_user!!.user_id,
             title = title,
             description = description,
             target_amount = price.toDouble(),
