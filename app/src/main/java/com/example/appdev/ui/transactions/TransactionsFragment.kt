@@ -254,12 +254,47 @@ class TransactionsFragment : Fragment() {
             setTypeface(typeface, Typeface.BOLD)
         }
 
+        val descriptionLayout = LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.HORIZONTAL
+        }
+
         val descriptionTextView = TextView(requireContext()).apply {
             text = transaction.description
             textSize = 14f
             setTextColor(ContextCompat.getColor(context, R.color.textColor))
-            setPadding(0, 4, 0, 0)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
         }
+
+        val deleteButton = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.delete_button)
+            setBackgroundResource(android.R.color.transparent)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            setOnClickListener {
+                // Confirm deletion with the user
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Transaction")
+                    .setMessage("Are you sure you want to delete this transaction?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        viewModel.deleteTransaction(transaction.transaction_id)
+                    }
+                    .setNegativeButton("No", null)
+                    .show()
+            }
+        }
+
+        descriptionLayout.addView(descriptionTextView)
+        descriptionLayout.addView(deleteButton)
 
         val amountTextView = TextView(requireContext()).apply {
             text = String.format("%.2f$", transaction.amount)
@@ -281,7 +316,7 @@ class TransactionsFragment : Fragment() {
         }
 
         contentLayout.addView(dateTextView)
-        contentLayout.addView(descriptionTextView)
+        contentLayout.addView(descriptionLayout)
         contentLayout.addView(amountTextView)
         contentLayout.addView(separator)
         cardView.addView(contentLayout)
