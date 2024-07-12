@@ -116,6 +116,7 @@ class TransactionsFragment : Fragment() {
                 val dateText = dateEditText.text.toString()
                 val selectedTypeId = typeRadioGroup.checkedRadioButtonId
                 val typeText = dialogView.findViewById<RadioButton>(selectedTypeId).text.toString()
+                // Check if any field is empty
                 if (amountText.isEmpty() || description.isEmpty() || dateText.isEmpty() || typeText.isEmpty()) {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
@@ -131,11 +132,11 @@ class TransactionsFragment : Fragment() {
                     {
                         val transaction = selectedCard?.let {
                             TransactionsEntity(
-                                card_id = it.card_id,
+                                card_id = it.card_id, // Example user_id
                                 type = type,
                                 amount = finalAmount,
                                 date = date,
-                                isRecurring = false,
+                                isRecurring = false, // Example value
                                 description = description
                             )
                         }
@@ -189,7 +190,7 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun openFilePicker() {
-        filePickerLauncher.launch("*/*")
+        filePickerLauncher.launch("/")
     }
 
     private fun copyUriToFile(uri: Uri): String? {
