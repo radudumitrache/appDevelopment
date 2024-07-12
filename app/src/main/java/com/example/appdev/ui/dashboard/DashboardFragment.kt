@@ -63,6 +63,8 @@ class DashboardFragment : Fragment() {
             updateCardDetails(creditCardView, cardDetails[cardIndex])
             valueContainer.text = "You have ${cardDetails[cardIndex].amount_on_card} $ on this card"
             updateTransactions(binding.transactionsRecyclerView, transactionsList[cardIndex])
+        } else {
+            valueContainer.text = "No card selected"
         }
 
         creditCardView.setOnTouchListener(object : View.OnTouchListener {
