@@ -13,8 +13,7 @@ object AverageSavingsCalculator {
 
     fun initialize(context: Context) {
         val db = Room.databaseBuilder(
-            context,
-            GoalSaverDatabase::class.java, "goal_saver_database"
+            context, GoalSaverDatabase::class.java, "goal_saver_database"
         ).allowMainThreadQueries().build()
 
         transactionsDao = db.transactionDao()

@@ -28,8 +28,7 @@ class GoalsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_goals, container, false)
     }
@@ -77,7 +76,8 @@ class GoalsFragment : Fragment() {
                 nonViableGoalsText.text = getString(R.string.all_goals_viable)
                 Toast.makeText(requireContext(), "All goals viable", Toast.LENGTH_SHORT).show()
             } else {
-                nonViableGoalsText.text = getString(R.string.non_viable_goals, nonViableGoals.joinToString(", "))
+                nonViableGoalsText.text =
+                    getString(R.string.non_viable_goals, nonViableGoals.joinToString(", "))
                 Toast.makeText(requireContext(), nonViableGoalsText.text, Toast.LENGTH_SHORT).show()
             }
             nonViableGoalsText.visibility = View.VISIBLE
@@ -98,15 +98,14 @@ class GoalsFragment : Fragment() {
     }
 
     private fun showAddRelatedCostDialog(goalTitle: String) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_new_related_cost, null)
+        val dialogView =
+            LayoutInflater.from(context).inflate(R.layout.dialog_new_related_cost, null)
         val amountEditText = dialogView.findViewById<EditText>(R.id.amountEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.descriptionEditText)
         val recurringSwitch = dialogView.findViewById<SwitchMaterial>(R.id.recurringSwitch)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.add_related_cost))
-            .setView(dialogView)
-            .setPositiveButton(getString(R.string.add)) { dialog, _ ->
+        AlertDialog.Builder(requireContext()).setTitle(getString(R.string.add_related_cost))
+            .setView(dialogView).setPositiveButton(getString(R.string.add)) { dialog, _ ->
                 val amountText = amountEditText.text.toString()
                 val amount = if (amountText.isEmpty()) 0.0 else amountText.toDouble()
                 val description = descriptionEditText.text.toString()
@@ -115,12 +114,9 @@ class GoalsFragment : Fragment() {
                 goalViewModel.addRelatedCost(goalTitle, relatedCost)
                 dialog.dismiss()
                 updatePredictionText()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
-            }
-            .create()
-            .show()
+            }.create().show()
     }
 
     private fun showCreateGoalDialog() {
@@ -134,10 +130,8 @@ class GoalsFragment : Fragment() {
             showDatePickerDialog(dueDateEditText)
         }
 
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.create_new_goal))
-            .setView(dialogView)
-            .setPositiveButton(getString(R.string.create)) { dialog, _ ->
+        AlertDialog.Builder(requireContext()).setTitle(getString(R.string.create_new_goal))
+            .setView(dialogView).setPositiveButton(getString(R.string.create)) { dialog, _ ->
                 val title = titleEditText.text.toString()
                 val description = descriptionEditText.text.toString()
                 val dueDate = dueDateEditText.text.toString()
@@ -147,25 +141,34 @@ class GoalsFragment : Fragment() {
                     try {
                         val price = priceText.toDouble()
                         if (price > 0) {
-                            val goal = GoalsViewModel.GoalDetails(0, title, description, dueDate, price, price)
+                            val goal = GoalsViewModel.GoalDetails(
+                                0, title, description, dueDate, price, price
+                            )
                             goalViewModel.addGoal(goal)
                         } else {
-                            Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Price must be greater than zero.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: NumberFormatException) {
-                        Toast.makeText(requireContext(), "Please enter a valid number for Price.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Please enter a valid number for Price.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT
+                    ).show()
                 }
                 dialog.dismiss()
                 updatePredictionText()
-            }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
-            }
-            .create()
-            .show()
+            }.create().show()
     }
 
     private fun showDatePickerDialog(dueDateEditText: EditText) {
@@ -174,17 +177,20 @@ class GoalsFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            dueDateEditText.setText(dateFormat.format(selectedDate.time))
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(selectedYear, selectedMonth, selectedDay)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                dueDateEditText.setText(dateFormat.format(selectedDate.time))
+            }, year, month, day)
 
         datePickerDialog.show()
     }
 
-    private fun createGoalView(goalDetails: GoalsViewModel.GoalDetails, inflater: LayoutInflater, container: ViewGroup?): View {
+    private fun createGoalView(
+        goalDetails: GoalsViewModel.GoalDetails, inflater: LayoutInflater, container: ViewGroup?
+    ): View {
         val view = inflater.inflate(R.layout.item_goal, container, false)
         val goalTitle: TextView = view.findViewById(R.id.goalTitle)
         val goalDescription: TextView = view.findViewById(R.id.goalDescription)
@@ -212,14 +218,21 @@ class GoalsFragment : Fragment() {
 
         relatedCostsContainer.removeAllViews()
         goalDetails.relatedCosts.forEach { relatedCost ->
-            val relatedCostView = createRelatedCostView(relatedCost, inflater, relatedCostsContainer, goalDetails.title)
+            val relatedCostView = createRelatedCostView(
+                relatedCost, inflater, relatedCostsContainer, goalDetails.title
+            )
             relatedCostsContainer.addView(relatedCostView)
         }
 
         return view
     }
 
-    private fun createRelatedCostView(relatedCost: GoalsViewModel.RelatedCost, inflater: LayoutInflater, container: ViewGroup?, goalTitle: String): View {
+    private fun createRelatedCostView(
+        relatedCost: GoalsViewModel.RelatedCost,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        goalTitle: String
+    ): View {
         val view = inflater.inflate(R.layout.item_related_cost, container, false)
         val costTitle: TextView = view.findViewById(R.id.tvCostTitle)
         val costAmount: TextView = view.findViewById(R.id.tvAmount)

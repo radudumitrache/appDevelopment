@@ -26,8 +26,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
 
     init {
         val db = Room.databaseBuilder(
-            application,
-            GoalSaverDatabase::class.java, "goal_saver_database"
+            application, GoalSaverDatabase::class.java, "goal_saver_database"
         ).allowMainThreadQueries().build()
 
         transactionsDao = db.transactionDao()
@@ -54,11 +53,13 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun calculateTotalEarnings(): Float {
-        return _transactions.value?.filter { it.amount > 0 }?.sumOf { it.amount.toDouble() }?.toFloat() ?: 0f
+        return _transactions.value?.filter { it.amount > 0 }?.sumOf { it.amount.toDouble() }
+            ?.toFloat() ?: 0f
     }
 
     fun calculateTotalSpent(): Float {
-        return _transactions.value?.filter { it.amount < 0 }?.sumOf { it.amount.toDouble() }?.toFloat() ?: 0f
+        return _transactions.value?.filter { it.amount < 0 }?.sumOf { it.amount.toDouble() }
+            ?.toFloat() ?: 0f
     }
 
     fun calculateTotalSaved(): Float {
@@ -87,7 +88,8 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                 val amount = values[amountIndex].toFloat()
                 val dateString = values[dateIndex].trim()
                 val date = try {
-                    dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
+                    dateFormat.parse(dateString)
+                        ?: throw IllegalArgumentException("Invalid date format")
                 } catch (e: Exception) {
                     e.printStackTrace()
                     null
@@ -104,13 +106,16 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                             isRecurring = false,
                             description = description
                         )
-                        val card = GoalSaverDatabase.getDatabase(getApplication()).cardDao().getCardOfId(cardId)
+                        val card = GoalSaverDatabase.getDatabase(getApplication()).cardDao()
+                            .getCardOfId(cardId)
                         if (transaction.type == '+') {
                             val amountToChange = card.amount_on_card + amount
-                            GoalSaverDatabase.getDatabase(getApplication()).cardDao().updateCardAmount(cardId, amountToChange)
+                            GoalSaverDatabase.getDatabase(getApplication()).cardDao()
+                                .updateCardAmount(cardId, amountToChange)
                         } else {
                             val amountToChange = card.amount_on_card + amount
-                            GoalSaverDatabase.getDatabase(getApplication()).cardDao().updateCardAmount(cardId, amountToChange)
+                            GoalSaverDatabase.getDatabase(getApplication()).cardDao()
+                                .updateCardAmount(cardId, amountToChange)
                         }
                         addTransaction(transaction)
                     }

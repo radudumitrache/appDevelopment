@@ -1,4 +1,5 @@
 package com.example.appdev.database.daos
+
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -21,12 +22,14 @@ interface TransactionsDao {
     @Query("SELECT * FROM `Transaction` WHERE transaction_id = :transaction_id")
     fun getTransactionByID(transaction_id: Int): TransactionsEntity
 
-    @Query("""
+    @Query(
+        """
         SELECT t.*
         FROM `Transaction` t
         INNER JOIN Card c ON t.card_id = c.card_id
         WHERE c.user_id = :userId
-    """)
+    """
+    )
     fun getTransactionsByUserId(userId: Int): List<TransactionsEntity>
 
     @Query("SELECT * FROM `Transaction`")

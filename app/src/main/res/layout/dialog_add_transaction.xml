@@ -16,8 +16,8 @@
             android:id="@+id/radio_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+"
-            android:checked="true" />
+            android:checked="true"
+            android:text="+" />
 
         <RadioButton
             android:id="@+id/radio_expense"
@@ -25,45 +25,47 @@
             android:layout_height="wrap_content"
             android:text="-" />
     </RadioGroup>
+
     <Spinner
         android:id="@+id/spinner_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Select Card"
         android:padding="16dp" />
+
     <Switch
         android:id="@+id/switch_recurring"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Is Recurring"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:text="Is Recurring" />
 
     <EditText
         android:id="@+id/amountEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints="autofillHintAmount"
         android:hint="@string/hint_amount"
         android:inputType="numberDecimal"
-        android:autofillHints="autofillHintAmount"
         android:padding="16dp" />
 
     <EditText
         android:id="@+id/descriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints="autofillHintDescription"
         android:hint="@string/hint_description"
         android:inputType="text"
-        android:autofillHints="autofillHintDescription"
-        android:layout_marginTop="8dp"
         android:padding="16dp" />
 
     <EditText
         android:id="@+id/dateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints="autofillHintDate"
         android:hint="@string/hint_date"
         android:inputType="date"
-        android:autofillHints="autofillHintDate"
-        android:layout_marginTop="8dp"
         android:padding="16dp" />
 </LinearLayout>

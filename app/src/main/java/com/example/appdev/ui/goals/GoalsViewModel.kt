@@ -1,4 +1,5 @@
 package com.example.appdev.ui.goals
+
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -23,9 +24,11 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     fun setGoalsFragment(fragment: GoalsFragment) {
         this.goalsFragment = fragment
     }
+
     init {
         loadGoals()
     }
+
     private fun loadGoals() {
         if (MainActivity.logged_user != null) {
             val userId = MainActivity.logged_user!!.user_id
@@ -40,7 +43,9 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
                     amount = goal.current_amount,
                     remainingAmount = goal.target_amount,
                     relatedCosts = relatedCosts.map {
-                        RelatedCost(it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring")
+                        RelatedCost(
+                            it.cost_id, it.title, it.amount.toDouble(), it.frequency == "recurring"
+                        )
                     }.toMutableList()
                 )
             }
@@ -172,10 +177,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
     )
 
     data class RelatedCost(
-        val costId: Int,
-        val title: String,
-        val amount: Double,
-        val isRecurring: Boolean
+        val costId: Int, val title: String, val amount: Double, val isRecurring: Boolean
     )
 
     companion object {

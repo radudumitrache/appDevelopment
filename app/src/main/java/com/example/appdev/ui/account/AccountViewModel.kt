@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.entities.UserEntity
+
 class AccountViewModel(application: Application) : AndroidViewModel(application) {
     private val userDao = GoalSaverDatabase.getDatabase(application).userDao()
     private val _user = MutableLiveData<UserEntity>()
