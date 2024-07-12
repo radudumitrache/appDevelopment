@@ -38,6 +38,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     private fun loadAllTransactions() {
         if (logged_user != null) {
             _transactions.value = transactionsDao.getTransactionsByUserId(logged_user.user_id)
+            AverageSavingsCalculator.calculateAverageSavingsPerMonth()
         }
     }
 

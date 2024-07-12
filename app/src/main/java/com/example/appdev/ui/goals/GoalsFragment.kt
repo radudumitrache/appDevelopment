@@ -19,7 +19,6 @@ import java.util.*
 class GoalsFragment : Fragment() {
 
     private val goalViewModel: GoalsViewModel by viewModels()
-
     private lateinit var nonViableGoalsText: TextView
 
     companion object {
