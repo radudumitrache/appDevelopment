@@ -48,7 +48,6 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-        val logged_user = MainActivity.logged_user
         Toast.makeText(requireContext(), "Welcome ${logged_user!!.email}", Toast.LENGTH_SHORT).show()
         val transactionContainer: LinearLayout = view.findViewById(R.id.transactionContainer)
         val addButton: Button = view.findViewById(R.id.addButton)
@@ -96,8 +95,7 @@ class TransactionsFragment : Fragment() {
         }
         val cards = logged_user?.let { GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardsOfUser(it.user_id) }
         var cardNames = cards?.map { it.name_on_card }
-        if (cardNames != null)
-        {
+        if (cardNames != null) {
             cardNames = cardNames.toMutableList()
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cardNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -128,8 +126,7 @@ class TransactionsFragment : Fragment() {
                 try {
                     val date = SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateText)
                     val finalAmount = if (type == '-') -amount else amount
-                    if (logged_user!=null)
-                    {
+                    if (logged_user != null) {
                         val transaction = selectedCard?.let {
                             TransactionsEntity(
                                 card_id = it.card_id, // Example user_id
@@ -140,24 +137,18 @@ class TransactionsFragment : Fragment() {
                                 description = description
                             )
                         }
-                        var card =
-                            transaction?.let {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
-                                    it.card_id)
-                            }
+                        val card = transaction?.let {
+                            GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().getCardOfId(
+                                it.card_id)
+                        }
                         if (transaction != null && card != null) {
-                            if (transaction.type == '+')
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
+                            if (transaction.type == '+') {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
+                            } else {
+                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id, card.amount_on_card + transaction.amount)
                             }
-                            else
-                            {
-                                GoalSaverDatabase.getDatabase(this.requireContext()).cardDao().updateCardAmount(card.card_id,card.amount_on_card + transaction.amount)
-                            }
-
                             viewModel.addTransaction(transaction)
                         }
-
                     }
 
                     dialog.dismiss()

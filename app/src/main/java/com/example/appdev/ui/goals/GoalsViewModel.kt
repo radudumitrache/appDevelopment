@@ -75,7 +75,7 @@ class GoalsViewModel(application: Application) : AndroidViewModel(application) {
                 user_id = MainActivity.logged_user!!.user_id,
                 title = relatedCost.title,
                 amount = relatedCost.amount,
-                currency = "USD", // Assuming USD, change as necessary
+                currency = "USD",
                 frequency = if (relatedCost.isRecurring) "recurring" else "one-time"
             )
             recurringCostDao.insert(recurringCostEntity)
