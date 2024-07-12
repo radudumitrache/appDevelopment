@@ -62,7 +62,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun calculateTotalSaved(): Float {
-        return calculateTotalEarnings() + calculateTotalSpent() // since spent amounts are negative
+        return calculateTotalEarnings() + calculateTotalSpent()
     }
 
     fun readCsvFile(filePath: String, cardId: Int) {
@@ -97,7 +97,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                     val description = values[descriptionIndex]
                     if (logged_user != null) {
                         val transaction = TransactionsEntity(
-                            card_id = cardId, // Use the selected card ID
+                            card_id = cardId,
                             type = if (amount >= 0) '+' else '-',
                             amount = amount,
                             date = date,

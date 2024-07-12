@@ -50,7 +50,7 @@ class CreateGoalFragment : Fragment() {
                     val priceValue = price.toDouble()
                     if (priceValue > 0) {
                         goalViewModel.createGoal(title, description, date, price)
-                        // Navigate to dashboard or other appropriate action
+
                     } else {
                         Toast.makeText(requireContext(), "Price must be greater than zero.", Toast.LENGTH_SHORT).show()
                     }
