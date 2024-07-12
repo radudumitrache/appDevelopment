@@ -8,15 +8,14 @@ import androidx.room.Room
 import com.example.appdev.MainActivity
 import com.example.appdev.database.GoalSaverDatabase
 import com.example.appdev.database.daos.TransactionsDao
-import com.example.appdev.database.entities.CardEntity
 import com.example.appdev.database.entities.TransactionsEntity
 import com.example.appdev.ui.dashboard.DashboardFragment
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
-import java.util.Date
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
+
 class TransactionsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val transactionsDao: TransactionsDao
@@ -67,7 +66,7 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
         return calculateTotalEarnings() + calculateTotalSpent() // since spent amounts are negative
     }
 
-    fun readCsvFile(filePath: String) {
+    fun readCsvFile(filePath: String, cardId: Int) {
         var bufferedReader: BufferedReader? = null
         try {
             bufferedReader = BufferedReader(FileReader(filePath))
@@ -99,21 +98,20 @@ class TransactionsViewModel(application: Application) : AndroidViewModel(applica
                     val description = values[descriptionIndex]
                     if (logged_user != null) {
                         val transaction = TransactionsEntity(
-                            card_id = DashboardFragment.selected_card.card_id, // Example user_id
+                            card_id = cardId, // Use the selected card ID
                             type = if (amount >= 0) '+' else '-',
                             amount = amount,
                             date = date,
                             isRecurring = false, // Example value
                             description = description
                         )
+                        val card = GoalSaverDatabase.getDatabase(getApplication()).cardDao().getCardOfId(cardId)
                         if (transaction.type == '+') {
-                            val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
-                            DashboardFragment.selected_card.amount_on_card = amount_to_change
-                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id, amount_to_change)
+                            val amountToChange = card.amount_on_card + amount
+                            GoalSaverDatabase.getDatabase(getApplication()).cardDao().updateCardAmount(cardId, amountToChange)
                         } else {
-                            val amount_to_change = DashboardFragment.selected_card.amount_on_card + amount
-                            DashboardFragment.selected_card.amount_on_card = amount_to_change
-                            MainActivity.database.cardDao().updateCardAmount(transaction.card_id, amount_to_change)
+                            val amountToChange = card.amount_on_card + amount
+                            GoalSaverDatabase.getDatabase(getApplication()).cardDao().updateCardAmount(cardId, amountToChange)
                         }
                         addTransaction(transaction)
                     }
